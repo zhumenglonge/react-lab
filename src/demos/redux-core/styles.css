@@ -1,0 +1,291 @@
+/* =========================================================
+ * 主题专属样式：Redux 核心原理
+ * ---------------------------------------------------------
+ * 通用样式（tabs / demo-wrap / demo-header / demo-grid / demo-box /
+ * code / tip / btn-row 等）在 src/App.css，这里只放本主题独有的。
+ * ⚠️ 各主题 styles.css 只在该主题加载时才注入、跨主题不共享，
+ *    所以类名统一 rx- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）。
+ * ========================================================= */
+
+/* ==================== ① 核心原理 ==================== */
+.rx-note {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  background: var(--bg-inset);
+  border-radius: 6px;
+  padding: 0.55rem 0.7rem;
+}
+.rx-note code,
+.rx-summary code,
+.rx-flow-note code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.86em;
+  color: var(--code-text);
+}
+
+.rx-state-tree {
+  background: var(--inset);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  margin-bottom: 0.8rem;
+}
+.rx-tree-title {
+  font-size: 0.74rem;
+  color: var(--accent-2);
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  letter-spacing: 0.02em;
+}
+.rx-state-tree .code { margin: 0; }
+
+.rx-todos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.9rem 0;
+}
+.rx-todos-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+.rx-empty { font-size: 0.8rem; color: var(--text-muted); font-style: italic; }
+.rx-chip {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  border-radius: 999px;
+  padding: 0.28em 0.8em;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.rx-chip:hover { border-color: var(--accent); color: var(--text-strong); }
+.rx-chip-done {
+  background: var(--success-bg);
+  border-color: var(--success);
+  color: var(--success);
+  text-decoration: line-through;
+}
+
+/* dispatch / 中间件日志（CoreDemo 与 AsyncDemo 共用） */
+.rx-log,
+.rx-mw-log {
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  min-height: 92px;
+}
+.rx-log-head {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+.rx-log-empty { font-size: 0.8rem; color: var(--text-muted); font-style: italic; }
+.rx-log-item {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  padding: 0.15rem 0;
+  animation: rx-fade-in 0.25s ease;
+}
+.rx-log-arrow { color: var(--accent-2); margin-right: 0.4rem; }
+@keyframes rx-fade-in {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ==================== ② 工作流程：单向数据流 ==================== */
+.rx-flow {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  margin: 0.4rem 0 1.1rem;
+}
+.rx-flow-step { display: flex; align-items: center; gap: 0.3rem; }
+.rx-node {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 116px;
+  padding: 0.6rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface-1);
+  opacity: 0.5;
+  transition: opacity 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+.rx-node-label { font-size: 0.86rem; font-weight: 700; color: var(--text-strong); }
+.rx-node-desc {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+.rx-flow-arrow { color: var(--text-muted); font-size: 1rem; }
+
+/* 五种节点各一色，便于顺着数据流一眼分辨 */
+.rx-node-dispatch { border-color: var(--accent-border); background: var(--accent-bg); }
+.rx-node-dispatch .rx-node-label { color: var(--accent-bright); }
+.rx-node-action { border-color: var(--warning-border); background: var(--warning-bg); }
+.rx-node-action .rx-node-label { color: var(--warning); }
+.rx-node-reducer { border-color: var(--success); background: var(--success-bg); }
+.rx-node-reducer .rx-node-label { color: var(--success); }
+.rx-node-store { border-color: var(--accent-2-border); background: var(--accent-2-bg); }
+.rx-node-store .rx-node-label { color: var(--accent-2); }
+
+.rx-flow-active .rx-node {
+  opacity: 1;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+.rx-flow-passed .rx-node { opacity: 0.9; }
+
+.rx-flow-note {
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  background: var(--bg-inset);
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 0.9rem;
+  min-height: 2.6em;
+}
+.rx-flow-counter {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-top: 0.4rem;
+}
+.rx-count-num {
+  font-size: 1.6rem;
+  color: var(--accent-2);
+  font-weight: 700;
+  margin: 0 0.2rem;
+}
+.rx-flow-hint {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+/* ==================== ③ 异步中间件 ==================== */
+.rx-status {
+  border-radius: 8px;
+  padding: 0.9rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 0.9rem;
+  transition: background-color 0.2s, color 0.2s;
+}
+.rx-status-idle { background: var(--surface-2); color: var(--text-secondary); }
+.rx-status-loading { background: var(--warning-bg); color: var(--warning); }
+.rx-status-success { background: var(--success-bg); color: var(--success); }
+.rx-mw-log { margin-top: 0.9rem; }
+
+/* ==================== 🎯 面试总结 ==================== */
+.rx-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.rx-sum-block h3 {
+  margin: 0 0 0.6rem;
+  font-size: 1.1rem;
+  color: var(--accent-2);
+}
+.rx-lead {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.85;
+  color: var(--text-secondary);
+}
+.rx-lead b { color: var(--warning); }
+.rx-sum-block ul,
+.rx-sum-block ol {
+  margin: 0;
+  padding-left: 1.35rem;
+  line-height: 1.9;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+}
+.rx-sum-block ul b,
+.rx-sum-block ol b { color: var(--warning); }
+
+.rx-flowline {
+  margin: 0 0 0.5rem;
+  font-size: 0.92rem;
+  line-height: 2;
+  color: var(--text-strong);
+  font-weight: 600;
+  text-align: center;
+}
+.rx-flowline span { color: var(--accent-2); font-weight: 400; }
+
+.rx-compare {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+.rx-compare th,
+.rx-compare td {
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+.rx-compare th {
+  background: var(--accent-bg);
+  color: var(--text-strong);
+  font-weight: 600;
+}
+.rx-compare td:first-child {
+  color: var(--accent-2);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.rx-compare td b { color: var(--text-strong); }
+.rx-compare code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--code-text);
+}
+.rx-compare tbody tr:hover td { background: var(--surface-1); }
+
+.rx-summary blockquote {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-2-bg));
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  line-height: 1.85;
+}
+.rx-summary blockquote p { margin: 0 0 0.6rem; }
+.rx-summary blockquote p:last-child { margin-bottom: 0; }
+.rx-summary blockquote b { color: var(--warning); }
+.rx-summary blockquote code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--code-text);
+}

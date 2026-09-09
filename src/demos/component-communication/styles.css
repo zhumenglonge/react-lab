@@ -1,0 +1,295 @@
+/* =========================================================
+ * 主题专属样式：React 组件间的通信方式
+ * ---------------------------------------------------------
+ * 通用样式（tabs / demo-wrap / demo-header / demo-box / code /
+ * tip / btn-row 等）在 src/App.css，这里只放本主题独有的。
+ * ⚠️ 各主题 styles.css 只在该主题加载时才注入、跨主题不共享，
+ *    所以类名统一 cc- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）。
+ * ========================================================= */
+
+/* ==================== 组件树可视化 ==================== */
+.cc-tree {
+  max-width: 720px;
+  margin: 0 auto 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.cc-node {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.8rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.cc-node-parent {
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
+  gap: 0.7rem;
+}
+.cc-node-child   { border-color: var(--accent-2-border); }
+.cc-node-middle  { border-style: dashed; border-color: var(--warning-border); }
+.cc-node-deep    { border-color: var(--success-border); }
+.cc-node-siblingA { border-color: var(--accent-border); }
+.cc-node-siblingB { border-color: var(--accent-2-border); }
+
+.cc-node-tag {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-strong);
+  background: var(--surface-2);
+  border-radius: 6px;
+  padding: 0.25em 0.65em;
+  align-self: flex-start;
+}
+
+.cc-state-line,
+.cc-recv {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+.cc-state-line code,
+.cc-recv code {
+  background: var(--bg-code);
+  padding: 0.15em 0.5em;
+  border-radius: 4px;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.85em;
+  color: var(--code-text);
+}
+.cc-state-line b,
+.cc-recv b { color: var(--warning); }
+.cc-recv.cc-empty { color: var(--text-muted); font-style: italic; }
+
+.cc-mini-tip {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.cc-mini-tip b { color: var(--text-secondary); }
+
+/* 数据流箭头行 */
+.cc-flow {
+  font-size: 0.8rem;
+  text-align: center;
+  padding: 0.4em 0.6em;
+  border-radius: 6px;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+.cc-flow-down { background: var(--accent-bg);   color: var(--accent-bright); border: 1px dashed var(--accent-border); }
+.cc-flow-up   { background: var(--warning-bg);  color: var(--warning);       border: 1px dashed var(--warning-border); }
+.cc-flow-both { background: var(--accent-2-bg); color: var(--accent-2);      border: 1px dashed var(--accent-2-border); }
+
+/* 兄弟两栏 */
+.cc-sibling-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+}
+@media (max-width: 700px) {
+  .cc-sibling-row { grid-template-columns: 1fr; }
+}
+
+/* ==================== 通信日志 ==================== */
+.cc-comm-log {
+  max-width: 720px;
+  margin: 0 auto 1.2rem;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.7rem 0.85rem;
+}
+.cc-comm-log-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-strong);
+  margin-bottom: 0.5rem;
+}
+.cc-comm-log-empty {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 0.4rem 0;
+}
+.cc-comm-log-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.cc-comm-log-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: 6px;
+  background: var(--surface-1);
+  border-left: 3px solid var(--border-strong);
+  animation: cc-slide-in 0.25s ease-out;
+}
+.cc-comm-log-item.down { border-left-color: var(--accent); }
+.cc-comm-log-item.up   { border-left-color: var(--warning); }
+.cc-comm-log-item.both { border-left-color: var(--accent-2); }
+.cc-comm-log-arrow { font-weight: 700; flex-shrink: 0; }
+.cc-comm-log-item.down .cc-comm-log-arrow { color: var(--accent-bright); }
+.cc-comm-log-item.up   .cc-comm-log-arrow { color: var(--warning); }
+.cc-comm-log-item.both .cc-comm-log-arrow { color: var(--accent-2); }
+.cc-comm-log-text { color: var(--text-secondary); }
+
+@keyframes cc-slide-in {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ==================== Context 主题预览 ==================== */
+.cc-theme-preview {
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: background-color 0.3s, color 0.3s;
+}
+.cc-theme-light .cc-theme-preview { background: #f5f7fb; color: #1a1d26; }
+.cc-theme-dark  .cc-theme-preview { background: #0b0d12; color: #eef1f6; border: 1px solid var(--border-strong); }
+
+/* ==================== 兄弟：输入框 & 消息列表 ==================== */
+.cc-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5em 0.7em;
+  font-size: 0.88rem;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--bg-inset);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+}
+.cc-input:focus { outline: none; border-color: var(--accent); }
+.cc-input::placeholder { color: var(--text-muted); }
+
+.cc-msg-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.4rem 0.6rem;
+  background: var(--inset);
+  border-radius: 8px;
+  min-height: 60px;
+  max-height: 140px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.cc-msg-list li {
+  font-size: 0.85rem;
+  color: var(--text);
+  padding: 0.25rem 0.5rem;
+  background: var(--accent-2-bg);
+  border: 1px solid var(--accent-2-border);
+  border-radius: 5px;
+  animation: cc-slide-in 0.25s ease-out;
+}
+
+/* ==================== Ref：命令式输入框 ==================== */
+.cc-fancy-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.55em 0.8em;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--bg-inset);
+  border: 1px solid var(--accent-2-border);
+  border-radius: 6px;
+}
+.cc-fancy-input:focus {
+  outline: none;
+  border-color: var(--accent-2);
+  box-shadow: 0 0 0 3px var(--accent-2-bg);
+}
+.cc-shake { animation: cc-shake 0.5s; border-color: var(--danger); }
+@keyframes cc-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+/* ==================== 🎯 面试总结 ==================== */
+.cc-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.cc-sum-block h3 {
+  margin: 0 0 0.6rem;
+  font-size: 1.1rem;
+  color: var(--accent-2);
+}
+.cc-sum-block ul {
+  margin: 0;
+  padding-left: 1.3rem;
+  line-height: 1.85;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+.cc-sum-block ul b { color: var(--warning); }
+.cc-sum-block code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.88em;
+}
+
+.cc-compare {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+.cc-compare th,
+.cc-compare td {
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.55;
+}
+.cc-compare th {
+  background: var(--accent-bg);
+  color: var(--text-strong);
+  font-weight: 600;
+}
+.cc-compare td:first-child {
+  color: var(--accent-2);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.cc-compare tbody tr:hover td { background: var(--surface-1); }
+
+.cc-summary blockquote {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-2-bg));
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  line-height: 1.8;
+}
+.cc-summary blockquote p { margin: 0 0 0.6rem; }
+.cc-summary blockquote p:last-child { margin-bottom: 0; }
+.cc-summary blockquote b { color: var(--warning); }

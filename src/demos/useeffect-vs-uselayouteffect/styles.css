@@ -1,0 +1,218 @@
+/* =========================================================
+ * 主题专属样式：useEffect vs useLayoutEffect
+ * ---------------------------------------------------------
+ * 通用样式（tabs / demo-wrap / demo-header / demo-grid / demo-box /
+ * code / tip / btn-row 等）在 src/App.css，这里只放本主题独有的。
+ * ⚠️ 各主题 styles.css 只在该主题加载时才注入、跨主题不共享，
+ *    所以类名统一 uel- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）。
+ * ========================================================= */
+
+/* ==================== ① 执行时机：流程图解 ==================== */
+.uel-phases {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  max-width: 920px;
+  margin: 0 auto 1.4rem;
+}
+.uel-phase {
+  flex: 1 1 140px;
+  min-width: 132px;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.uel-phase-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+.uel-phase-desc {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+.uel-phase-arrow {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+.uel-phase-layout { border-color: var(--warning-border); background: var(--warning-bg); }
+.uel-phase-layout .uel-phase-label { color: var(--warning); }
+.uel-phase-paint  { border-color: var(--accent-2-border); background: var(--accent-2-bg); }
+.uel-phase-paint .uel-phase-label  { color: var(--accent-2); }
+.uel-phase-effect { border-color: var(--accent-border); background: var(--accent-bg); }
+.uel-phase-effect .uel-phase-label { color: var(--accent-bright); }
+
+/* ==================== ① 执行时机：阻塞对比盒子 ==================== */
+.uel-box { gap: 0.7rem; }
+.uel-box-good { border-top: 3px solid var(--success); }
+.uel-box-warn { border-top: 3px solid var(--warning); }
+
+.uel-lamp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 54px;
+  padding: 0.6rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background-color 0.12s, color 0.12s;
+}
+.uel-lamp-idle { background: var(--surface-2); color: var(--text-secondary); }
+.uel-lamp-busy { background: var(--warning-bg); color: var(--warning); }
+.uel-lamp-done { background: var(--success-bg); color: var(--success); }
+.uel-lamp-icon { font-size: 1.3rem; line-height: 1; }
+
+.uel-count {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+.uel-count b { color: var(--accent-2); font-size: 1.1rem; }
+
+.uel-ghost {
+  background: var(--surface-2);
+  color: var(--text-secondary);
+}
+
+.uel-note {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  background: var(--bg-inset);
+  border-radius: 6px;
+  padding: 0.5rem 0.65rem;
+}
+
+/* ==================== ② 防闪烁定位 ==================== */
+.uel-stage {
+  position: relative;
+  height: 190px;
+  background: var(--inset);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.uel-stage-origin {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+.uel-anchor {
+  padding: 0.45em 1em;
+  font-size: 0.88rem;
+  background: var(--btn-grad);
+  color: var(--text-strong);
+  border: 1px solid transparent;
+  border-radius: 6px;
+}
+.uel-bubble {
+  position: absolute;
+  transform: translateX(-50%);
+  background: var(--accent-2);
+  color: #06222a;
+  padding: 0.4em 0.8em;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+}
+
+/* ==================== 🎯 面试总结 ==================== */
+.uel-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.uel-sum-block h3 {
+  margin: 0 0 0.6rem;
+  font-size: 1.1rem;
+  color: var(--accent-2);
+}
+.uel-sum-block ul {
+  margin: 0;
+  padding-left: 1.3rem;
+  line-height: 1.85;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+.uel-sum-block ul b { color: var(--warning); }
+.uel-sum-block code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.86em;
+  color: var(--code-text);
+}
+
+.uel-compare {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+.uel-compare th,
+.uel-compare td {
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.55;
+}
+.uel-compare th {
+  background: var(--accent-bg);
+  color: var(--text-strong);
+  font-weight: 600;
+}
+.uel-compare th:nth-child(2) { color: var(--success); }
+.uel-compare th:nth-child(3) { color: var(--warning); }
+.uel-compare td:first-child {
+  color: var(--accent-2);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.uel-compare td b { color: var(--text-strong); }
+.uel-compare tbody tr:hover td { background: var(--surface-1); }
+
+.uel-summary blockquote {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-2-bg));
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  line-height: 1.8;
+}
+.uel-summary blockquote p { margin: 0 0 0.6rem; }
+.uel-summary blockquote p:last-child { margin-bottom: 0; }
+.uel-summary blockquote b { color: var(--warning); }
+.uel-summary blockquote code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--code-text);
+}

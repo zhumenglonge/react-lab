@@ -53,6 +53,36 @@ const rawTopics = [
     createdAt: '2026-09-09',
     loader: () => import('./virtual-scroll/index.jsx'),
   },
+  {
+    id: 'component-communication',
+    icon: '🔗',
+    title: '组件间通信方式',
+    subtitle: '父子 / 跨层级 / 兄弟 / Ref 四种场景，可运行 demo 看清数据往哪流',
+    tags: ['组件通信', '数据流', '面试高频'],
+    difficulty: '初级',
+    createdAt: '2026-09-09',
+    loader: () => import('./component-communication/index.jsx'),
+  },
+  {
+    id: 'useeffect-vs-uselayouteffect',
+    icon: '⏱️',
+    title: 'useEffect vs useLayoutEffect',
+    subtitle: '绘制后异步 vs 绘制前同步：阻塞对比 + 防闪烁定位，一眼看懂',
+    tags: ['Hooks', '副作用', '面试高频'],
+    difficulty: '中级',
+    createdAt: '2026-09-09',
+    loader: () => import('./useeffect-vs-uselayouteffect/index.jsx'),
+  },
+  {
+    id: 'redux-core',
+    icon: '🔄',
+    title: 'Redux 核心原理',
+    subtitle: '手写 mini-redux：createStore / 单向数据流 / thunk 异步，原理与实战一次讲透',
+    tags: ['状态管理', 'Redux', '面试高频'],
+    difficulty: '中级',
+    createdAt: '2026-09-10',
+    loader: () => import('./redux-core/index.jsx'),
+  },
 
   /* 👇 未来在这里继续加，例如：
   {
