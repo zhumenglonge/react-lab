@@ -76,7 +76,7 @@
   align-items: center;
   justify-content: center;
 }
-.result .loading { color: #ffd166; }
+.result .loading { color: #777161; }
 .result .ok      { color: #7ee787; }
 .result .err     { color: #ff7b72; }
 .result .idle    { color: #666; font-size: 0.85rem; }
@@ -98,10 +98,10 @@
   margin: 0;
   padding-left: 1.3rem;
   line-height: 1.85;
-  color: #ddd;
+  color: #777;
   font-size: 0.95rem;
 }
-.sum-block ul b { color: #ffd166; }
+.sum-block ul b { color: #777161; }
 .sum-block code {
   background: rgba(255, 255, 255, 0.1);
   padding: 0.1em 0.4em;
@@ -127,7 +127,7 @@
   font-weight: 600;
 }
 .compare td:first-child {
-  color: #ffd166;
+  color: #777161;
   width: 20%;
   font-weight: 500;
 }
@@ -141,10 +141,10 @@ blockquote {
   background: linear-gradient(135deg, rgba(100, 108, 255, 0.1), rgba(97, 218, 251, 0.06));
   border-left: 4px solid #646cff;
   border-radius: 6px;
-  color: #ddd;
+  color: #333;
   font-size: 0.94rem;
   line-height: 1.8;
 }
 blockquote p { margin: 0 0 0.6rem; }
 blockquote p:last-child { margin-bottom: 0; }
-blockquote b { color: #ffd166; }
+blockquote b { color: #777161; }
