@@ -1,31 +1,102 @@
+/* =========================================================
+ * 全局基础样式 + 设计令牌（Design Tokens / 配色变量）
+ * ---------------------------------------------------------
+ * 配色遵循「色弱友好 + 高对比」四条原则：
+ *   1. 深色底 (#12141a)，把正文对比度拉到 ~16:1
+ *   2. 文字分三级，最弱的一级也有 ~7:1 对比，杜绝发灰发白
+ *   3. 强调色一律高饱和，不用浅粉彩（浅青/浅绿/浅红/浅黄全部加深提纯）
+ *   4. 成功/危险除颜色外，界面上还有 ✅/❌ 文字冗余，不只靠红绿区分
+ *
+ * 全站颜色只在这里用 CSS 变量定义，其它 CSS / JSX 一律引用变量，
+ * 以后想微调主题只改这一处即可。
+ * ========================================================= */
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* 强制深色：避免系统「浅色模式」偏好把页面刷成白底 */
+  color-scheme: dark;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* ---------- 背景层级 ---------- */
+  --bg: #12141a;              /* 页面底色（原 #242424，加深以拉高对比） */
+  --bg-elevated: #1a1d26;     /* 按钮 / 抬起的面板 */
+  --bg-code: #0b0d12;         /* 代码块底 */
+  --bg-inset: #0e1015;        /* 内凹区域底 */
+  --surface-1: rgba(255, 255, 255, 0.05); /* 卡片/浅底 */
+  --surface-2: rgba(255, 255, 255, 0.08); /* 输入框/小标签底 */
+  --inset: rgba(0, 0, 0, 0.35);           /* 列表/结果框等凹陷底 */
+
+  /* ---------- 边框（改实色，边界更清晰） ---------- */
+  --border: #2b303c;
+  --border-strong: #3b4252;
+
+  /* ---------- 文字（三级，全部高对比） ---------- */
+  --text: #eef1f6;            /* 正文 ~16:1 */
+  --text-strong: #ffffff;     /* 标题 / 激活态 */
+  --text-secondary: #c4cbd8;  /* 次要说明（原 #aaa/#999/#ccc） ~11:1 */
+  --text-muted: #99a2b4;      /* 弱化信息（原 #888/#777/#666） ~7:1 */
+  --code-text: #d7dbe3;       /* 代码正文 */
+
+  /* ---------- 主色 & 强调（高饱和） ---------- */
+  --accent: #5b8cff;          /* 主蓝：文字/链接/边框（原 #646cff，提亮） */
+  --accent-bright: #82a4ff;   /* 悬停更亮 */
+  --accent-2: #23c8e0;        /* 青：次级高亮（原浅青 #61dafb，提饱和） */
+  --btn-grad: linear-gradient(90deg, #3d5afe, #7048e8); /* 实心按钮/激活 tab，白字对比≥4.5:1 */
+  --accent-shadow: rgba(61, 90, 254, 0.45);
+
+  /* ---------- 语义色（提饱和；红绿另有 ✅/❌ 文字冗余） ---------- */
+  --success: #37d67a;         /* 成功（原浅绿 #7ee787） */
+  --danger: #ff6b57;          /* 危险/错误（原浅红 #ff7b72，偏橙拉开与绿的距离） */
+  --warning: #ffb020;         /* 警告/难度/强调（原浅黄 #ffd166） */
+
+  /* 语义色浅底（色块背景） */
+  --success-bg: rgba(55, 214, 122, 0.16);
+  --danger-bg: rgba(255, 107, 87, 0.16);
+  --danger-bg-strong: rgba(255, 107, 87, 0.30);
+  --warning-bg: rgba(255, 176, 32, 0.16);
+  --accent-bg: rgba(91, 140, 255, 0.16);
+  --accent-2-bg: rgba(35, 200, 224, 0.14);
+
+  /* 语义色描边（标签/树线等） */
+  --accent-border: rgba(91, 140, 255, 0.40);
+  --accent-2-border: rgba(35, 200, 224, 0.40);
+  --success-border: rgba(55, 214, 122, 0.40);
+  --danger-border: rgba(255, 107, 87, 0.40);
+  --warning-border: rgba(255, 176, 32, 0.40);
+
+  /* ---------- 链接 & 焦点 ---------- */
+  --link: #82a4ff;
+  --link-hover: #a9c0ff;
+  --focus-ring: #82a4ff;
+
+  color: var(--text);
+  background-color: var(--bg);
 }
 
 a {
   font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  color: var(--link);
+  /* 链接保留下划线：不只靠颜色区分，色弱更易识别 */
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--link-hover);
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background-color: var(--bg);
+  color: var(--text);
 }
 
 h1 {
@@ -35,32 +106,20 @@ h1 {
 
 button {
   border-radius: 8px;
-  border: 1px solid transparent;
+  border: 1px solid var(--border-strong);
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  color: var(--text);
+  background-color: var(--bg-elevated);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: border-color 0.25s, background-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--accent);
 }
-button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
 }

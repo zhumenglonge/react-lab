@@ -3,6 +3,7 @@
  * ---------------------------------------------------------
  * 只放本主题独有的样式（购物车 UI、异步请求 UI、总结表格等）。
  * 通用样式（tabs / demo-box / code / tip 等）在 src/App.css 里。
+ * 颜色统一引用 index.css 的 CSS 变量（色弱友好高对比调色板）。
  * ========================================================= */
 
 /* ==================== 购物车 UI ==================== */
@@ -26,7 +27,7 @@
   list-style: none;
   padding: 0.5rem 0.7rem;
   margin: 0;
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--inset);
   border-radius: 8px;
   min-height: 60px;
 }
@@ -36,11 +37,11 @@
   align-items: center;
   padding: 0.25rem 0;
   font-size: 0.9rem;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+  border-bottom: 1px dashed var(--border);
 }
 .items li:last-child { border-bottom: none; }
 .items li.empty {
-  color: #666;
+  color: var(--text-muted);
   justify-content: center;
   font-size: 0.85rem;
 }
@@ -54,9 +55,9 @@
   flex-direction: column;
   gap: 0.15rem;
   font-size: 0.85rem;
-  color: #ccc;
+  color: var(--text-secondary);
   padding: 0.5rem 0.7rem;
-  background: rgba(100, 108, 255, 0.08);
+  background: var(--accent-bg);
   border-radius: 6px;
 }
 
@@ -70,16 +71,16 @@
   min-height: 60px;
   padding: 0.7rem;
   border-radius: 8px;
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--inset);
   font-size: 0.92rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.result .loading { color: #777161; }
-.result .ok      { color: #7ee787; }
-.result .err     { color: #ff7b72; }
-.result .idle    { color: #666; font-size: 0.85rem; }
+.result .loading { color: var(--warning); }
+.result .ok      { color: var(--success); }
+.result .err     { color: var(--danger); }
+.result .idle    { color: var(--text-muted); font-size: 0.85rem; }
 
 /* ==================== 总结页 ==================== */
 .summary.demo-wrap {
@@ -92,18 +93,18 @@
 .sum-block h3 {
   margin: 0 0 0.6rem;
   font-size: 1.1rem;
-  color: #61dafb;
+  color: var(--accent-2);
 }
 .sum-block ul {
   margin: 0;
   padding-left: 1.3rem;
   line-height: 1.85;
-  color: #777;
+  color: var(--text-secondary);
   font-size: 0.95rem;
 }
-.sum-block ul b { color: #777161; }
+.sum-block ul b { color: var(--warning); }
 .sum-block code {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--surface-2);
   padding: 0.1em 0.4em;
   border-radius: 3px;
   font-size: 0.88em;
@@ -117,34 +118,34 @@
 .compare th,
 .compare td {
   padding: 0.55rem 0.7rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  border-bottom: 1px solid var(--border);
   text-align: left;
   vertical-align: top;
 }
 .compare th {
-  background: rgba(100, 108, 255, 0.15);
-  color: #fff;
+  background: var(--accent-bg);
+  color: var(--text-strong);
   font-weight: 600;
 }
 .compare td:first-child {
-  color: #777161;
+  color: var(--accent-2);
   width: 20%;
   font-weight: 500;
 }
 .compare tr:hover td {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--surface-1);
 }
 
 blockquote {
   margin: 0;
   padding: 1rem 1.2rem;
-  background: linear-gradient(135deg, rgba(100, 108, 255, 0.1), rgba(97, 218, 251, 0.06));
-  border-left: 4px solid #646cff;
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-2-bg));
+  border-left: 4px solid var(--accent);
   border-radius: 6px;
-  color: #333;
+  color: var(--text-secondary);
   font-size: 0.94rem;
   line-height: 1.8;
 }
 blockquote p { margin: 0 0 0.6rem; }
 blockquote p:last-child { margin-bottom: 0; }
-blockquote b { color: #777161; }
+blockquote b { color: var(--warning); }

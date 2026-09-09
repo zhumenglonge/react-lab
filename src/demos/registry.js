@@ -23,6 +23,16 @@ const rawTopics = [
     createdAt: '2026-09-09',
     loader: () => import('./useState-vs-useReducer/index.jsx'),
   },
+  {
+    id: 'virtual-dom-diff',
+    icon: '🌳',
+    title: '虚拟 DOM Diff 算法',
+    subtitle: 'Tree / Component / Element 三大策略 + key 陷阱',
+    tags: ['原理', '性能优化', '面试高频'],
+    difficulty: '中级',
+    createdAt: '2026-09-09',
+    loader: () => import('./virtual-dom-diff/index.jsx'),
+  },
 
   /* 👇 未来在这里继续加，例如：
   {
