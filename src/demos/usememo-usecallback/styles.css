@@ -1,0 +1,336 @@
+/* =========================================================
+ * 主题专属样式：useMemo vs useCallback
+ * ---------------------------------------------------------
+ * 通用样式（tabs / demo-box / demo-grid / code / tip 等）在 src/App.css。
+ * ⚠️ 各主题的 styles.css 只在该主题加载时才注入，跨主题不共享，
+ *    所以本主题用到的 primary-btn / render-box / compare / blockquote
+ *    等类，都在这里自带一份。
+ * 颜色统一引用 index.css 的 CSS 变量（色弱友好高对比调色板），
+ * 成功/危险除颜色外，界面上另有 ✅/❌/🆕/🔗 文字冗余。
+ * ========================================================= */
+
+/* ==================== 控制条 & 按钮 ==================== */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 0 0 1.2rem;
+}
+
+.count-tag {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+  color: var(--accent-2);
+  padding: 0.25em 0.75em;
+  background: var(--accent-2-bg);
+  border: 1px solid var(--accent-2-border);
+  border-radius: 999px;
+}
+
+.primary-btn {
+  padding: 0.4em 1em;
+  font-size: 0.88rem;
+  background: var(--btn-grad);
+  color: var(--text-strong);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.2s, background-color 0.2s;
+}
+.primary-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--accent-shadow);
+}
+.primary-btn.ghost {
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-strong);
+}
+.primary-btn.ghost:hover {
+  border-color: var(--accent);
+  color: var(--text-strong);
+  box-shadow: none;
+}
+.primary-btn.danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid var(--danger-border);
+}
+.primary-btn.danger:hover { box-shadow: none; background: var(--danger-bg-strong); }
+.primary-btn.ok {
+  background: var(--success-bg);
+  color: var(--success);
+  border: 1px solid var(--success-border);
+}
+.primary-btn.ok:hover { box-shadow: none; }
+
+/* ==================== ① 本质区别：引用身份 ==================== */
+.ref-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.55rem 0.7rem;
+  background: var(--inset);
+  border-radius: 8px;
+}
+.ref-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+.ref-label b { font-size: 0.9rem; color: var(--text-strong); }
+.ref-label code {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.ref-badge {
+  flex-shrink: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.25em 0.7em;
+  border-radius: 999px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+.ref-badge.new {
+  color: var(--danger);
+  background: var(--danger-bg);
+  border-color: var(--danger-border);
+}
+.ref-badge.same {
+  color: var(--success);
+  background: var(--success-bg);
+  border-color: var(--success-border);
+}
+
+/* ==================== ② useMemo：统计数字 ==================== */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+.stat {
+  background: var(--inset);
+  border-radius: 8px;
+  padding: 0.5rem 0.4rem;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+.stat.bad  { border-color: var(--danger-border); background: var(--danger-bg); }
+.stat.good { border-color: var(--success-border); background: var(--success-bg); }
+.stat-label {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.2rem;
+}
+.stat-value {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+.stat.bad .stat-value  { color: var(--danger); }
+.stat.good .stat-value { color: var(--success); }
+.result-line {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+.result-line b {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  color: var(--accent-2);
+}
+
+/* ==================== ③ useCallback：子组件渲染框 ==================== */
+.render-box {
+  padding: 0.7rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  border-left: 3px solid var(--success);
+  background: var(--success-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.rc-head { font-weight: 600; color: var(--text-strong); }
+.rc-prop { color: var(--text-secondary); font-size: 0.85rem; }
+.rc-prop code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  color: var(--accent-2);
+}
+.render-count {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+.demo-box > .render-count {
+  text-align: center;
+  margin: -0.2rem 0;
+}
+
+/* ==================== ④ 常见误区 ==================== */
+.demo-box.full-width {
+  grid-column: 1 / -1;
+  margin-bottom: 1rem;
+}
+.msg-box {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  background: var(--inset);
+  border: 1px solid var(--border-strong);
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.9rem;
+  color: var(--text-strong);
+  text-align: center;
+}
+.pit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+@media (max-width: 700px) {
+  .pit-grid { grid-template-columns: 1fr; }
+}
+.pit-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.8rem 0.9rem;
+}
+.pit-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  color: var(--warning);
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+.pit-icon { font-size: 1.05rem; }
+.pit-body {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+.pit-body code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--code-text);
+}
+.pit-body b { color: var(--text-strong); }
+
+/* ==================== tip 变体 ==================== */
+.tip.warn {
+  background: var(--danger-bg);
+  border-left-color: var(--danger);
+  color: var(--danger);
+}
+.tip code {
+  background: var(--surface-2);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+  font-size: 0.85em;
+}
+.tip b { color: inherit; }
+
+/* ==================== 🎯 面试总结（作用域限定在 .summary，避免与其它主题串味） ==================== */
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.summary .sum-block h3 {
+  margin: 0 0 0.6rem;
+  font-size: 1.1rem;
+  color: var(--accent-2);
+}
+.summary .sum-block ul {
+  margin: 0;
+  padding-left: 1.3rem;
+  line-height: 1.85;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+.summary .sum-block ul b { color: var(--warning); }
+.summary .sum-block code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.88em;
+  color: var(--code-text);
+}
+
+.summary .compare {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.summary .compare th,
+.summary .compare td {
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+.summary .compare th {
+  background: var(--accent-bg);
+  color: var(--text-strong);
+  font-weight: 600;
+}
+.summary .compare td:first-child {
+  color: var(--accent-2);
+  width: 20%;
+  font-weight: 500;
+}
+.summary .compare td b { color: var(--warning); }
+.summary .compare code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--code-text);
+}
+.summary .compare tr:hover td { background: var(--surface-1); }
+
+.summary blockquote {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-2-bg));
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  line-height: 1.8;
+}
+.summary blockquote p { margin: 0 0 0.6rem; }
+.summary blockquote p:last-child { margin-bottom: 0; }
+.summary blockquote b { color: var(--warning); }
+.summary blockquote code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--code-text);
+}

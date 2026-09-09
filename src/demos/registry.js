@@ -33,6 +33,26 @@ const rawTopics = [
     createdAt: '2026-09-09',
     loader: () => import('./virtual-dom-diff/index.jsx'),
   },
+  {
+    id: 'usememo-usecallback',
+    icon: '⚡',
+    title: 'useMemo / useCallback',
+    subtitle: '缓存值 vs 缓存函数，什么时候该用、什么时候是过度优化',
+    tags: ['Hooks', '性能优化', '面试高频'],
+    difficulty: '中级',
+    createdAt: '2026-09-09',
+    loader: () => import('./usememo-usecallback/index.jsx'),
+  },
+  {
+    id: 'virtual-scroll',
+    icon: '📜',
+    title: '虚拟滚动 / 长列表优化',
+    subtitle: '10 万条也不卡：手写 VirtualList + 性能对比 + 原理可视化',
+    tags: ['性能优化', '长列表', '面试高频'],
+    difficulty: '中级',
+    createdAt: '2026-09-09',
+    loader: () => import('./virtual-scroll/index.jsx'),
+  },
 
   /* 👇 未来在这里继续加，例如：
   {
@@ -44,15 +64,6 @@ const rawTopics = [
     difficulty: '中级',
     createdAt: '2026-09-10',
     loader: () => import('./useEffect-deep-dive/index.jsx'),
-  },
-  {
-    id: 'usememo-usecallback',
-    icon: '⚡',
-    title: 'useMemo / useCallback',
-    subtitle: '什么时候值得优化，什么时候是过度优化',
-    tags: ['Hooks', '性能'],
-    difficulty: '中级',
-    loader: () => import('./usememo-usecallback/index.jsx'),
   },
   */
 ]

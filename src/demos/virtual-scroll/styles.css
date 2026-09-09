@@ -1,0 +1,415 @@
+/* =========================================================
+ * 主题专属样式：虚拟滚动 / 长列表性能优化
+ * ---------------------------------------------------------
+ * 通用样式（tabs / demo-wrap / demo-header / demo-grid / demo-box /
+ * code / tip / btn-row 等）在 src/App.css，这里只放本主题独有的。
+ * 类名统一 vs- / vl- 前缀，自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）。
+ * ========================================================= */
+
+/* ==================== 通用交互元素 ==================== */
+.vs-btn {
+  padding: 0.4em 1em;
+  font-size: 0.88rem;
+  background: var(--btn-grad);
+  color: var(--text-strong);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.15s, box-shadow 0.2s, border-color 0.2s, background-color 0.2s;
+}
+.vs-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--accent-shadow);
+}
+.vs-btn.ghost {
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  border-color: var(--border);
+}
+.vs-btn.ghost:hover {
+  border-color: var(--accent);
+  color: var(--text);
+  box-shadow: none;
+}
+
+.vs-tag {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  padding: 0.2em 0.7em;
+  background: var(--surface-2);
+  border-radius: 999px;
+  align-self: center;
+}
+.vs-size-row { margin: 0.2rem 0 1rem; }
+.vs-warn { margin: 0 0 1rem; }
+
+/* 危险提示（自包含定义，不依赖其它主题） */
+.tip.warn {
+  background: var(--danger-bg);
+  border-left-color: var(--danger);
+  color: var(--danger);
+}
+.tip b.hl, b.hl { color: var(--warning); }
+
+/* ==================== 列表项（两个 demo 复用） ==================== */
+.vs-row {
+  display: grid;
+  grid-template-columns: 30px 96px 1fr 46px;
+  gap: 0.55rem;
+  align-items: center;
+  height: 100%;
+  padding: 0 0.75rem;
+  box-sizing: border-box;
+  font-size: 0.86rem;
+}
+.vs-avatar {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  background: var(--accent-bg);
+  color: var(--accent-bright);
+  border: 1px solid var(--accent-border);
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.vs-name {
+  color: var(--text-strong);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vs-desc {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vs-score {
+  justify-self: end;
+  padding: 0.15em 0.55em;
+  border-radius: 999px;
+  background: var(--accent-2-bg);
+  color: var(--accent-2);
+  border: 1px solid var(--accent-2-border);
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.76rem;
+}
+
+/* ==================== VirtualList 核心结构 ==================== */
+.vl-viewport {
+  overflow-y: auto;
+  position: relative;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--bg-inset);
+}
+.vl-spacer {
+  position: relative;
+  width: 100%;
+}
+.vl-item {
+  position: absolute;
+  left: 0;
+  right: 0;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--border);
+}
+
+/* 暴力渲染侧：普通文档流滚动容器 */
+.vs-scroll {
+  overflow-y: auto;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--bg-inset);
+}
+.vs-static-item {
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--border);
+}
+
+/* 深色滚动条美化 */
+.vl-viewport::-webkit-scrollbar,
+.vs-scroll::-webkit-scrollbar { width: 10px; }
+.vl-viewport::-webkit-scrollbar-thumb,
+.vs-scroll::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 999px;
+}
+.vl-viewport::-webkit-scrollbar-thumb:hover,
+.vs-scroll::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ==================== ① 性能对比面板 ==================== */
+.vs-panel {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--border-strong);
+  border-radius: 12px;
+  padding: 0.9rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.vs-panel.bad  { border-top-color: var(--danger); }
+.vs-panel.good { border-top-color: var(--success); }
+
+.vs-panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.vs-badge {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.vs-panel.bad  .vs-badge { color: var(--danger); }
+.vs-panel.good .vs-badge { color: var(--success); }
+.vs-panel-head code {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  background: var(--surface-2);
+  padding: 0.15em 0.5em;
+  border-radius: 4px;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+
+.vs-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+.vs-metric {
+  background: var(--inset);
+  border-radius: 8px;
+  padding: 0.55rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  text-align: center;
+}
+.vs-metric-label {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+.vs-metric b {
+  font-size: 1.25rem;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  line-height: 1.1;
+}
+.vs-metric b.good { color: var(--success); }
+.vs-metric b.bad  { color: var(--danger); }
+
+.vs-list-host { min-height: 40px; }
+
+/* ==================== ② 原理剖析：四步图解 ==================== */
+.vs-steps {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+  margin-bottom: 1rem;
+}
+@media (max-width: 700px) {
+  .vs-steps { grid-template-columns: 1fr; }
+}
+.vs-step {
+  display: flex;
+  gap: 0.7rem;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.7rem 0.85rem;
+}
+.vs-step-n {
+  font-size: 1.5rem;
+  color: var(--accent-2);
+  line-height: 1;
+  flex-shrink: 0;
+}
+.vs-step-body { display: flex; flex-direction: column; gap: 0.3rem; min-width: 0; }
+.vs-step-body b { color: var(--text-strong); font-size: 0.95rem; }
+.vs-step-body p { margin: 0; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
+.vs-step-formula {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.74rem;
+  color: var(--accent-bright);
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 0.35em 0.55em;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ==================== ② 原理剖析：三栏工作区 ==================== */
+.vs-how-grid {
+  display: grid;
+  grid-template-columns: 1fr 150px 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .vs-how-grid { grid-template-columns: 1fr; }
+}
+.vs-how-col { display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
+.vs-how-caption {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* 整体缩略图 */
+.vs-minimap {
+  position: relative;
+  width: 100%;
+  background: var(--bg-inset);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.vs-map-render {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  background: var(--accent-2-bg);
+  border: 1px solid var(--accent-2-border);
+  border-radius: 3px;
+  transition: top 0.05s linear, height 0.05s linear;
+}
+.vs-map-viewport {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  background: var(--warning-bg);
+  border: 1px solid var(--warning);
+  border-radius: 3px;
+  transition: top 0.05s linear, height 0.05s linear;
+}
+.vs-map-end {
+  position: absolute;
+  left: 8px;
+  font-size: 0.66rem;
+  color: var(--text-muted);
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+.vs-map-end.top { top: 4px; }
+.vs-map-end.bottom { bottom: 4px; }
+
+.vs-map-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+}
+.vs-map-legend span { display: flex; align-items: center; gap: 0.35rem; }
+.vs-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.vs-dot.viewport { background: var(--warning-bg); border: 1px solid var(--warning); }
+.vs-dot.render   { background: var(--accent-2-bg); border: 1px solid var(--accent-2); }
+
+/* 实时计算值 */
+.vs-data {
+  margin: 0;
+  background: var(--inset);
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.vs-data > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.28rem 0;
+  border-bottom: 1px dashed var(--border);
+}
+.vs-data > div:last-child { border-bottom: none; }
+.vs-data dt {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+.vs-data dd {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text);
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-weight: 600;
+}
+.vs-data dd.hl { color: var(--warning); }
+
+/* ==================== ③ 面试总结 ==================== */
+.vs-summary { max-width: 900px; margin: 0 auto; }
+.vs-block { margin-bottom: 1.6rem; }
+.vs-block h3 {
+  font-size: 1.1rem;
+  margin: 0 0 0.6rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-strong);
+}
+.vs-block blockquote {
+  margin: 0;
+  padding: 0.7rem 1rem;
+  background: var(--accent-bg);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  color: var(--text-secondary);
+}
+.vs-block blockquote p { margin: 0.4rem 0; line-height: 1.7; }
+.vs-block blockquote p:first-child { margin-top: 0; }
+.vs-block blockquote p:last-child { margin-bottom: 0; }
+.vs-block blockquote b { color: var(--text-strong); }
+.vs-block code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.86em;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  color: var(--accent-bright);
+}
+
+.vs-flow { margin: 0; padding-left: 1.3rem; line-height: 1.9; color: var(--text-secondary); }
+.vs-flow b { color: var(--text-strong); }
+
+.vs-list { margin: 0; padding-left: 1.2rem; line-height: 1.85; color: var(--text-secondary); }
+.vs-list li { margin-bottom: 0.35rem; }
+.vs-list b { color: var(--text-strong); }
+
+.vs-compare {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin-bottom: 0.6rem;
+}
+.vs-compare th,
+.vs-compare td {
+  border: 1px solid var(--border);
+  padding: 0.55rem 0.7rem;
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.55;
+}
+.vs-compare th {
+  background: var(--surface-2);
+  color: var(--text-strong);
+  font-weight: 600;
+}
+.vs-compare tbody tr:nth-child(odd) { background: var(--surface-1); }
+.vs-compare td:first-child { color: var(--accent-2); font-weight: 600; white-space: nowrap; }
