@@ -31,7 +31,7 @@ const STAGES = [
     phase: 'net',
     icon: '📍',
     title: 'DNS 解析',
-    brief: '把域名 www.example.com 翻译成 IP 地址',
+    brief: '把域名 www.example.com 翻译成 IP 地址（Domain Name System Resolution）',
     detail:
       '网络层只认 IP，所以要把域名解析成 IP（如 93.184.216.34）。查找顺序：浏览器 DNS 缓存 → 系统缓存(hosts) → 路由器 → ISP 递归解析器 → 根域名服务器 → 顶级域(.com) → 权威服务器。细节见 ② DNS 解析 tab。',
     code: 'www.example.com\n→ 交给递归解析器代查（它对外迭代）\n→ 根服务器 → .com 顶级域 → example.com 权威\n← 返回 A 记录 93.184.216.34',
