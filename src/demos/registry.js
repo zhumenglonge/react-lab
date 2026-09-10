@@ -83,6 +83,26 @@ const rawTopics = [
     createdAt: '2026-09-10',
     loader: () => import('./redux-core/index.jsx'),
   },
+  {
+    id: 'useReducer-context',
+    icon: '🧩',
+    title: 'useReducer + Context 全局状态',
+    subtitle: '轻量版 Redux：Context 广播 + reducer 集中更新，中小应用够用（含性能拆分）',
+    tags: ['状态管理', 'Context', '面试高频'],
+    difficulty: '中级',
+    createdAt: '2026-09-10',
+    loader: () => import('./useReducer-context/index.jsx'),
+  },
+  {
+    id: 'url-to-page',
+    icon: '🌐',
+    title: '从输入 URL 到页面展示',
+    subtitle: 'DNS → TCP → HTTP → 渲染：把"浏览器输入网址发生了什么"一步步跑给你看',
+    tags: ['网络', '浏览器原理', '面试高频'],
+    difficulty: '中级',
+    createdAt: '2026-09-10',
+    loader: () => import('./url-to-page/index.jsx'),
+  },
 
   /* 👇 未来在这里继续加，例如：
   {

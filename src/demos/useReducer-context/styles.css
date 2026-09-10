@@ -1,0 +1,318 @@
+/* =========================================================
+ * 主题专属样式：useReducer + Context 全局状态
+ * ---------------------------------------------------------
+ * 只放本主题独有的样式，类名统一 urc- 前缀，自包含。
+ * 通用样式（tabs / demo-box / demo-grid / code / tip / btn-row）在 App.css。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板），禁止硬编码。
+ * ========================================================= */
+
+/* ==================== ① 层级可视化 ==================== */
+.urc-layers {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.urc-layer {
+  border: 1px dashed var(--accent-border);
+  border-radius: 10px;
+  padding: 0.7rem 0.8rem;
+  background: var(--surface-1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.urc-layer .urc-layer {
+  border-color: var(--border-strong);
+  background: var(--inset);
+  margin-left: 0.8rem;
+}
+.urc-deep {
+  border-color: var(--accent-2-border);
+}
+
+/* ==================== 通用节点 & 标签 ==================== */
+.urc-node-tag {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+.urc-count {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent-2);
+  text-align: center;
+  margin: 0.2rem 0;
+}
+.urc-mini {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ==================== ② 实战 App 布局 ==================== */
+.urc-app {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.urc-node {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.75rem 0.9rem;
+  background: var(--surface-1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.urc-topbar {
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
+}
+.urc-topbar-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+}
+.urc-user {
+  color: var(--text-strong);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.urc-vip {
+  font-size: 0.7rem;
+  padding: 0.1em 0.5em;
+  border-radius: 999px;
+  background: var(--warning-bg);
+  color: var(--warning);
+  border: 1px solid var(--warning-border);
+}
+.urc-theme {
+  color: var(--accent-2);
+  font-size: 0.85rem;
+}
+
+.urc-layout {
+  border-style: dashed;
+  border-color: var(--border-strong);
+  background: transparent;
+}
+.urc-layout-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+}
+@media (max-width: 700px) {
+  .urc-layout-body { grid-template-columns: 1fr; }
+}
+
+/* ---------- 待办面板 ---------- */
+.urc-add {
+  display: flex;
+  gap: 0.4rem;
+}
+.urc-add input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.4em 0.7em;
+  font-size: 0.88rem;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--bg-inset);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+}
+.urc-add input:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 1px;
+}
+.urc-add button {
+  padding: 0.35em 0.9em;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+.urc-todo-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.4rem 0.6rem;
+  background: var(--inset);
+  border-radius: 8px;
+  min-height: 56px;
+}
+.urc-todo-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.28rem 0;
+  font-size: 0.9rem;
+  border-bottom: 1px dashed var(--border);
+}
+.urc-todo-list li:last-child { border-bottom: none; }
+.urc-todo-list li.empty {
+  color: var(--text-muted);
+  justify-content: center;
+  font-size: 0.85rem;
+}
+.urc-todo-list label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+.urc-todo-list label.done span {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+.urc-todo-list li button {
+  padding: 0.1em 0.6em;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+/* ---------- 计数徽标 ---------- */
+.urc-badge {
+  border-color: var(--success-border);
+  justify-content: center;
+}
+.urc-badge-num {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+.urc-badge-num b {
+  font-size: 1.6rem;
+  color: var(--success);
+  margin: 0 0.15rem;
+}
+
+/* ---------- Store 实况 ---------- */
+.urc-inspector {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--surface-1);
+}
+.urc-inspector-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent-2);
+  padding: 0.5rem 0.8rem;
+  background: var(--accent-2-bg);
+  border-bottom: 1px solid var(--border);
+}
+.urc-inspector .code {
+  border: none;
+  border-radius: 0;
+  margin: 0;
+}
+
+/* ==================== ③ 性能对比 ==================== */
+.urc-perf-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  background: var(--inset);
+}
+.urc-render {
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.15em 0.7em;
+  border-radius: 999px;
+}
+.urc-render.good {
+  color: var(--success);
+  background: var(--success-bg);
+  border: 1px solid var(--success-border);
+}
+.urc-render.bad {
+  color: var(--danger);
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+}
+
+/* ==================== 总结页 ==================== */
+.summary.demo-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.sum-block h3 {
+  margin: 0 0 0.6rem;
+  font-size: 1.1rem;
+  color: var(--accent-2);
+}
+.sum-block ul {
+  margin: 0;
+  padding-left: 1.3rem;
+  line-height: 1.85;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+.sum-block ul b { color: var(--warning); }
+.sum-block code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.88em;
+  color: var(--code-text);
+}
+
+.compare {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.compare th,
+.compare td {
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+.compare th {
+  background: var(--accent-bg);
+  color: var(--text-strong);
+  font-weight: 600;
+}
+.compare td:first-child {
+  color: var(--accent-2);
+  width: 16%;
+  font-weight: 500;
+}
+.compare tr:hover td {
+  background: var(--surface-1);
+}
+
+blockquote {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-2-bg));
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  line-height: 1.8;
+}
+blockquote p { margin: 0 0 0.6rem; }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote b { color: var(--warning); }
+
+/* 误区专区：用危险色描边，强调"这是要破除的错观点" */
+.urc-myth blockquote {
+  background: linear-gradient(135deg, var(--danger-bg), var(--warning-bg));
+  border-left-color: var(--danger);
+}
+.urc-myth blockquote b { color: var(--text-strong); }
