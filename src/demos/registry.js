@@ -103,6 +103,16 @@ const rawTopics = [
     createdAt: '2026-09-10',
     loader: () => import('./url-to-page/index.jsx'),
   },
+  {
+    id: 'js-data-types',
+    icon: '🧬',
+    title: 'JS 数据类型（8 种）',
+    subtitle: '默写挑战 + 口诀 + 闪卡 + typeof 陷阱：把“数据类型有哪些”焊进长期记忆，忘了就回来填一遍',
+    tags: ['JS 基础', '数据类型', '面试高频'],
+    difficulty: '初级',
+    createdAt: '2026-09-13',
+    loader: () => import('./js-data-types/index.jsx'),
+  },
 
   /* 👇 未来在这里继续加，例如：
   {

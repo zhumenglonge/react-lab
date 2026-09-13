@@ -1,0 +1,940 @@
+/* =========================================================
+ * 主题专属样式：JS 数据类型（8 种）
+ * ---------------------------------------------------------
+ * 通用样式（tabs / demo-wrap / demo-header / code / tip / btn-row）在 src/App.css，
+ * 这里只放本主题独有的。
+ * ⚠️ 各主题 styles.css 只在该主题加载时才注入、跨主题不共享，
+ *    所以类名统一 jst- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）；
+ * 成功/失败除红绿外还有 ✅/❌ 文字冗余，"陷阱"另用虚线边框标记（不靠颜色）。
+ * ========================================================= */
+
+/* ==================== 基础容器 ==================== */
+.jst-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.jst-root .demo-header {
+  margin-bottom: 0.2rem;
+}
+.jst-root .demo-header h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.3rem;
+  color: var(--text-strong);
+}
+.jst-root .demo-sub {
+  margin: 0 auto;
+  max-width: 820px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+.jst-root .demo-sub b {
+  color: var(--accent-bright);
+}
+
+.jst-block {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  overflow-x: auto; /* 窄屏时表格可横向滚动 */
+}
+.jst-block h3 {
+  margin: 0;
+  font-size: 1.02rem;
+  color: var(--accent-2);
+}
+.jst-note {
+  margin: 0;
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+.jst-note b { color: var(--text); }
+.jst-lead {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.9;
+  color: var(--text);
+}
+.jst-lead b { color: var(--accent-bright); }
+.jst-homo { color: var(--warning); }
+
+/* 行内 code（表格/说明文字里） */
+.jst-code,
+.jst-note code,
+.jst-lead code,
+.jst-list code,
+.jst-clue code,
+.jst-quote code {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-2);
+  font-size: 0.86em;
+}
+
+/* 按钮：主按钮 / 幽灵按钮 */
+.jst-primary {
+  background: var(--btn-grad);
+  border-color: transparent;
+  color: var(--text-strong);
+  box-shadow: 0 4px 12px var(--accent-shadow);
+  font-weight: 600;
+}
+.jst-root .btn-row button.ghost {
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-strong);
+}
+.jst-root .btn-row button.ghost:hover {
+  border-color: var(--accent);
+  color: var(--text-strong);
+}
+.jst-root .btn-row button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* 分组徽标：原始 / 引用 */
+.jst-badge {
+  font-size: 0.7rem;
+  padding: 0.1em 0.55em;
+  border-radius: 999px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+.jst-badge-primitive {
+  color: var(--accent-2);
+  background: var(--accent-2-bg);
+  border-color: var(--accent-2-border);
+}
+.jst-badge-object {
+  color: var(--warning);
+  background: var(--warning-bg);
+  border-color: var(--warning-border);
+}
+
+/* 通用表格 */
+.jst-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+.jst-table th,
+.jst-table td {
+  border: 1px solid var(--border);
+  padding: 0.45rem 0.6rem;
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+.jst-table th {
+  background: var(--bg-elevated);
+  color: var(--text-strong);
+}
+.jst-table tbody tr:nth-child(odd) { background: var(--surface-1); }
+.jst-table td:first-child {
+  color: var(--accent-2);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.jst-table b { color: var(--text); }
+.jst-td-cn {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* ==================== ✍️ 默写挑战 ==================== */
+.jst-levels {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.jst-level {
+  flex: 1 1 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  text-align: left;
+  padding: 0.5rem 0.8rem;
+  border-radius: 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.jst-level b { font-size: 0.92rem; color: var(--text); }
+.jst-level span { font-size: 0.76rem; color: var(--text-muted); }
+.jst-level:hover { border-color: var(--accent); }
+.jst-level-on {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  box-shadow: 0 4px 14px var(--accent-shadow);
+}
+.jst-level-on b { color: var(--accent-bright); }
+.jst-level-on span { color: var(--text-secondary); }
+
+.jst-statusbar {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.35rem 1rem;
+}
+.jst-statusbar b { color: var(--accent-2); font-size: 0.95rem; }
+.jst-record { border-left: 1px solid var(--border); padding-left: 1rem; }
+
+.jst-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 0.7rem;
+}
+.jst-slot {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border-strong);
+  border-radius: 10px;
+  padding: 0.7rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+.jst-slot-correct {
+  border-left-color: var(--success);
+  background: var(--success-bg);
+}
+.jst-slot-wrong {
+  border-left-color: var(--danger);
+  background: var(--danger-bg);
+}
+.jst-slot-empty {
+  border-left-color: var(--warning);
+  background: var(--warning-bg);
+}
+
+.jst-slot-top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.jst-slot-idx {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  display: grid;
+  place-items: center;
+}
+.jst-slot-es { font-size: 0.72rem; color: var(--text-muted); }
+.jst-hint-btn {
+  margin-left: auto;
+  padding: 0.2em 0.65em;
+  font-size: 0.74rem;
+  border-radius: 999px;
+  background: var(--warning-bg);
+  border: 1px solid var(--warning-border);
+  color: var(--warning);
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.jst-hint-btn:disabled { opacity: 0.55; cursor: default; }
+
+.jst-clue {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+.jst-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--bg-inset);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.98rem;
+  color: var(--text-strong);
+}
+.jst-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+.jst-input:disabled { opacity: 0.75; cursor: not-allowed; }
+.jst-input::placeholder { color: var(--text-muted); }
+
+.jst-hint {
+  font-size: 0.78rem;
+  color: var(--warning);
+  background: var(--warning-bg);
+  border-left: 3px solid var(--warning);
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  line-height: 1.65;
+}
+.jst-row-ok { font-size: 0.85rem; color: var(--success); font-weight: 600; }
+.jst-row-bad {
+  font-size: 0.85rem;
+  color: var(--danger);
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.jst-row-why {
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+.jst-row-empty { font-size: 0.8rem; color: var(--text-muted); }
+
+.jst-score {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.jst-score-full {
+  border-color: var(--success-border);
+  background: var(--success-bg);
+}
+.jst-score-main {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-size: 1.3rem;
+  color: var(--text-secondary);
+}
+.jst-score-main b { font-size: 2rem; color: var(--success); }
+.jst-score-time {
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.jst-score-verdict { font-size: 0.94rem; color: var(--text); }
+.jst-score-miss {
+  font-size: 0.86rem;
+  color: var(--text);
+  background: var(--bg-inset);
+  border-left: 3px solid var(--warning);
+  padding: 0.5rem 0.7rem;
+  border-radius: 4px;
+}
+.jst-score-miss-clue {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  line-height: 1.65;
+}
+.jst-score-miss-clue b { color: var(--warning); }
+
+/* ==================== 🧠 记忆法 ==================== */
+.jst-answer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.8rem 0.9rem;
+  font-size: 0.94rem;
+  line-height: 1.8;
+  color: var(--text);
+}
+.jst-answer > b { color: var(--accent-bright); }
+.jst-answer-part {
+  display: block;
+  padding-left: 0.8rem;
+  border-left: 3px solid;
+}
+.jst-answer-prim { border-color: var(--accent-2); }
+.jst-answer-obj { border-color: var(--warning); }
+.jst-answer-part b { color: var(--text-strong); font-size: 1.05rem; }
+
+/* 分类树 */
+.jst-tree { display: flex; flex-direction: column; gap: 0.6rem; }
+.jst-tree-root {
+  align-self: center;
+  background: var(--btn-grad);
+  color: var(--text-strong);
+  padding: 0.35rem 1.1rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 12px var(--accent-shadow);
+}
+.jst-tree-branches {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 0.7rem;
+}
+.jst-tree-col {
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.6rem 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.jst-tree-label { font-size: 0.8rem; font-weight: 700; }
+.jst-tree-label-prim { color: var(--accent-2); }
+.jst-tree-label-obj { color: var(--warning); }
+.jst-tree-leaves {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: flex-start;
+}
+.jst-leaf {
+  padding: 0.25em 0.7em;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+.jst-leaf:hover { border-color: var(--accent); }
+.jst-leaf-on {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  color: var(--accent-bright);
+  font-weight: 700;
+}
+.jst-tree-sub {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+.jst-leaf-detail {
+  background: var(--bg-elevated);
+  border: 1px solid var(--accent-border);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  line-height: 1.7;
+}
+.jst-leaf-title { display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; }
+.jst-leaf-title b { color: var(--text-strong); font-size: 0.95rem; }
+.jst-leaf-es { font-size: 0.72rem; color: var(--text-muted); }
+.jst-leaf-key { color: var(--warning); font-size: 0.8rem; }
+
+/* 口诀字卡 */
+.jst-mnemo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(94px, 1fr));
+  gap: 0.45rem;
+}
+.jst-char {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.55rem 0.4rem;
+  border-radius: 10px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+.jst-char:hover { border-color: var(--accent); }
+.jst-char-main {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-strong);
+  line-height: 1.1;
+}
+.jst-char-homo { font-size: 0.7rem; color: var(--text-muted); }
+.jst-char-type { font-size: 0.76rem; color: var(--accent-2); font-weight: 600; }
+.jst-char-on {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  box-shadow: 0 4px 14px var(--accent-shadow);
+}
+.jst-char-plus {
+  cursor: default;
+  background: var(--warning-bg);
+  border-color: var(--warning-border);
+}
+.jst-char-plus .jst-char-type { color: var(--warning); }
+
+/* 时间线 */
+.jst-timeline {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.5rem;
+}
+.jst-tl {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  align-items: flex-start;
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  border-radius: 10px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  font-family: inherit;
+  color: inherit;
+  transition: all 0.2s;
+}
+.jst-tl:hover { border-color: var(--accent); }
+.jst-tl-on {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  box-shadow: 0 4px 14px var(--accent-shadow);
+}
+.jst-tl-era {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+.jst-tl-total { font-size: 1rem; font-weight: 700; color: var(--text-strong); }
+.jst-tl-new { font-size: 0.78rem; color: var(--accent-2); line-height: 1.6; }
+
+/* 语义分组 */
+.jst-families {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.6rem;
+}
+.jst-family {
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.65rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.jst-family-name { font-size: 0.88rem; font-weight: 700; color: var(--accent-bright); }
+.jst-family-types { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.jst-pill {
+  font-size: 0.74rem;
+  padding: 0.12em 0.6em;
+  border-radius: 999px;
+  background: var(--accent-2-bg);
+  color: var(--accent-2);
+  border: 1px solid var(--accent-2-border);
+}
+.jst-family-say { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.7; }
+
+/* 列表 / 步骤 / 话术 */
+.jst-list,
+.jst-steps {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+.jst-list b, .jst-steps b { color: var(--text-strong); }
+.jst-quote {
+  margin: 0;
+  padding: 0.7rem 0.9rem;
+  background: var(--bg-inset);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  font-size: 0.88rem;
+  line-height: 1.9;
+  color: var(--text-secondary);
+}
+.jst-quote p { margin: 0 0 0.6rem; }
+.jst-quote p:last-child { margin-bottom: 0; }
+.jst-quote b { color: var(--text-strong); }
+
+/* ==================== 🃏 闪卡速记 ==================== */
+.jst-fc-bar { display: flex; flex-direction: column; gap: 0.6rem; }
+.jst-fc-modes { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
+.jst-fc-modes .jst-level {
+  flex: 0 1 auto;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.jst-card {
+  position: relative;
+  height: 260px;
+  perspective: 1200px;
+  cursor: pointer;
+  margin: 0.3rem 0;
+}
+.jst-card:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 4px; border-radius: 14px; }
+.jst-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 14px;
+  border: 1px solid var(--border-strong);
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.7rem;
+  transition: transform 0.5s;
+  overflow: hidden;
+}
+.jst-face-front {
+  background: var(--bg-elevated);
+  border-color: var(--accent-border);
+  transform: rotateY(0deg);
+}
+.jst-face-back {
+  background: var(--bg-inset);
+  border-color: var(--success-border);
+  transform: rotateY(180deg);
+}
+.jst-card-flipped .jst-face-front { transform: rotateY(-180deg); }
+.jst-card-flipped .jst-face-back { transform: rotateY(0deg); }
+
+.jst-face-tag { font-size: 0.74rem; color: var(--text-muted); text-align: center; }
+.jst-face-main {
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: var(--text);
+  text-align: center;
+}
+.jst-face-code {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.95rem;
+  color: var(--accent-2);
+  background: var(--bg-code);
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  text-align: center;
+}
+.jst-face-tip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+.jst-face-answer {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.jst-face-icon { font-size: 1.8rem; }
+.jst-face-name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--success);
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+.jst-face-cn { font-size: 0.8rem; color: var(--text-muted); }
+.jst-face-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.7;
+}
+.jst-face-meta b { color: var(--accent-bright); }
+.jst-face-key {
+  font-size: 0.8rem;
+  color: var(--warning);
+  background: var(--warning-bg);
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  text-align: center;
+  line-height: 1.7;
+}
+
+.jst-bad-btn {
+  background: var(--danger-bg);
+  border-color: var(--danger-border);
+  color: var(--danger);
+  font-weight: 700;
+}
+.jst-ok-btn {
+  background: var(--success-bg);
+  border-color: var(--success-border);
+  color: var(--success);
+  font-weight: 700;
+}
+
+.jst-fc-done {
+  background: var(--bg-elevated);
+  border: 1px solid var(--success-border);
+  border-radius: 12px;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  text-align: center;
+}
+.jst-fc-done-title { font-size: 1.15rem; font-weight: 700; color: var(--success); }
+.jst-fc-hard {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  background: var(--bg-inset);
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  line-height: 1.7;
+}
+.jst-fc-track {
+  display: flex;
+  justify-content: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  padding: 0.2rem 0;
+}
+.jst-fc-dot {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  font-size: 0.9rem;
+  opacity: 0.5;
+}
+.jst-fc-dot-ok { opacity: 1; border-color: var(--success); background: var(--success-bg); }
+.jst-fc-dot-hard { opacity: 1; border-color: var(--danger); background: var(--danger-bg); }
+
+/* ==================== 🔬 typeof 实验室 ==================== */
+.jst-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.jst-chip {
+  padding: 0.25em 0.7em;
+  border-radius: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  transition: all 0.2s;
+}
+.jst-chip code { font-family: inherit; color: inherit; background: none; padding: 0; }
+.jst-chip:hover { border-color: var(--accent); color: var(--text); }
+.jst-chip-on {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  color: var(--accent-bright);
+  font-weight: 700;
+}
+/* 陷阱样本用「虚线边框」标记，不依赖颜色区分 */
+.jst-chip-trap { border-style: dashed; }
+
+.jst-lab {
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.8rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.jst-lab-expr {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.jst-lab-expr > code {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 1rem;
+  color: var(--text);
+  background: var(--bg-code);
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+}
+.jst-lab-arrow { color: var(--text-muted); font-size: 1.1rem; }
+.jst-lab-result {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 1.25rem;
+  color: var(--success);
+  background: var(--success-bg);
+  border: 1px solid var(--success-border);
+  padding: 0.15rem 0.7rem;
+  border-radius: 8px;
+}
+.jst-lab-trap {
+  color: var(--warning);
+  background: var(--warning-bg);
+  border-color: var(--warning-border);
+}
+.jst-trap-tag {
+  font-size: 0.74rem;
+  color: var(--warning);
+  border: 1px solid var(--warning-border);
+  border-radius: 999px;
+  padding: 0.1em 0.55em;
+}
+.jst-lab-precise {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+.jst-lab-precise b { color: var(--accent-2); }
+.jst-lab-belong { margin-left: auto; }
+
+/* 竞猜 */
+.jst-quiz {
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.8rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.jst-quiz-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.jst-quiz-head b { color: var(--success); }
+.jst-quiz-code {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 1rem;
+  color: var(--accent-2);
+  background: var(--bg-code);
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  overflow-x: auto;
+}
+.jst-opts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.45rem;
+}
+.jst-opt {
+  padding: 0.45em 0.8em;
+  border-radius: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.88rem;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+.jst-opt:hover:not(:disabled) { border-color: var(--accent); }
+.jst-opt:disabled { cursor: default; }
+.jst-opt-right {
+  background: var(--success-bg);
+  border-color: var(--success);
+  color: var(--success);
+  font-weight: 700;
+}
+.jst-opt-wrong {
+  background: var(--danger-bg);
+  border-color: var(--danger);
+  color: var(--danger);
+  font-weight: 700;
+}
+.jst-opt-dim { opacity: 0.45; }
+
+.jst-quiz-why {
+  font-size: 0.85rem;
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  line-height: 1.75;
+  font-weight: 600;
+}
+.jst-quiz-why.is-ok {
+  background: var(--success-bg);
+  color: var(--success);
+  border-left: 3px solid var(--success);
+}
+.jst-quiz-why.is-bad {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border-left: 3px solid var(--danger);
+}
+.jst-quiz-why > div {
+  color: var(--text-secondary);
+  font-weight: 400;
+  margin-top: 0.25rem;
+}
+
+.jst-wrong-review {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: var(--bg-inset);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+}
+.jst-wrong-title { font-size: 0.85rem; color: var(--warning); font-weight: 700; }
+.jst-wrong-item {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  border-left: 2px solid var(--danger-border);
+  padding-left: 0.6rem;
+  line-height: 1.75;
+}
+.jst-wrong-item code {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  color: var(--text);
+}
+.jst-wrong-item b { color: var(--success); }
+
+/* ==================== 窄屏适配 ==================== */
+@media (max-width: 760px) {
+  .jst-tree-branches { grid-template-columns: 1fr; }
+  .jst-card { height: 300px; }
+  .jst-record { border-left: none; padding-left: 0; }
+  .jst-lab-belong { margin-left: 0; }
+}
