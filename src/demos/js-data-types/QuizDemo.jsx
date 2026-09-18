@@ -20,7 +20,6 @@ import {
  * ---------------------------------------------------------
  * 记忆的关键不是「看」，而是「提取」——所以这里做成默写：
  *   🟢 看线索：每格一句中文线索，写出类型名
- *   🟡 看例子：每格一段示例代码，写出它的类型
  *   🔴 纯默写：只分「原始 7 + 引用 1」，顺序也打乱，最接近面试
  * 填不出来就点 💡，提示分三级递进（首字母 → 关键线索 → 答案），
  * 用了三级答案的格子会被标记，不计入「完美默写」。
@@ -30,13 +29,12 @@ import {
 
 const LEVELS = [
   { key: 'clue', label: '🟢 看线索', desc: '每格一句中文线索，写出类型名' },
-  { key: 'example', label: '🟡 看例子', desc: '每格一段示例代码，写出它的类型' },
   { key: 'blind', label: '🔴 纯默写', desc: '只分「原始 7 + 引用 1」，全靠回忆' },
 ]
 
 const TOTAL = DATA_TYPES.length // 8
 
-// 出题：线索/例子模式打乱顺序，避免靠「位置」背答案；盲填模式只给分组
+// 出题：线索模式打乱顺序，避免靠「位置」背答案；盲填模式只给分组
 function buildSlots(level) {
   if (level === 'blind') {
     return [
@@ -206,10 +204,9 @@ export default function QuizDemo() {
         ))}
       </div>
 
-      {/* 状态条 */}
+      {/* 状态条（不显示实时计时，避免打扰注意力；用时只在交卷后的成绩面板里告诉你） */}
       <div className="jst-statusbar">
         <span>已填 <b>{filled}</b> / {TOTAL}</span>
-        <span>⏱️ {fmtSec(elapsed)}</span>
         <span className="jst-record">
           📒 历史：练过 <b>{record.attempts}</b> 次，最好 <b>{record.best}</b>/8，完美 <b>{record.perfect}</b> 次
         </span>
@@ -234,20 +231,10 @@ export default function QuizDemo() {
                 </button>
               </div>
 
-              {/* 线索 / 例子 */}
+              {/* 线索 */}
               <div className="jst-clue">
                 {level === 'clue' &&
                   (hintFor ? hintFor.clue : '原始类型之一（7 选 1，不能重复）')}
-                {level === 'example' &&
-                  (hintFor ? (
-                    <>
-                      这段代码的值是什么类型？<code className="jst-code">{`const v = ${hintFor.examples[0]}`}</code>
-                    </>
-                  ) : (
-                    <>
-                      原始类型之一，想想有哪些？<code className="jst-code">typeof v === ?</code>
-                    </>
-                  ))}
                 {level === 'blind' &&
                   (slot.group === 'primitive'
                     ? '原始类型之一：直接写出来，7 个不分先后但不能重复'

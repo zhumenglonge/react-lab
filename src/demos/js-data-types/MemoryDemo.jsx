@@ -181,6 +181,9 @@ export default function MemoryDemo() {
             </div>
             <div>{pickedType.clue}</div>
             <div className="jst-leaf-key">⚠️ 考点：{pickedType.key}</div>
+            {pickedType.bugReason && (
+              <div className="jst-bug">🐞 为什么 typeof 是这个结果：{pickedType.bugReason}</div>
+            )}
           </div>
         )}
       </section>

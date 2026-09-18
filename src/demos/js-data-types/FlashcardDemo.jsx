@@ -171,6 +171,11 @@ export default function FlashcardDemo() {
             </div>
           </div>
 
+          {/* 卡片高度固定且溢出隐藏，长的「历史 bug 由来」放在翻面后的卡片下方 */}
+          {flipped && type.bugReason && (
+            <div className="jst-bug">🐞 为什么 typeof 是这个结果：{type.bugReason}</div>
+          )}
+
           <div className="btn-row">
             <button className="jst-bad-btn" onClick={() => judge(false)}>😕 不熟悉（1）</button>
             <button className="jst-ok-btn" onClick={() => judge(true)}>😀 认识（2）</button>

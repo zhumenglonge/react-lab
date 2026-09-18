@@ -82,6 +82,12 @@ export const DATA_TYPES = [
     examples: ['null', 'let a = null'],
     clue: '表示「主动赋的空值 / 这里本该有对象但没有」；它的 typeof 结果是个历史 bug',
     key: 'typeof null === "object"（1995 年 32 位实现里类型标签全是 0）；判空要用 === null',
+    // 查看答案时才展开的「历史 bug 由来」，不放进 clue（clue 是作答前的提示）
+    bugReason:
+      '1995 年 JS 最初用 32 位存一个值，其中最低的几位是「类型标签」，对象的标签恰好是 000。' +
+      '而 null 在底层是「空指针」，整段机器码全是 0（0x00），它的类型标签位自然也是 000，' +
+      '于是 typeof 把它误判成 object。后来 ES 曾提案改成返回 "null"，但这会破坏海量依赖 ' +
+      'typeof null === "object" 的老代码，最终不了了之，成了永久保留的历史 bug。',
     aliases: ['null', '空', '空值'],
   },
   {
@@ -256,7 +262,8 @@ export function buildHint(type, level) {
   if (level === 2) {
     return `第 2 级：${type.clue}｜typeof 结果：${type.typeofResult}`
   }
-  return `第 3 级（答案）：${type.name} —— ${type.clue}`
+  const answer = `第 3 级（答案）：${type.name} —— ${type.clue}`
+  return type.bugReason ? `${answer}｜🐞 ${type.bugReason}` : answer
 }
 
 /* ---------- 出题顺序 ---------- */

@@ -315,6 +315,17 @@
 }
 .jst-row-empty { font-size: 0.8rem; color: var(--text-muted); }
 
+/* 「历史 bug 由来」：查看答案时展开，用 warning 色调标记这是个坑 */
+.jst-bug {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  background: var(--warning-bg);
+  border-left: 3px solid var(--warning);
+  padding: 0.5rem 0.7rem;
+  border-radius: 6px;
+  line-height: 1.75;
+}
+
 .jst-score {
   background: var(--bg-elevated);
   border: 1px solid var(--border);
