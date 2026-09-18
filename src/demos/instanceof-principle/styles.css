@@ -1,0 +1,337 @@
+/* =========================================================
+ * 主题专属样式：instanceof 原理与手写实现
+ * ---------------------------------------------------------
+ * 通用样式（tabs / demo-wrap / demo-header / demo-grid / demo-box /
+ * code / tip / btn-row）在 src/App.css，这里只放本主题独有的。
+ * ⚠️ 各主题 styles.css 只在该主题加载时才注入、跨主题不共享，
+ *    所以类名统一 iof- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）；
+ * 命中/未命中除红绿外还有 ✅/❌ 文字冗余，不只靠颜色区分。
+ * ========================================================= */
+
+/* ==================== 基础容器 ==================== */
+.iof-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.iof-root .demo-header { margin-bottom: 0.2rem; }
+.iof-root .demo-header h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.3rem;
+  color: var(--text-strong);
+}
+.iof-root .demo-sub {
+  margin: 0 auto;
+  max-width: 840px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+.iof-root .demo-sub b { color: var(--accent-bright); }
+.iof-root .demo-sub code,
+.iof-note code,
+.iof-lead code,
+.iof-list code,
+.iof-quote code,
+.iof-result code {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-2);
+  font-size: 0.86em;
+}
+
+.iof-primary {
+  background: var(--btn-grad);
+  border-color: transparent;
+  color: var(--text-strong);
+  box-shadow: 0 4px 12px var(--accent-shadow);
+  font-weight: 600;
+}
+.iof-root .btn-row button.ghost {
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-strong);
+}
+.iof-root .btn-row button.ghost:hover { border-color: var(--accent); color: var(--text-strong); }
+.iof-root .btn-row button:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+
+/* ==================== 用例选择 chips ==================== */
+.iof-cases { display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; }
+.iof-case {
+  padding: 0.3em 0.75em;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.iof-case:hover { border-color: var(--accent); color: var(--text); }
+.iof-case-on {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  color: var(--accent-bright);
+  font-weight: 700;
+}
+
+/* ==================== 表达式条 ==================== */
+.iof-expr {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 1.05rem;
+  color: var(--text);
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+}
+.iof-expr-kw { color: var(--warning); font-weight: 700; }
+
+/* ==================== 原型链可视化 ==================== */
+.iof-viz {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+}
+.iof-target {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  background: var(--warning-bg);
+  border: 1px dashed var(--warning-border);
+  border-radius: 999px;
+  padding: 0.3rem 0.9rem;
+}
+.iof-target b {
+  color: var(--warning);
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+
+.iof-chain {
+  display: flex;
+  align-items: stretch;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.iof-step { display: flex; align-items: center; gap: 0.3rem; }
+.iof-node {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 132px;
+  max-width: 190px;
+  padding: 0.55rem 0.7rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface-1);
+  opacity: 0.35;
+  transition: opacity 0.3s, transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+.iof-node-name {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-strong);
+  word-break: break-all;
+}
+.iof-node-cmp { font-size: 0.7rem; color: var(--text-muted); line-height: 1.5; }
+.iof-arrow { color: var(--text-muted); font-size: 1.1rem; }
+
+/* 已访问 / 当前 / 命中 / 未命中 */
+.iof-node-seen { opacity: 0.85; }
+.iof-node-cur {
+  opacity: 1;
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  border-color: var(--accent);
+}
+.iof-node-hit {
+  opacity: 1;
+  border-color: var(--success);
+  background: var(--success-bg);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+.iof-node-hit .iof-node-cmp { color: var(--success); font-weight: 700; }
+.iof-node-miss { border-color: var(--danger-border); background: var(--danger-bg); }
+.iof-node-start {
+  border-color: var(--accent-2-border);
+  background: var(--accent-2-bg);
+  opacity: 1;
+}
+.iof-node-start .iof-node-name { color: var(--accent-2); }
+.iof-node-null {
+  opacity: 1;
+  border-style: dashed;
+  border-color: var(--border-strong);
+  background: var(--bg-code);
+}
+.iof-node-null .iof-node-name { color: var(--text-muted); }
+
+/* ==================== 结果条 ==================== */
+.iof-result {
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  line-height: 1.7;
+}
+.iof-result-true { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+.iof-result-false { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
+.iof-result-idle { background: var(--surface-2); color: var(--text-muted); font-weight: 400; }
+.iof-result-why {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.iof-note {
+  margin: 0;
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  background: var(--bg-inset);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+}
+
+/* ==================== 手写实现对拍表 ==================== */
+.iof-impl-grid { align-items: start; }
+.iof-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+.iof-table th,
+.iof-table td {
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.55rem;
+  text-align: center;
+  vertical-align: middle;
+  color: var(--text-secondary);
+}
+.iof-table th { background: var(--bg-elevated); color: var(--text-strong); }
+.iof-table td.iof-td-code {
+  text-align: left;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  color: var(--text);
+  font-size: 0.76rem;
+}
+.iof-table tbody tr:nth-child(odd) { background: var(--surface-1); }
+.iof-bool-true { color: var(--success); font-weight: 700; }
+.iof-bool-false { color: var(--danger); font-weight: 700; }
+.iof-same { color: var(--success); font-weight: 700; }
+
+/* ==================== 🎯 面试总结 ==================== */
+.iof-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+  max-width: 980px;
+  margin: 0 auto;
+}
+.iof-block {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  overflow-x: auto;
+}
+.iof-block h3 { margin: 0; font-size: 1.05rem; color: var(--accent-2); }
+.iof-lead {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.9;
+  color: var(--text);
+}
+.iof-lead b { color: var(--accent-bright); }
+.iof-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+.iof-list b { color: var(--text-strong); }
+.iof-compare {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.iof-compare th,
+.iof-compare td {
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.iof-compare th { background: var(--accent-bg); color: var(--text-strong); font-weight: 600; }
+.iof-compare td:first-child { color: var(--accent-2); font-weight: 600; white-space: nowrap; }
+.iof-compare td b { color: var(--text-strong); }
+.iof-compare code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--code-text);
+}
+.iof-compare tbody tr:hover td { background: var(--surface-1); }
+.iof-quote {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-2-bg));
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  line-height: 1.9;
+}
+.iof-quote p { margin: 0 0 0.6rem; }
+.iof-quote p:last-child { margin-bottom: 0; }
+.iof-quote b { color: var(--warning); }
+.iof-steps {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+.iof-steps b { color: var(--text-strong); }
+
+/* ==================== 窄屏适配 ==================== */
+@media (max-width: 760px) {
+  .iof-chain { flex-direction: column; align-items: center; }
+  .iof-step { flex-direction: column; }
+  .iof-arrow { transform: rotate(90deg); }
+  .iof-node { max-width: 100%; }
+}

@@ -113,6 +113,16 @@ const rawTopics = [
     createdAt: '2026-09-13',
     loader: () => import('./js-data-types/index.jsx'),
   },
+  {
+    id: 'instanceof-principle',
+    icon: '🔗',
+    title: 'instanceof 原理与实现',
+    subtitle: '原型链查找可视化 + 手写 myInstanceof 当场对拍原生：把“instanceof 原理”讲透',
+    tags: ['JS 基础', '原型链', '面试高频'],
+    difficulty: '中级',
+    createdAt: '2026-09-18',
+    loader: () => import('./instanceof-principle/index.jsx'),
+  },
 
   /* 👇 未来在这里继续加，例如：
   {
