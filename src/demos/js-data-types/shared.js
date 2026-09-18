@@ -2,8 +2,13 @@
  * 主题共享数据与工具（非组件，单独放 .js，符合 react-refresh 约定）
  * ---------------------------------------------------------
  * 面试原题：「JS 数据类型有哪些？」标准答案 = 8 种
- *   原始类型 7 种：Number / String / Boolean / Undefined / Null / Symbol / BigInt
- *   引用类型 1 种：Object（数组、函数、日期、正则、Map/Set 都属于它）
+ *   原始类型 7 种：number / string / boolean / undefined / null / symbol / bigint
+ *   引用类型 1 种：object（数组、函数、日期、正则、Map/Set 都属于它）
+ *
+ * ⚠️ 本站统一用「全小写」记类型名（与 typeof 的返回值一致），避免大小写记混。
+ *   只有两种情况仍用大写，因为它们是代码里真实的标识符 / API 输出：
+ *   ① 全局构造器与 API：Symbol('id')、BigInt(10)、Object.keys()、Array.isArray()
+ *   ② Object.prototype.toString.call() 的返回值：'[object Null]'
  *
  * 本文件提供：
  *   1. DATA_TYPES      —— 8 种类型的全部元信息（线索、示例、typeof 结果、坑）
@@ -16,7 +21,7 @@
 export const DATA_TYPES = [
   {
     id: 'number',
-    name: 'Number',
+    name: 'number',
     cn: '数字',
     icon: '🔢',
     group: 'primitive',
@@ -29,7 +34,7 @@ export const DATA_TYPES = [
   },
   {
     id: 'string',
-    name: 'String',
+    name: 'string',
     cn: '字符串',
     icon: '📝',
     group: 'primitive',
@@ -42,7 +47,7 @@ export const DATA_TYPES = [
   },
   {
     id: 'boolean',
-    name: 'Boolean',
+    name: 'boolean',
     cn: '布尔',
     icon: '✅',
     group: 'primitive',
@@ -55,7 +60,7 @@ export const DATA_TYPES = [
   },
   {
     id: 'undefined',
-    name: 'Undefined',
+    name: 'undefined',
     cn: '未定义',
     icon: '❓',
     group: 'primitive',
@@ -68,7 +73,7 @@ export const DATA_TYPES = [
   },
   {
     id: 'null',
-    name: 'Null',
+    name: 'null',
     cn: '空值',
     icon: '🕳️',
     group: 'primitive',
@@ -81,7 +86,7 @@ export const DATA_TYPES = [
   },
   {
     id: 'symbol',
-    name: 'Symbol',
+    name: 'symbol',
     cn: '符号',
     icon: '🎭',
     group: 'primitive',
@@ -89,12 +94,12 @@ export const DATA_TYPES = [
     typeofResult: 'symbol',
     examples: ['Symbol("id")', 'Symbol.iterator'],
     clue: 'ES6 新增，每个值都全局唯一，常用作对象属性 key 来防止命名冲突',
-    key: 'Symbol.for() 走全局注册表；for...in / Object.keys 遍历不到 Symbol 键',
+    key: 'Symbol.for() 走全局注册表；for...in / Object.keys 遍历不到 symbol 键',
     aliases: ['symbol', 'sym', '符号'],
   },
   {
     id: 'bigint',
-    name: 'BigInt',
+    name: 'bigint',
     cn: '大整数',
     icon: '🐘',
     group: 'primitive',
@@ -102,12 +107,12 @@ export const DATA_TYPES = [
     typeofResult: 'bigint',
     examples: ['10n', 'BigInt(9007199254740993)'],
     clue: 'ES2020 新增，能表示任意精度整数，字面量在数字后面加一个 n',
-    key: '解决 Number 超过 2^53 - 1 的精度丢失；不能与 Number 直接混合运算',
+    key: '解决 number 超过 2^53 - 1 的精度丢失；不能与 number 直接混合运算',
     aliases: ['bigint', '大整数', '大数'],
   },
   {
     id: 'object',
-    name: 'Object',
+    name: 'object',
     cn: '对象',
     icon: '📦',
     group: 'object',
@@ -115,7 +120,7 @@ export const DATA_TYPES = [
     typeofResult: 'object',
     examples: ['{}', '[]', 'function () {}', 'new Date()', 'new Map()'],
     clue: '唯一的「引用类型」：普通对象、数组、函数、日期、正则、Map/Set 全都属于它',
-    key: '变量存的是堆内存地址；typeof 函数返回 "function"，但函数本质仍是 Object',
+    key: '变量存的是堆内存地址；typeof 函数返回 "function"，但函数本质仍是 object',
     aliases: ['object', 'obj', '对象', '引用类型'],
   },
 ]
@@ -162,51 +167,51 @@ const CONFUSIONS = [
   {
     match: ['object', 'obj', '对象', '引用类型'],
     message:
-      '被 typeof 骗到了：typeof null === "object" 是 JS 的历史 bug（1995 年 32 位实现中 null 的类型标签恰好全为 0），但 Null 本身是独立的原始类型。',
+      '被 typeof 骗到了：typeof null === "object" 是 JS 的历史 bug（1995 年 32 位实现中 null 的类型标签恰好全为 0），但 null 本身是独立的原始类型。',
   },
   {
     match: ['function', 'func', '函数'],
     message:
-      'function 只是 typeof 的一个返回值，不是独立的数据类型——函数是「可调用的对象」，本质属于 Object。',
+      'function 只是 typeof 的一个返回值，不是独立的数据类型——函数是「可调用的对象」，本质属于 object。',
   },
   {
     match: ['array', '数组', 'date', '日期', 'regexp', 'regex', '正则', 'map', 'set', 'json'],
     message:
-      '数组 / 日期 / 正则 / Map / Set / JSON 都不是独立的数据类型，它们统统属于 Object（引用类型）。',
+      '数组 / 日期 / 正则 / Map / Set / JSON 都不是独立的数据类型，它们统统属于 object（引用类型）。',
   },
   {
     match: ['null', '空', '空值'],
     message:
-      '区分两个「空」：Undefined = 声明了但没赋值（系统给的默认值）；Null = 主动赋的空值（程序员给的）。两者都是独立的原始类型。',
+      '区分两个「空」：undefined = 声明了但没赋值（系统给的默认值）；null = 主动赋的空值（程序员给的）。两者都是独立的原始类型。',
   },
   {
     match: ['undefined', 'undef', '未定义'],
     message:
-      '区分两个「空」：Undefined = 没赋值的默认值；Null = 主动赋的空值，而且 typeof null 返回 "object"。',
+      '区分两个「空」：undefined = 没赋值的默认值；null = 主动赋的空值，而且 typeof null 返回 "object"。',
   },
   {
     match: ['int', 'integer', 'long', 'double', 'float'],
-    message: 'JS 没有 int / float / double 之分，整数和小数一律是 Number（双精度 64 位浮点）。',
+    message: 'JS 没有 int / float / double 之分，整数和小数一律是 number（双精度 64 位浮点）。',
   },
   {
     match: ['char', 'character', '字符'],
-    message: 'JS 没有 char 类型，单个字符也是 String。',
+    message: 'JS 没有 char 类型，单个字符也是 string。',
   },
   {
     match: ['true', 'false', '真', '假'],
-    message: 'true / false 是「值」，类型名要写 Boolean。',
+    message: 'true / false 是「值」，类型名要写 boolean。',
   },
   {
     match: ['biginteger', 'bignum', '整数', 'int64'],
-    message: '标准名字是 BigInt（ES2020 新增），字面量写法是 10n。',
+    message: '标准名字是 bigint（ES2020 新增），字面量写法是 10n。',
   },
   {
     match: ['symbols', '唯一值', '唯一标识', 'unique'],
-    message: '标准名字是 Symbol（ES6 新增），强调「每个值都全局唯一」。',
+    message: '标准名字是 symbol（ES6 新增），强调「每个值都全局唯一」。',
   },
   {
     match: ['list', '列表', 'arr'],
-    message: 'JS 里没有 List 类型，数组 Array 是 Object 的一种。',
+    message: 'JS 里没有 list 类型，数组属于 object。',
   },
 ]
 

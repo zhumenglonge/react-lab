@@ -7,7 +7,7 @@ import { DATA_TYPES, PRIMITIVE_TYPES, typeById } from './shared.js'
  * 记不住的根因是「孤立地背 8 个单词」。这里给三条互补的钩子：
  *   ① 结构钩子：1 个引用类型 + 7 个原始类型（7 = 一周七天）
  *   ② 口诀钩子：数 字 布 未 空 符 大（谐音「书字不为空，付大款」）
- *   ③ 时间钩子：ES1 五样 → ES6 加 Symbol → ES2020 加 BigInt（5→6→7）
+ *   ③ 时间钩子：ES1 五样 → ES6 加 symbol → ES2020 加 bigint（5→6→7）
  *   ④ 语义钩子：值家族 / 两个「空」/ 一个「唯一」/ 一个「容器」
  * 点口诀里的每个字，可以看到它对应的类型与线索。
  * ========================================================= */
@@ -29,19 +29,19 @@ const TIMELINE = [
     era: 'ES1 · 1995',
     total: '5 原始 + 1 引用 = 6 种',
     ids: ['number', 'string', 'boolean', 'undefined', 'null'],
-    note: 'JS 诞生就有这 5 个原始类型，加上 Object 一共 6 种。这也是为什么「老五样」最难忘。',
+    note: 'JS 诞生就有这 5 个原始类型，加上 object 一共 6 种。这也是为什么「老五样」最难忘。',
   },
   {
     era: 'ES6 · 2015',
     total: '6 原始 + 1 引用 = 7 种',
     ids: ['symbol'],
-    note: '新增 Symbol：解决「对象键名冲突」，也让语言有了内置的迭代协议（Symbol.iterator）。',
+    note: '新增 symbol：解决「对象键名冲突」，也让语言有了内置的迭代协议（Symbol.iterator）。',
   },
   {
     era: 'ES2020',
     total: '7 原始 + 1 引用 = 8 种',
     ids: ['bigint'],
-    note: '新增 BigInt：解决大整数精度丢失（Number 只能安全表示到 2^53 - 1）。',
+    note: '新增 bigint：解决大整数精度丢失（number 只能安全表示到 2^53 - 1）。',
   },
 ]
 
@@ -63,13 +63,13 @@ const FAMILIES = [
     icon: '🎭',
     name: '一个「唯一」· 1 个',
     ids: ['symbol'],
-    say: 'Symbol：每次调用都产生全局唯一的值，专门用来做不会撞名的对象键。',
+    say: 'symbol：每次调用都产生全局唯一的值，专门用来做不会撞名的对象键。',
   },
   {
     icon: '📦',
     name: '一个「容器」· 1 个',
     ids: ['object'],
-    say: 'Object：唯一的引用类型，数组 / 函数 / 日期 / 正则 / Map / Set 全装在里面。',
+    say: 'object：唯一的引用类型，数组 / 函数 / 日期 / 正则 / Map / Set 全装在里面。',
   },
 ]
 
@@ -78,8 +78,8 @@ const COMPARE_ROWS = [
   ['可变吗', '不可变，只能整体替换', '可变，属性随时增删改'],
   ['赋值 = ?', '拷贝一份值，互不影响', '拷贝地址，两个变量指向同一对象'],
   ['比较 = ?', '比值：1 === 1 → true', '比地址：{} === {} → false'],
-  ['typeof', '各自的类型名（Null 例外，返回 "object"）', '"object"（函数例外，返回 "function"）'],
-  ['包含', 'Number / String / Boolean / Undefined / Null / Symbol / BigInt', '普通对象 / 数组 / 函数 / Date / RegExp / Map / Set'],
+  ['typeof', '各自的类型名（null 例外，返回 "object"）', '"object"（函数例外，返回 "function"）'],
+  ['包含', 'number / string / boolean / undefined / null / symbol / bigint', '普通对象 / 数组 / 函数 / Date / RegExp / Map / Set'],
 ]
 
 const VALUE_VS_REF_CODE = `// 原始类型：拷贝的是「值」
@@ -122,15 +122,20 @@ export default function MemoryDemo() {
         <div className="jst-answer">
           JS 共有 <b>8</b> 种数据类型 =
           <span className="jst-answer-part jst-answer-prim">
-            <b>7</b> 种原始类型：Number、String、Boolean、Undefined、Null、Symbol、BigInt
+            <b>7</b> 种原始类型：number、string、boolean、undefined、null、symbol、bigint
           </span>
           <span className="jst-answer-part jst-answer-obj">
-            <b>1</b> 种引用类型：Object（数组、函数、日期、正则、Map/Set 都属于它）
+            <b>1</b> 种引用类型：object（数组、函数、日期、正则、Map/Set 都属于它）
           </span>
         </div>
         <p className="jst-note">
           加分说法：「按<b>存储方式</b>分成原始类型和引用类型；原始类型存值本身、不可变，引用类型存堆地址、可变。
-          其中 Symbol 是 ES6 新增、BigInt 是 ES2020 新增。」
+          其中 symbol 是 ES6 新增、bigint 是 ES2020 新增。」
+        </p>
+        <p className="jst-note">
+          🔠 <b>本站统一按全小写记</b>（和 <code className="jst-code">typeof</code> 的返回值完全一致），免得大小写记混。
+          只有写代码时才用大写，因为那是真实存在的构造器：<code className="jst-code">Object.keys()</code>、
+          <code className="jst-code">Symbol('id')</code>、<code className="jst-code">BigInt(10)</code>。
         </p>
       </section>
 
@@ -161,7 +166,7 @@ export default function MemoryDemo() {
                   className={'jst-leaf' + (picked === 'object' ? ' jst-leaf-on' : '')}
                   onClick={() => setPicked('object')}
                 >
-                  📦 Object
+                  📦 object
                 </button>
                 <span className="jst-tree-sub">├ 数组 Array<br />├ 函数 Function<br />├ Date / RegExp<br />└ Map / Set / 普通对象</span>
               </div>
@@ -205,12 +210,12 @@ export default function MemoryDemo() {
           <div className="jst-char jst-char-plus">
             <span className="jst-char-main">＋</span>
             <span className="jst-char-homo">第 8 个</span>
-            <span className="jst-char-type">📦 Object</span>
+            <span className="jst-char-type">📦 object</span>
           </div>
         </div>
         <p className="jst-note">
-          英文首字母版（7 个原始类型）：<b>S</b>tring <b>N</b>umber <b>B</b>oolean <b>U</b>ndefined
-          <b> N</b>ull <b>S</b>ymbol <b>B</b>igInt → 记成一句话
+          英文首字母版（7 个原始类型）：<b>s</b>tring <b>n</b>umber <b>b</b>oolean <b>u</b>ndefined
+          <b> n</b>ull <b>s</b>ymbol <b>b</b>igint → 首字母 S N B U N S B，记成一句话
           <b className="jst-homo"> “Super Ninjas Break Under No Stress, Breathe”</b>。
         </p>
       </section>
@@ -228,7 +233,7 @@ export default function MemoryDemo() {
               <span className="jst-tl-era">{t.era}</span>
               <span className="jst-tl-total">{t.total}</span>
               <span className="jst-tl-new">
-                {i === 0 ? '原始五样：Number / String / Boolean / Undefined / Null' : `新增：${t.ids.map((id) => typeById(id).name).join('、')}`}
+                {i === 0 ? '原始五样：number / string / boolean / undefined / null' : `新增：${t.ids.map((id) => typeById(id).name).join('、')}`}
               </span>
             </button>
           ))}
@@ -260,7 +265,7 @@ export default function MemoryDemo() {
         <h3>⚖️ 原始 vs 引用（面试官一定会追问）</h3>
         <table className="jst-table">
           <thead>
-            <tr><th>维度</th><th>原始类型（7 种）</th><th>引用类型（Object）</th></tr>
+            <tr><th>维度</th><th>原始类型（7 种）</th><th>引用类型（object）</th></tr>
           </thead>
           <tbody>
             {COMPARE_ROWS.map((r) => (

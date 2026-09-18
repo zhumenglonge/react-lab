@@ -260,7 +260,7 @@ export default function QuizDemo() {
                 }}
                 className="jst-input"
                 value={answers[i]}
-                placeholder={slot.group === 'primitive' ? '如：Number' : '如：Object'}
+                placeholder={slot.group === 'primitive' ? '如：number' : '如：object'}
                 autoComplete="off"
                 spellCheck="false"
                 disabled={!!results}
@@ -279,7 +279,7 @@ export default function QuizDemo() {
                   {hintFor
                     ? buildHint(hintFor, hintLevels[i])
                     : hintLevels[i] === 1
-                      ? '第 1 级：7 个原始类型的首字母是 N / S / B / U / N / S / B'
+                      ? '第 1 级：7 个原始类型的首字母是 n / s / b / u / n / s / b'
                       : hintLevels[i] === 2
                         ? `第 2 级：口诀「数 字 布 未 空 符 大」——数字、字符串、布尔、未定义、空值、符号、大整数`
                         : `第 3 级（答案）：${PRIMITIVE_TYPES.map((t) => t.name).join(' / ')}（7 个原始类型，顺序不限）`}
@@ -333,6 +333,19 @@ export default function QuizDemo() {
           </div>
         </div>
       )}
+
+      <p className="tip">
+        💡 本站统一按<b>全小写</b>记：<code>number</code>、<code>string</code>、<code>boolean</code>、<code>undefined</code>、
+        <code>null</code>、<code>symbol</code>、<code>bigint</code>、<code>object</code>——正好和 <code>typeof</code> 的返回值一模一样，
+        背一套就够。判分时<b>大小写都算对</b>（<code>Number</code> / <code>数字</code> / <code>num</code> 也认），不用纠结。
+      </p>
+
+      <p className="tip">
+        ⚠️ 只有两种情况必须大写，因为那是代码里真实的标识符：① 全局构造器
+        <code>Object.keys()</code>、<code>Symbol('id')</code>、<code>BigInt(10)</code>、<code>Array.isArray()</code>；
+        ② <code>Object.prototype.toString.call(null)</code> 返回的 <code>'[object Null]'</code>。
+        注意 <code>null</code> / <code>undefined</code> <b>没有大写形式</b>，写 <code>Null</code> 会 ReferenceError。
+      </p>
 
       <p className="tip">
         💡 用法建议：先用 🔴 纯默写测真实水平 → 错的格子读「错因」而不是答案 →

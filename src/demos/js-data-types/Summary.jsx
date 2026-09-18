@@ -46,6 +46,41 @@ const TYPEOF_VS_INSTANCEOF = [
   ['最佳替代', '—', 'Array.isArray() / Object.prototype.toString.call()'],
 ]
 
+/* 大小写：本站统一用小写记类型名，只有代码里的标识符必须大写 */
+const CASE_ROWS = [
+  ['记类型名 / 口头答题', '小写（本站口径）', 'number、string、boolean、undefined、null、symbol、bigint、object'],
+  ['typeof 的返回值', '小写（语言规定）', "typeof 42 === 'number'"],
+  ['TypeScript 类型注解', '小写', 'let a: string（大写 String 指包装对象类型，lint 会禁）'],
+  ['代码里的全局构造器 / API', '必须大写', "Object.keys()、Symbol('id')、BigInt(10)、Array.isArray()"],
+  ['toString 的类型标签', '必须大写（API 输出）', "'[object Null]'、'[object Array]'"],
+  ['值 / 字面量', '只有小写形式', 'null、undefined（写 Null / Undefined 会 ReferenceError）'],
+]
+
+const CASE_CODE = `// ✅ 本站口径：类型名一律小写，和 typeof 的返回值完全重合，背一套就够
+typeof 42          // 'number'
+typeof 'x'         // 'string'
+typeof null        // 'object'
+typeof Symbol()    // 'symbol'
+typeof 10n         // 'bigint'
+
+// ⚠️ 笔试陷阱：大写字符串永远不相等（typeof 只返回小写）
+typeof 42 === 'Number'   // false
+typeof 42 === 'number'   // true
+
+// ⚠️ null / undefined 只有小写的「值」，没有大写形式
+null                 // ✅
+undefined            // ✅
+Null                 // ❌ ReferenceError: Null is not defined
+Undefined            // ❌ ReferenceError
+
+// ⚠️ 写代码时构造器必须大写（这是真实存在的标识符，改小写就是错代码）
+Object.keys(o)   Array.isArray(a)   Number.isNaN(x)
+Symbol('id')     BigInt(10)         Object.prototype.toString.call(v)
+
+// ⚠️ 不加 new 是类型转换（常用）；加 new 会变成包装对象
+typeof String('x')       // 'string'
+typeof new String('x')   // 'object'  ← 别用`
+
 export default function Summary() {
   return (
     <div className="demo-wrap jst-root jst-summary">
@@ -53,9 +88,9 @@ export default function Summary() {
         <h3>🧠 一句话本质</h3>
         <p className="jst-lead">
           JS 有 <b>8 种数据类型</b>，按<b>存储方式</b>分成两大类：
-          <b>7 种原始类型</b>（Number、String、Boolean、Undefined、Null、Symbol、BigInt）——值存在栈里、不可变、赋值即拷贝；
-          <b>1 种引用类型</b>（Object）——值存在堆里、变量存地址，数组 / 函数 / 日期 / 正则 / Map / Set 都属于它。
-          其中 <b>Symbol 是 ES6 新增</b>、<b>BigInt 是 ES2020 新增</b>，答出这句就没漏项了。
+          <b>7 种原始类型</b>（number、string、boolean、undefined、null、symbol、bigint）——值存在栈里、不可变、赋值即拷贝；
+          <b>1 种引用类型</b>（object）——值存在堆里、变量存地址，数组 / 函数 / 日期 / 正则 / Map / Set 都属于它。
+          其中 <b>symbol 是 ES6 新增</b>、<b>bigint 是 ES2020 新增</b>，答出这句就没漏项了。
         </p>
       </section>
 
@@ -98,6 +133,32 @@ export default function Summary() {
       </section>
 
       <section className="jst-block">
+        <h3>🔠 大小写：本站统一记「全小写」</h3>
+        <p className="jst-note">
+          类型名在 ECMAScript 规范文档里写作首字母大写（<i>The Number Type</i>），但 <code>typeof</code> 的返回值是小写字符串。
+          两套写法容易记混，所以<b>本站统一按全小写记</b>——这样「类型名」和「typeof 结果」完全重合，只需背一套。
+          面试时口头说小写完全没问题（很多面试官自己就说小写），<b>关键是别漏项</b>。
+        </p>
+        <table className="jst-table">
+          <thead>
+            <tr><th>场景</th><th>大小写</th><th>例子</th></tr>
+          </thead>
+          <tbody>
+            {CASE_ROWS.map((r) => (
+              <tr key={r[0]}><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td></tr>
+            ))}
+          </tbody>
+        </table>
+        <pre className="code">{CASE_CODE}</pre>
+        <p className="jst-note">
+          ⚠️ 真正会出错的只有两处：① 代码里写 <code>Null</code> / <code>Undefined</code> 会直接
+          <b> ReferenceError</b>（它们只有小写的「值」，没有大写的全局构造器）；
+          ② 笔试陷阱 <code>typeof 42 === 'Number'</code> 永远是 <b>false</b>，因为 typeof 返回的是小写串。
+          反过来，写代码时把 <code>Object.keys()</code>、<code>Symbol()</code> 写成小写也会报错——<b>记类型用小写，调 API 照原样大写</b>。
+        </p>
+      </section>
+
+      <section className="jst-block">
         <h3>🔍 typeof vs instanceof（怎么判断类型）</h3>
         <table className="jst-table">
           <thead>
@@ -116,10 +177,10 @@ export default function Summary() {
         <h3>⚠️ 高频追问点</h3>
         <ul className="jst-list">
           <li><b>typeof null 为什么是 "object"？</b>1995 年 JS 用 32 位存值、低位存类型标签，对象的标签是 <code>000</code>，而 null 的内部表示全是 0，于是被误判。后来有提案修复（typeof null → "null"），因破坏存量代码兼容被否决，成为永久 bug。</li>
-          <li><b>function 是第 9 种类型吗？</b>不是。<code>typeof</code> 对函数返回 "function" 只是特殊照顾，函数本质是「可调用的对象」，属于 Object。所以 typeof 有 8 个返回值，数据类型也是 8 种，但两者并非一一对应。</li>
-          <li><b>0.1 + 0.2 为什么不等于 0.3？</b>Number 是 IEEE 754 双精度浮点，0.1、0.2 转成二进制都是无限循环，相加后为 <code>0.30000000000000004</code>。解决：整数用 BigInt，浮点比较用 <code>Math.abs(a - b) &lt; Number.EPSILON</code>，金额用「分为单位的整数」或 decimal 库。</li>
-          <li><b>Symbol 有什么用？</b>① 做对象唯一键，防止属性名冲突（如给别人的对象挂元数据）；② 内置 well-known symbols 定制语言行为，如 <code>Symbol.iterator</code>（可被 for...of）、<code>Symbol.toPrimitive</code>（自定义转换）；③ 模拟私有属性（for...in / Object.keys 遍历不到）。注意 <code>Symbol.for()</code> 走全局注册表，<code>Symbol()</code> 每次都是新值。</li>
-          <li><b>BigInt 解决什么问题？</b>Number 只能安全表示 <code>-(2^53-1) ~ 2^53-1</code>，超过就精度丢失（如数据库的 Long 型 ID、纳秒时间戳、加密运算）。BigInt 表示任意精度整数，但不能与 Number 混合运算，也不能用于 Math 方法。</li>
+          <li><b>function 是第 9 种类型吗？</b>不是。<code>typeof</code> 对函数返回 "function" 只是特殊照顾，函数本质是「可调用的对象」，属于 object。所以 typeof 有 8 个返回值，数据类型也是 8 种，但两者并非一一对应。</li>
+          <li><b>0.1 + 0.2 为什么不等于 0.3？</b>number 是 IEEE 754 双精度浮点，0.1、0.2 转成二进制都是无限循环，相加后为 <code>0.30000000000000004</code>。解决：整数用 bigint，浮点比较用 <code>Math.abs(a - b) &lt; Number.EPSILON</code>，金额用「分为单位的整数」或 decimal 库。</li>
+          <li><b>symbol 有什么用？</b>① 做对象唯一键，防止属性名冲突（如给别人的对象挂元数据）；② 内置 well-known symbols 定制语言行为，如 <code>Symbol.iterator</code>（可被 for...of）、<code>Symbol.toPrimitive</code>（自定义转换）；③ 模拟私有属性（for...in / Object.keys 遍历不到）。注意 <code>Symbol.for()</code> 走全局注册表，<code>Symbol()</code> 每次都是新值。</li>
+          <li><b>bigint 解决什么问题？</b>number 只能安全表示 <code>-(2^53-1) ~ 2^53-1</code>，超过就精度丢失（如数据库的 Long 型 ID、纳秒时间戳、加密运算）。bigint 表示任意精度整数，但不能与 number 混合运算，也不能用于 Math 方法。</li>
           <li><b>原始类型和引用类型的区别？</b>存储位置（栈 / 堆）、可变性（不可变 / 可变）、赋值语义（拷值 / 拷地址）、比较方式（比值 / 比地址）。这四点决定了深拷贝浅拷贝、函数传参、<code>const</code> 对象仍可改属性等一系列现象。</li>
           <li><b>JS 是值传递还是引用传递？</b>只有<b>值传递</b>。传对象时传的是「地址的副本」：函数内改属性会影响外面，但给形参<b>重新赋值</b>不会影响外面的变量。</li>
           <li><b>const 声明的对象为什么还能改？</b>const 锁的是「变量绑定」（不能重新赋值地址），不是对象内容。要冻结内容用 <code>Object.freeze()</code>（且只是浅冻结）。</li>
@@ -132,8 +193,8 @@ export default function Summary() {
         <blockquote className="jst-quote">
           <p>
             "JS 一共有 <b>8 种数据类型</b>，按存储方式分成两类：<b>7 种原始类型</b>和 <b>1 种引用类型</b>。
-            原始类型是 Number、String、Boolean、Undefined、Null，加上 ES6 新增的 Symbol 和 ES2020 新增的 BigInt；
-            引用类型只有 Object，数组、函数、日期、正则、Map、Set 都属于它。"
+            原始类型是 number、string、boolean、undefined、null，加上 ES6 新增的 symbol 和 ES2020 新增的 bigint；
+            引用类型只有 object，数组、函数、日期、正则、Map、Set 都属于它。"
           </p>
           <p>
             "两类的区别在于<b>存储和赋值语义</b>：原始类型的值直接存在栈里、不可变，赋值是拷一份值，比较比值；
@@ -154,8 +215,8 @@ export default function Summary() {
         <ol className="jst-steps">
           <li>背口诀：<b>数 字 布 未 空 符 大 + 对象</b>（谐音「书字不为空，付大款」）。</li>
           <li>记结构：<b>1 个引用 + 7 个原始</b>，7 = 一周七天。</li>
-          <li>记时间线：<b>ES1 五样 → ES6 加 Symbol → ES2020 加 BigInt</b>（5 → 6 → 7）。</li>
-          <li>绑 typeof：每种类型都配一个 typeof 结果，重点记两个例外（null → object、函数 → function）。</li>
+          <li>记时间线：<b>ES1 五样 → ES6 加 symbol → ES2020 加 bigint</b>（5 → 6 → 7）。</li>
+          <li>绑 typeof：本站统一用<b>小写</b>记类型名，刚好和 typeof 返回值重合；重点记两个例外（null → object、函数 → function）。</li>
           <li>去 ✍️ 默写挑战 用 <b>🔴 纯默写</b> 测一次；错了读「错因」，10 分钟后、第二天、第 4 天各再来一次。</li>
         </ol>
       </section>

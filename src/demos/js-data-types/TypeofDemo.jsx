@@ -6,29 +6,29 @@ import { useState } from 'react'
  * 「8 种数据类型」最容易被追问的就是 typeof 的返回值：
  *   typeof 一共只会返回 8 个字符串——
  *   "undefined" "boolean" "number" "bigint" "string" "symbol" "object" "function"
- *   但 "function" 并不是第 9 种数据类型（函数属于 Object）。
+ *   但 "function" 并不是第 9 种数据类型（函数属于 object）。
  * 上半屏是「真实运行」：点任意值，用 JS 引擎当场算出 typeof 与精确类型标签。
  * 下半屏是「陷阱竞猜」：10 道高频坑题，选完立刻讲为什么。
  * ========================================================= */
 
 /* 预置样本：value 用工厂函数生成，真实调用 typeof，不靠硬编码答案 */
 const SAMPLES = [
-  { code: 'null', get: () => null, trap: true, type: 'Null', why: '著名的历史 bug：typeof null === "object"。1995 年的实现用 32 位存值、低位是类型标签，对象的标签是 000，而 null 的内部表示全是 0，于是被误判成对象。后来有提案想修复，因为会破坏大量存量代码被否决了。' },
-  { code: 'undefined', get: () => undefined, type: 'Undefined', why: 'typeof undefined === "undefined"，这是唯一「类型名和 typeof 结果完全对齐」的空值。' },
-  { code: '42', get: () => 42, type: 'Number', why: '整数、小数、NaN、Infinity 全是 Number，没有 int / float 之分。' },
-  { code: 'NaN', get: () => NaN, trap: true, type: 'Number', why: 'NaN 的 typeof 仍是 "number"（它表示"不是一个有效数字"）。注意 NaN !== NaN，判断要用 Number.isNaN(x)。' },
-  { code: '"hi"', get: () => 'hi', type: 'String', why: '字面量字符串是原始类型，typeof 为 "string"。' },
-  { code: 'new String("hi")', get: () => new String('hi'), trap: true, type: 'Object', why: '用 new 创建的是「包装对象」，属于引用类型，typeof 为 "object"。所以永远不要写 new String / new Number / new Boolean。' },
-  { code: 'true', get: () => true, type: 'Boolean', why: '布尔只有 true / false 两个值。注意 new Boolean(true) 会变成对象，if 里永远为真。' },
-  { code: 'Symbol("id")', get: () => Symbol('id'), type: 'Symbol', why: 'ES6 新增，每次调用都产生唯一值，typeof 为 "symbol"。' },
-  { code: '10n', get: () => BigInt(10), type: 'BigInt', why: 'ES2020 新增，字面量后缀 n（也可写 BigInt(10)），typeof 为 "bigint"。' },
-  { code: '{}', get: () => ({ a: 1 }), type: 'Object', why: '普通对象，typeof 为 "object"。' },
-  { code: '[]', get: () => [1, 2], trap: true, type: 'Object', why: 'typeof 分不清数组和普通对象，都返回 "object"。判数组要用 Array.isArray(x)。' },
-  { code: 'function () {}', get: () => function () {}, trap: true, type: 'Object', why: 'typeof 对函数特殊返回 "function"，但函数不是第 9 种数据类型——它是「可调用的对象」，属于 Object。' },
-  { code: 'new Date()', get: () => new Date(), trap: true, type: 'Object', why: '内置对象一律 "object"，要精确区分得靠 Object.prototype.toString.call()。' },
-  { code: '/ab+c/', get: () => /ab+c/, trap: true, type: 'Object', why: '正则也是对象，typeof 为 "object"。' },
+  { code: 'null', get: () => null, trap: true, type: 'null', why: '著名的历史 bug：typeof null === "object"。1995 年的实现用 32 位存值、低位是类型标签，对象的标签是 000，而 null 的内部表示全是 0，于是被误判成对象。后来有提案想修复，因为会破坏大量存量代码被否决了。' },
+  { code: 'undefined', get: () => undefined, type: 'undefined', why: 'typeof undefined === "undefined"，这是唯一「类型名和 typeof 结果完全对齐」的空值。' },
+  { code: '42', get: () => 42, type: 'number', why: '整数、小数、NaN、Infinity 全是 number，没有 int / float 之分。' },
+  { code: 'NaN', get: () => NaN, trap: true, type: 'number', why: 'NaN 的 typeof 仍是 "number"（它表示"不是一个有效数字"）。注意 NaN !== NaN，判断要用 Number.isNaN(x)。' },
+  { code: '"hi"', get: () => 'hi', type: 'string', why: '字面量字符串是原始类型，typeof 为 "string"。' },
+  { code: 'new String("hi")', get: () => new String('hi'), trap: true, type: 'object', why: '用 new 创建的是「包装对象」，属于引用类型，typeof 为 "object"。所以永远不要写 new String / new Number / new Boolean。' },
+  { code: 'true', get: () => true, type: 'boolean', why: '布尔只有 true / false 两个值。注意 new Boolean(true) 会变成对象，if 里永远为真。' },
+  { code: 'Symbol("id")', get: () => Symbol('id'), type: 'symbol', why: 'ES6 新增，每次调用都产生唯一值，typeof 为 "symbol"。' },
+  { code: '10n', get: () => BigInt(10), type: 'bigint', why: 'ES2020 新增，字面量后缀 n（也可写 BigInt(10)），typeof 为 "bigint"。' },
+  { code: '{}', get: () => ({ a: 1 }), type: 'object', why: '普通对象，typeof 为 "object"。' },
+  { code: '[]', get: () => [1, 2], trap: true, type: 'object', why: 'typeof 分不清数组和普通对象，都返回 "object"。判数组要用 Array.isArray(x)。' },
+  { code: 'function () {}', get: () => function () {}, trap: true, type: 'object', why: 'typeof 对函数特殊返回 "function"，但函数不是第 9 种数据类型——它是「可调用的对象」，属于 object。' },
+  { code: 'new Date()', get: () => new Date(), trap: true, type: 'object', why: '内置对象一律 "object"，要精确区分得靠 Object.prototype.toString.call()。' },
+  { code: '/ab+c/', get: () => /ab+c/, trap: true, type: 'object', why: '正则也是对象，typeof 为 "object"。' },
   // 未声明变量没法在模块里真实求值，给静态结果 + 说明
-  { code: 'notDeclared', raw: 'typeof notDeclared', result: 'undefined', toString: '[object Undefined]', trap: true, type: 'Undefined', why: 'typeof 是唯一对「从未声明的变量」不抛 ReferenceError 的操作符，会安静地返回 "undefined"。老代码常用它做特性检测，如 typeof window.BigInt !== "undefined"。' },
+  { code: 'notDeclared', raw: 'typeof notDeclared', result: 'undefined', toString: '[object Undefined]', trap: true, type: 'undefined', why: 'typeof 是唯一对「从未声明的变量」不抛 ReferenceError 的操作符，会安静地返回 "undefined"。老代码常用它做特性检测，如 typeof window.BigInt !== "undefined"。' },
 ]
 
 const QUESTIONS = [
@@ -42,7 +42,7 @@ const QUESTIONS = [
     code: 'typeof NaN',
     options: ['"NaN"', '"number"', '"undefined"', '"object"'],
     answer: '"number"',
-    why: 'NaN 是 Number 类型的一个特殊值，意为「不是有效数字」。顺带记：NaN 是唯一不等于自己的值，用 Number.isNaN() 判断。',
+    why: 'NaN 是 number 类型的一个特殊值，意为「不是有效数字」。顺带记：NaN 是唯一不等于自己的值，用 Number.isNaN() 判断。',
   },
   {
     code: 'typeof []',
@@ -54,7 +54,7 @@ const QUESTIONS = [
     code: 'typeof function () {}',
     options: ['"function"', '"object"', '"undefined"', '"callable"'],
     answer: '"function"',
-    why: '这是 typeof 的「特殊照顾」，但函数仍然属于 Object（引用类型），所以数据类型总数还是 8 种，不是 9 种。',
+    why: '这是 typeof 的「特殊照顾」，但函数仍然属于 object（引用类型），所以数据类型总数还是 8 种，不是 9 种。',
   },
   {
     code: 'typeof Symbol("id")',
@@ -66,7 +66,7 @@ const QUESTIONS = [
     code: 'typeof 10n',
     options: ['"bigint"', '"number"', '"object"', '"integer"'],
     answer: '"bigint"',
-    why: 'ES2020 新增，typeof 返回 "bigint"。它和 Number 不能直接混合运算：10n + 1 会抛 TypeError。',
+    why: 'ES2020 新增，typeof 返回 "bigint"。它和 number 不能直接混合运算：10n + 1 会抛 TypeError。',
   },
   {
     code: 'typeof notDeclared  // 变量从未声明',
@@ -90,7 +90,7 @@ const QUESTIONS = [
     code: '0.1 + 0.2 === 0.3',
     options: ['true', 'false', 'NaN', 'TypeError'],
     answer: 'false',
-    why: 'Number 是 IEEE 754 双精度浮点，0.1 + 0.2 实际是 0.30000000000000004。浮点比较用 Math.abs(a - b) < Number.EPSILON，超大整数用 BigInt。',
+    why: 'number 是 IEEE 754 双精度浮点，0.1 + 0.2 实际是 0.30000000000000004。浮点比较用 Math.abs(a - b) < Number.EPSILON，超大整数用 bigint。',
   },
 ]
 
@@ -252,21 +252,22 @@ export default function TypeofDemo() {
 
       {/* typeof 全景 */}
       <section className="jst-block">
-        <h3>③ 一张图记住 typeof 的「8 个返回值 vs 8 种类型」</h3>
+        <h3>③ 一张图记住 typeof 的「8 个返回值 vs 8 种类型」（现在两边一模一样）</h3>
         <pre className="code">{`typeof 可能返回的 8 个字符串          对应的数据类型（8 种）
 ─────────────────────────────────    ─────────────────────────
-"undefined"                          Undefined
-"boolean"                            Boolean
-"number"                             Number（含 NaN / Infinity）
-"bigint"                             BigInt
-"string"                             String
-"symbol"                             Symbol
+"undefined"                          undefined
+"boolean"                            boolean
+"number"                             number（含 NaN / Infinity）
+"bigint"                             bigint
+"string"                             string
+"symbol"                             symbol
 "function"  ⚠️ 不是独立类型  ────────┐
-"object"    ⚠️ null 也返回它  ───────┴─→  Object（函数/数组/日期/正则/Map/Set）`}</pre>
+"object"    ⚠️ null 也返回它  ───────┴─→  object（函数/数组/日期/正则/Map/Set）`}</pre>
         <p className="jst-note">
           所以「typeof 返回 8 种」和「数据类型 8 种」是<b>巧合</b>，不是对应关系：
           typeof 多了一个 <code>function</code>，又把 <code>null</code> 错算成了 <code>object</code>。
           面试时点出这一层，基本就是加分项。
+          这也是本站<b>统一用小写记类型名</b>的原因——刚好和 typeof 的返回值完全重合，背一套就够。
         </p>
       </section>
 
