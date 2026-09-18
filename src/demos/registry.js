@@ -123,6 +123,16 @@ const rawTopics = [
     createdAt: '2026-09-18',
     loader: () => import('./instanceof-principle/index.jsx'),
   },
+  {
+    id: 'react-fiber',
+    icon: '🧵',
+    title: 'React Fiber 架构',
+    subtitle: '链表 + 时间切片：可视化 work loop 遍历 + Stack/Fiber 可中断渲染对比，讲透「为什么需要 Fiber」',
+    tags: ['原理', 'React 架构', '面试高频'],
+    difficulty: '中级',
+    createdAt: '2026-09-18',
+    loader: () => import('./react-fiber/index.jsx'),
+  },
 
   /* 👇 未来在这里继续加，例如：
   {
