@@ -270,6 +270,9 @@
 .jst-input {
   width: 100%;
   box-sizing: border-box;
+  /* 卡片在 grid 行内被拉伸成等高，线索文字长短不一会让输入框位置忽上忽下；
+     用 margin-top:auto 把输入框（及其后的提示/批改内容）顶到卡片底部，始终贴底对齐 */
+  margin-top: auto;
   background: var(--bg-inset);
   border: 1px solid var(--border-strong);
   border-radius: 8px;
