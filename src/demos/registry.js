@@ -211,6 +211,50 @@ const rawTopics = [
     loader: () => import('./css-box-model/index.jsx'),
   },
 
+  {
+    id: 'prototype-chain',
+    icon: '🪜',
+    title: '原型链与继承',
+    subtitle: '属性查找逐环播放 + ES5 寄生组合 vs class 六项对拍：三角关系、new 四步、接线式继承一次讲透',
+    tags: ['JS 基础', '原型链', '面试高频'],
+    difficulty: '中级',
+    createdAt: '2026-09-24',
+    loader: () => import('./prototype-chain/index.jsx'),
+  },
+
+  {
+    id: 'ts-vs-js',
+    icon: '🔷',
+    title: 'TS 和 JS 的区别',
+    subtitle: '同一个 bug 双栏对拍：tsc 编译期标红 vs 真跑擦除类型后的 JS；类型擦除、any/unknown、收益与代价',
+    tags: ['JS 基础', 'TypeScript', '面试高频'],
+    difficulty: '初级',
+    createdAt: '2026-09-24',
+    loader: () => import('./ts-vs-js/index.jsx'),
+  },
+
+  {
+    id: 'ts-basic-types',
+    icon: '🧬',
+    title: 'TS 基础原子类型',
+    subtitle: '7 种原子类型 typeof 探测台 + void/never/any/unknown 运行时足迹真跑；null、NaN 陷阱与字面量拓宽',
+    tags: ['JS 基础', 'TypeScript', '面试高频'],
+    difficulty: '初级',
+    createdAt: '2026-09-24',
+    loader: () => import('./ts-basic-types/index.jsx'),
+  },
+
+  {
+    id: 'ts-type-interface',
+    icon: '⚖️',
+    title: 'type vs interface · any/unknown/never',
+    subtitle: '声明合并模拟器 + any/unknown/never 放行矩阵 + 真跑运行时后果；对象选型、顶/底类型、穷尽性检查',
+    tags: ['JS 基础', 'TypeScript', '面试高频'],
+    difficulty: '中级',
+    createdAt: '2026-09-24',
+    loader: () => import('./ts-type-interface/index.jsx'),
+  },
+
   /* 👇 未来在这里继续加，例如：
   {
     id: 'useEffect-deep-dive',

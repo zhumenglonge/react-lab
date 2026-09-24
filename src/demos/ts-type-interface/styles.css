@@ -1,0 +1,309 @@
+/* =========================================================
+ * 主题专属样式：type vs interface · any/unknown/never
+ * ---------------------------------------------------------
+ * 通用样式（tabs / demo-wrap / demo-header / demo-sub / code / btn-row /
+ * ghost）在 src/App.css，这里只放本主题独有的。
+ * ⚠️ 类名统一 tti- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）；
+ * 放行/拦截除红绿外还有 ✅/❌/➖/💥/▶ 文字冗余，不只靠颜色区分。
+ * ========================================================= */
+
+/* ==================== 基础容器 ==================== */
+.tti-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.tti-root .demo-header { margin-bottom: 0.2rem; }
+.tti-root .demo-header h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.3rem;
+  color: var(--text-strong);
+}
+.tti-root .demo-sub {
+  margin: 0 auto;
+  max-width: 860px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+.tti-root .demo-sub b { color: var(--accent-bright); }
+.tti-root .demo-sub code,
+.tti-lead code,
+.tti-list code,
+.tti-pit code,
+.tti-tip code {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-2);
+  font-size: 0.86em;
+}
+
+.tti-primary {
+  background: var(--btn-grad);
+  border-color: transparent;
+  color: var(--text-strong);
+  box-shadow: 0 4px 12px var(--accent-shadow);
+  font-weight: 600;
+}
+
+/* ==================== 分区 ==================== */
+.tti-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.tti-section > h3 {
+  margin: 0;
+  font-size: 1.08rem;
+  color: var(--accent-2);
+}
+.tti-sec-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+.tti-sec-head h3 { margin: 0; font-size: 1.08rem; color: var(--accent-2); }
+
+/* ==================== 对拍卡片 ==================== */
+.tti-duel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+.tti-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.8rem 0.95rem 0.9rem;
+  min-width: 0;
+}
+.tti-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.tti-tag {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.15em 0.6em;
+  border-radius: 999px;
+}
+.tti-tag-ok { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+.tti-tag-bad { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
+.tti-card-title { font-size: 0.92rem; font-weight: 700; color: var(--text-strong); }
+
+.tti-side-tag {
+  align-self: flex-start;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15em 0.6em;
+  border-radius: 999px;
+}
+.tti-side-ts { background: var(--accent-bg); color: var(--accent-bright); border: 1px solid var(--accent-border); }
+.tti-side-js { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning-border); }
+
+.tti-code {
+  margin: 0;
+  font-size: 0.76rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.tti-card-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  justify-content: flex-start;
+}
+.tti-verdict { font-size: 0.86rem; font-weight: 700; }
+.tti-v-ok { color: var(--success); }
+.tti-v-bad { color: var(--danger); }
+.tti-detail {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  background: var(--bg-inset);
+  border-radius: 8px;
+  padding: 0.45rem 0.65rem;
+}
+.tti-tip {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  background: var(--bg-inset);
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+}
+.tti-tip b { color: var(--text-strong); }
+
+/* any vs unknown 真跑结果 */
+.tti-run {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  font-size: 0.8rem;
+  border-radius: 8px;
+  padding: 0.45rem 0.65rem;
+}
+.tti-run-ok { background: var(--success-bg); border: 1px solid var(--success-border); color: var(--success); }
+.tti-run-threw { background: var(--danger-bg); border: 1px solid var(--danger-border); color: var(--danger); }
+.tti-run code {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  word-break: break-all;
+}
+
+/* ==================== 放行矩阵 ==================== */
+.tti-matrix {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  overflow-x: auto;
+}
+.tti-mrow {
+  display: grid;
+  grid-template-columns: minmax(140px, 0.9fr) repeat(3, 1fr);
+  gap: 0.5rem;
+  align-items: stretch;
+}
+.tti-mhead {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+.tti-mhead > span {
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  text-align: center;
+}
+.tti-mhead > span:first-child { text-align: left; }
+.tti-mtype { font-family: 'SF Mono', Menlo, Consolas, monospace; }
+.tti-mop {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-strong);
+  background: var(--surface-2);
+  border-radius: 8px;
+  padding: 0.5rem 0.65rem;
+  display: flex;
+  align-items: center;
+}
+.tti-mcell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem 0.6rem;
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+.tti-micon { font-size: 0.9rem; }
+.tti-yes { color: var(--success); }
+.tti-no { color: var(--danger); }
+.tti-na { color: var(--text-muted); }
+.tti-mmsg { font-style: normal; color: var(--text-secondary); word-break: break-word; }
+.tti-mpending { font-style: normal; color: var(--text-muted); }
+
+/* ==================== 本质 · 总结 ==================== */
+.tti-block {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  overflow-x: auto;
+}
+.tti-block h3 { margin: 0; font-size: 1.05rem; color: var(--accent-2); }
+.tti-essence,
+.tti-summary {
+  gap: 1.3rem;
+  max-width: 980px;
+  margin: 0 auto;
+}
+.tti-lead { margin: 0; font-size: 0.95rem; line-height: 1.9; color: var(--text); }
+.tti-lead b { color: var(--accent-bright); }
+
+.tti-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.tti-table th,
+.tti-table td {
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.tti-table th { background: var(--accent-bg); color: var(--text-strong); font-weight: 600; }
+.tti-table td:first-child { color: var(--accent-2); font-weight: 600; }
+.tti-table td b { color: var(--text-strong); }
+.tti-table td code {
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-2);
+  font-size: 0.84em;
+  word-break: break-all;
+}
+.tti-table tbody tr:hover td { background: var(--surface-1); }
+
+.tti-pit,
+.tti-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+.tti-pit b,
+.tti-list b { color: var(--text-strong); }
+
+.tti-quote {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-2-bg));
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  line-height: 1.9;
+}
+.tti-quote p { margin: 0 0 0.6rem; }
+.tti-quote p:last-child { margin-bottom: 0; }
+.tti-quote b { color: var(--warning); }
+.tti-quote code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--code-text);
+}
+
+/* ==================== 窄屏适配 ==================== */
+@media (max-width: 760px) {
+  .tti-duel { grid-template-columns: 1fr; }
+  .tti-mrow { grid-template-columns: 1fr; }
+  .tti-mhead { display: none; }
+}

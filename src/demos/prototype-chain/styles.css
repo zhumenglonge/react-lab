@@ -1,0 +1,324 @@
+/* =========================================================
+ * 主题专属样式：原型链与继承
+ * ---------------------------------------------------------
+ * 通用样式（tabs / demo-wrap / demo-header / demo-sub / code / tip /
+ * btn-row / ghost）在 src/App.css，这里只放本主题独有的。
+ * ⚠️ 类名统一 ptc- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）；
+ * 命中/未命中除红绿外还有 ✅/❌ 文字冗余，不只靠颜色区分。
+ * ========================================================= */
+
+/* ==================== 基础容器 ==================== */
+.ptc-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.ptc-root .demo-header { margin-bottom: 0.2rem; }
+.ptc-root .demo-header h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.3rem;
+  color: var(--text-strong);
+}
+.ptc-root .demo-sub {
+  margin: 0 auto;
+  max-width: 840px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+.ptc-root .demo-sub b { color: var(--accent-bright); }
+.ptc-root .demo-sub code,
+.ptc-lead code,
+.ptc-list code,
+.ptc-quote code,
+.ptc-result code {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-2);
+  font-size: 0.86em;
+}
+
+.ptc-primary {
+  background: var(--btn-grad);
+  border-color: transparent;
+  color: var(--text-strong);
+  box-shadow: 0 4px 12px var(--accent-shadow);
+  font-weight: 600;
+}
+.ptc-root .btn-row button.ghost {
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-strong);
+}
+.ptc-root .btn-row button.ghost:hover { border-color: var(--accent); color: var(--text-strong); }
+.ptc-root .btn-row button:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+
+/* ==================== 用例选择 chips ==================== */
+.ptc-cases { display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; }
+.ptc-case {
+  padding: 0.3em 0.75em;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.ptc-case:hover { border-color: var(--accent); color: var(--text); }
+.ptc-case-on {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  color: var(--accent-bright);
+  font-weight: 700;
+}
+
+/* ==================== 原型链可视化 ==================== */
+.ptc-viz {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+}
+.ptc-target {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  background: var(--warning-bg);
+  border: 1px dashed var(--warning-border);
+  border-radius: 999px;
+  padding: 0.3rem 0.9rem;
+}
+.ptc-target b,
+.ptc-target code {
+  color: var(--warning);
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+
+.ptc-chain {
+  display: flex;
+  align-items: stretch;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.ptc-step { display: flex; align-items: center; gap: 0.3rem; }
+.ptc-node {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 132px;
+  max-width: 200px;
+  padding: 0.55rem 0.7rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface-1);
+  opacity: 0.35;
+  transition: opacity 0.3s, transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+.ptc-node-name {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-strong);
+  word-break: break-all;
+}
+.ptc-node-cmp { font-size: 0.7rem; color: var(--text-muted); line-height: 1.5; }
+.ptc-arrow { color: var(--text-muted); font-size: 1.1rem; }
+
+.ptc-node-seen { opacity: 0.85; }
+.ptc-node-cur {
+  opacity: 1;
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  border-color: var(--accent);
+}
+.ptc-node-hit {
+  opacity: 1;
+  border-color: var(--success);
+  background: var(--success-bg);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+.ptc-node-hit .ptc-node-cmp { color: var(--success); font-weight: 700; }
+.ptc-node-miss { border-color: var(--danger-border); background: var(--danger-bg); }
+.ptc-node-null {
+  opacity: 1;
+  border-style: dashed;
+  border-color: var(--border-strong);
+  background: var(--bg-code);
+}
+.ptc-node-null .ptc-node-name { color: var(--text-muted); }
+
+/* ==================== 结果条 ==================== */
+.ptc-result {
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  line-height: 1.7;
+}
+.ptc-result-true { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+.ptc-result-false { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
+.ptc-result-idle { background: var(--surface-2); color: var(--text-muted); font-weight: 400; }
+.ptc-result-why {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+/* ==================== 继承对拍 ==================== */
+.ptc-block {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  overflow-x: auto;
+}
+.ptc-block h3 { margin: 0; font-size: 1.05rem; color: var(--accent-2); }
+.ptc-lead { margin: 0; font-size: 0.92rem; line-height: 1.9; color: var(--text); }
+.ptc-lead b { color: var(--accent-bright); }
+.ptc-tip {
+  margin: 0;
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  background: var(--bg-inset);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+}
+.ptc-tip b { color: var(--text-strong); }
+
+.ptc-compare { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.ptc-compare th,
+.ptc-compare td {
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.ptc-compare th { background: var(--accent-bg); color: var(--text-strong); font-weight: 600; }
+.ptc-compare td:first-child { color: var(--accent-2); font-weight: 600; }
+.ptc-compare td b { color: var(--text-strong); }
+.ptc-compare code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--code-text);
+}
+.ptc-compare tbody tr:hover td { background: var(--surface-1); }
+.ptc-code-sub {
+  display: block;
+  margin-top: 0.2rem;
+  font-weight: 400;
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  word-break: break-all;
+}
+.ptc-bool-true { color: var(--success); font-weight: 700; font-family: 'SF Mono', Menlo, monospace; }
+.ptc-bool-false { color: var(--danger); font-weight: 700; font-family: 'SF Mono', Menlo, monospace; }
+
+/* ==================== 三角关系图 ==================== */
+.ptc-triangle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.8rem 0.5rem;
+  background: var(--bg-inset);
+  border-radius: 10px;
+}
+.ptc-tri-node {
+  padding: 0.5rem 1.1rem;
+  border-radius: 10px;
+  border: 1px solid var(--border-strong);
+  font-size: 0.86rem;
+  text-align: center;
+  color: var(--text-secondary);
+}
+.ptc-tri-node b { font-family: 'SF Mono', Menlo, Consolas, monospace; }
+.ptc-tri-fn { background: var(--accent-bg); border-color: var(--accent-border); }
+.ptc-tri-fn b { color: var(--accent-bright); }
+.ptc-tri-proto { background: var(--accent-2-bg); border-color: var(--accent-2-border); }
+.ptc-tri-proto b { color: var(--accent-2); }
+.ptc-tri-inst { background: var(--warning-bg); border-color: var(--warning-border); }
+.ptc-tri-inst b { color: var(--warning); }
+.ptc-tri-mid { display: flex; justify-content: center; }
+.ptc-tri-edge {
+  display: flex;
+  gap: 1.6rem;
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  padding: 0.15rem 0;
+}
+.ptc-tri-label-back { color: var(--text-muted); }
+
+/* ==================== 列表 / 话术 ==================== */
+.ptc-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+.ptc-list b { color: var(--text-strong); }
+.ptc-list code { white-space: nowrap; }
+
+.ptc-quote {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-2-bg));
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  line-height: 1.9;
+}
+.ptc-quote p { margin: 0 0 0.6rem; }
+.ptc-quote p:last-child { margin-bottom: 0; }
+.ptc-quote b { color: var(--warning); }
+.ptc-quote code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--code-text);
+}
+
+.ptc-essence,
+.ptc-summary {
+  gap: 1.3rem;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+/* ==================== 窄屏适配 ==================== */
+@media (max-width: 760px) {
+  .ptc-chain { flex-direction: column; align-items: center; }
+  .ptc-step { flex-direction: column; }
+  .ptc-arrow { transform: rotate(90deg); }
+  .ptc-node { max-width: 100%; }
+  .ptc-tri-edge { flex-direction: column; gap: 0.2rem; align-items: center; }
+}

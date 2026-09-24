@@ -1,0 +1,315 @@
+/* =========================================================
+ * 主题专属样式：TS 基础原子类型
+ * ---------------------------------------------------------
+ * 通用样式（tabs / demo-wrap / demo-header / demo-sub / code / btn-row /
+ * ghost）在 src/App.css，这里只放本主题独有的。
+ * ⚠️ 类名统一 tsb- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）；
+ * 陷阱/正常除颜色外还有 ⚠️/✅/💥/▶ 文字冗余，不只靠颜色区分。
+ * ========================================================= */
+
+/* ==================== 基础容器 ==================== */
+.tsb-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+.tsb-root .demo-header { margin-bottom: 0.2rem; }
+.tsb-root .demo-header h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.3rem;
+  color: var(--text-strong);
+}
+.tsb-root .demo-sub {
+  margin: 0 auto;
+  max-width: 860px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+.tsb-root .demo-sub b { color: var(--accent-bright); }
+.tsb-root .demo-sub code,
+.tsb-lead code,
+.tsb-list code,
+.tsb-hint code,
+.tsb-pit code,
+.tsb-tip code {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-2);
+  font-size: 0.86em;
+}
+
+.tsb-primary {
+  background: var(--btn-grad);
+  border-color: transparent;
+  color: var(--text-strong);
+  box-shadow: 0 4px 12px var(--accent-shadow);
+  font-weight: 600;
+}
+
+/* ==================== 分区 ==================== */
+.tsb-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.tsb-sec-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+.tsb-sec-head h3 {
+  margin: 0;
+  font-size: 1.08rem;
+  color: var(--accent-2);
+}
+.tsb-hint {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+  background: var(--surface-1);
+  border: 1px dashed var(--border-strong);
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+}
+.tsb-hint b { color: var(--text-secondary); }
+.tsb-hint-left { border-style: solid; border-color: var(--border); }
+
+/* ==================== ① 探测台 ==================== */
+.tsb-probe {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.tsb-probe-row {
+  display: grid;
+  grid-template-columns: 150px 1fr 1fr;
+  align-items: center;
+  gap: 0.4rem 0.8rem;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.55rem 0.8rem;
+}
+.tsb-probe-head {
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-strong);
+  padding: 0.4rem 0.8rem;
+}
+.tsb-trap { border-color: var(--warning-border); background: var(--warning-bg); }
+
+.tsb-probe-ts {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-weight: 700;
+  color: var(--accent-bright);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.tsb-trap-tag {
+  font-style: normal;
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: var(--warning);
+  background: var(--surface-2);
+  border-radius: 999px;
+  padding: 0.1em 0.5em;
+}
+.tsb-probe-val code {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+.tsb-probe-type code {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.tsb-type-ok { color: var(--success); }
+.tsb-type-bad { color: var(--warning); }
+.tsb-type-pending { font-size: 0.8rem; color: var(--text-muted); }
+.tsb-probe-note {
+  grid-column: 1 / -1;
+  margin: 0.2rem 0 0;
+  padding-top: 0.45rem;
+  border-top: 1px dashed var(--border);
+  font-size: 0.8rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+/* ==================== ② 特殊类型足迹 ==================== */
+.tsb-special {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+.tsb-sp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.8rem 0.95rem 0.9rem;
+}
+.tsb-sp-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.tsb-sp-badge {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.15em 0.6em;
+  border-radius: 999px;
+  background: var(--accent-bg);
+  color: var(--accent-bright);
+  border: 1px solid var(--accent-border);
+}
+.tsb-sp-title { font-size: 0.92rem; font-weight: 700; color: var(--text-strong); }
+.tsb-code {
+  margin: 0;
+  font-size: 0.76rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.tsb-sp-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+.tsb-sp-expect { font-size: 0.76rem; color: var(--text-muted); }
+.tsb-sp-result {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  font-size: 0.8rem;
+  border-radius: 8px;
+  padding: 0.45rem 0.65rem;
+}
+.tsb-sp-ok { background: var(--success-bg); border: 1px solid var(--success-border); color: var(--success); }
+.tsb-sp-threw { background: var(--danger-bg); border: 1px solid var(--danger-border); color: var(--danger); }
+.tsb-sp-result code {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  word-break: break-all;
+}
+.tsb-sp-kind { font-size: 0.74rem; color: var(--text-muted); }
+.tsb-tip {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  background: var(--bg-inset);
+  border-radius: 8px;
+  padding: 0.45rem 0.65rem;
+}
+
+/* ==================== 本质 · 总结 ==================== */
+.tsb-block {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  overflow-x: auto;
+}
+.tsb-block h3 { margin: 0; font-size: 1.05rem; color: var(--accent-2); }
+.tsb-essence,
+.tsb-summary {
+  gap: 1.3rem;
+  max-width: 980px;
+  margin: 0 auto;
+}
+.tsb-lead { margin: 0; font-size: 0.95rem; line-height: 1.9; color: var(--text); }
+.tsb-lead b { color: var(--accent-bright); }
+
+.tsb-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.tsb-table th,
+.tsb-table td {
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.tsb-table th { background: var(--accent-bg); color: var(--text-strong); font-weight: 600; }
+.tsb-table td:first-child {
+  color: var(--accent-2);
+  font-weight: 600;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  white-space: nowrap;
+}
+.tsb-table td b { color: var(--text-strong); }
+.tsb-table td code {
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-2);
+  font-size: 0.84em;
+  word-break: break-all;
+}
+.tsb-table tbody tr:hover td { background: var(--surface-1); }
+
+.tsb-pit,
+.tsb-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+.tsb-pit b,
+.tsb-list b { color: var(--text-strong); }
+
+.tsb-quote {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-2-bg));
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  line-height: 1.9;
+}
+.tsb-quote p { margin: 0 0 0.6rem; }
+.tsb-quote p:last-child { margin-bottom: 0; }
+.tsb-quote b { color: var(--warning); }
+.tsb-quote code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--code-text);
+}
+
+/* ==================== 窄屏适配 ==================== */
+@media (max-width: 760px) {
+  .tsb-special { grid-template-columns: 1fr; }
+  .tsb-probe-row { grid-template-columns: 1fr; gap: 0.3rem; }
+  .tsb-probe-head { display: none; }
+}
