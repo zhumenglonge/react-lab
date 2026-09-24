@@ -44,6 +44,38 @@ const PITFALLS = [
   },
 ]
 
+/* ---------- 附录：Map / Set 快速了解 ---------- */
+
+// 三者按维度拉平：存什么、迭代产出什么、和 in/of 的关系
+const MAP_COMPARE = [
+  ['存的是什么', '键值对（键只能是 string/symbol）', '键值对（键可以是<b>任意类型</b>）', '<b>不重复的值</b>（只有值没有键）'],
+  ['数据存在哪', '属性上（for...in 可枚举）', '内部存储，<b>不是属性</b>', '内部存储，<b>不是属性</b>'],
+  ['for...in', '✅ 拿到各 key', '❌ 空手而归', '❌ 空手而归'],
+  ['for...of 产出', '❌ 抛错（无 Symbol.iterator）', '[键, 值] 数组（默认 entries()）', '每个值本身'],
+  ['顺序 / 计数', '数字键会被抢先排序 / 数 Object.keys', '严格插入顺序 / size 直接读', '插入顺序 / size'],
+  ['典型用途', '固定形状的数据、JSON 交互', '对象当键、动态映射、计数器', '<b>去重</b>：[...new Set(arr)]'],
+]
+
+// 什么时候用 Map / WeakMap，Set 与 Map 的关系一句话
+const MAP_NOTES = [
+  {
+    t: '为什么 in / of 在 Map 上表现反差这么大？',
+    d: 'Map 把键值对存在引擎内部存储里，对象身上一个可枚举属性都没有，所以「枚举属性」的 for...in 一无所获；而它实现了 Symbol.iterator（默认指向 entries()，每次吐出 [键, 值] 数组），所以「消费迭代器」的 for...of 能同时拿到键和值——这不是语法魔法，是 Map 迭代器协议的约定。Set 同理，只是它的迭代器产出的是值本身。',
+  },
+  {
+    t: '什么时候用 Map 而不是普通对象？',
+    d: '① 键想用对象/数字/NaN 当（对象键会被强转字符串撞车）；② 需要可靠的插入顺序和 O(1) 的 size；③ 频繁增删的映射（计数器、缓存）；④ 键来自用户输入，怕 __proto__ 原型污染。反过来：固定形状的数据、要和 JSON/API 打交道，还是用对象——JSON.stringify(map) 会得到 "{}"，需先 Object.fromEntries 转一下。',
+  },
+  {
+    t: 'Set 和 Map 什么关系？',
+    d: '可以理解为「只有值的 Map」：都是 ES6 哈希结构、都不可被 for...in 枚举、都可 for...of。Set 保证成员不重复（按 SameValueZero 判重），所以前端最常用的姿势就是 [...new Set(arr)] 一行去重，以及 has() 做 O(1) 存在性查询。',
+  },
+  {
+    t: '追问延伸：有了 Map 为什么还有 WeakMap？',
+    d: 'Map 会强引用住它的键——键对象在外面没用了也回收不掉，长生命周期的 Map 攒着短命对象就是内存泄漏。WeakMap 对键只持弱引用：键对象被 GC 时条目自动消失，代价是键只能是对象、没有 size、不可遍历。典型用途是给对象挂「附加私有数据」（DOM 节点元数据、库的内部状态）。',
+  },
+]
+
 export default function EssenceDemo() {
   return (
     <div className="demo-wrap fio-root fio-essence">
@@ -96,6 +128,46 @@ export default function EssenceDemo() {
         <h3>⚠️ 高频陷阱</h3>
         <ul className="fio-list">
           {PITFALLS.map((p) => (
+            <li key={p.t}>
+              <b>{p.t}</b>
+              {p.d}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="fio-block">
+        <h3>🗺️ 附录 · Map / Set 快速了解</h3>
+        <p className="fio-lead">
+          上面的对拍里 Map / Set 是最特别的两行：一个 <code>for...in</code> 空手而归、一个{' '}
+          <code>for...of</code> 能同时产出键和值。这个附录把「Map 是什么、什么时候用、和 Set 怎么选」一次讲清。
+        </p>
+        <table className="fio-compare">
+          <thead>
+            <tr>
+              <th>维度</th>
+              <th>普通对象</th>
+              <th>Map</th>
+              <th>Set</th>
+            </tr>
+          </thead>
+          <tbody>
+            {MAP_COMPARE.map((r) => (
+              <tr key={r[0]}>
+                <td>{r[0]}</td>
+                {r.slice(1).map((cell, i) => (
+                  <td key={i} dangerouslySetInnerHTML={{ __html: cell }} />
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
+      <section className="fio-block">
+        <h3>🧩 Map / Set 追问延伸</h3>
+        <ul className="fio-list">
+          {MAP_NOTES.map((p) => (
             <li key={p.t}>
               <b>{p.t}</b>
               {p.d}
