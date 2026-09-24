@@ -1,0 +1,313 @@
+/* =========================================================
+ * 主题专属样式：CSS 选择器与优先级
+ * ---------------------------------------------------------
+ * 通用样式（tabs / demo-wrap / demo-header / demo-sub / code / btn-row /
+ * ghost）在 src/App.css，这里只放本主题独有的。
+ * ⚠️ 类名统一 cse- 前缀自包含，删除本文件夹即可整体移除。
+ * ⚠️ 文件末尾的「实跑对拍真实规则」顺序必须与 shared.js 的 DUELS
+ *    一致——同源顺序对拍（对决③⑥）靠的就是这个书写顺序。
+ * 颜色引用本文件定义的 --cse-c* 局部变量（高对比、色觉友好），
+ * 且渲染色旁边永远配文字说明，不只靠颜色传达信息。
+ * ========================================================= */
+
+.cse-root {
+  --cse-c1: #f0524d; /* 红 */
+  --cse-c2: #4da3ff; /* 蓝 */
+  --cse-c3: #ffb020; /* 橙 */
+  --cse-c4: #b98cff; /* 紫 */
+  --cse-c5: #34d399; /* 绿 */
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.cse-root .demo-header { margin-bottom: 0.2rem; }
+.cse-root .demo-header h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.3rem;
+  color: var(--text-strong);
+}
+.cse-root .demo-sub {
+  margin: 0 auto;
+  max-width: 860px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+.cse-root .demo-sub b { color: var(--accent-bright); }
+.cse-root code { font-family: 'SF Mono', Menlo, Consolas, monospace; }
+
+.cse-primary {
+  background: var(--btn-grad);
+  border-color: transparent;
+  color: var(--text-strong);
+  box-shadow: 0 4px 12px var(--accent-shadow);
+  font-weight: 600;
+}
+.cse-toolbar { display: flex; justify-content: center; }
+
+/* ==================== 权重计算器 ==================== */
+.cse-calc {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+.cse-input {
+  flex: 1;
+  min-width: 240px;
+  background: var(--bg-code);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  color: var(--text-strong);
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.95rem;
+  padding: 0.55rem 0.75rem;
+}
+.cse-input:focus { outline: 2px solid var(--accent); border-color: transparent; }
+
+.cse-tuple { display: flex; align-items: stretch; gap: 0.35rem; }
+.cse-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  border-radius: 8px;
+  min-width: 58px;
+  padding: 0.3rem 0.5rem;
+}
+.cse-cell b { font-size: 1.15rem; color: var(--accent-bright); font-family: 'SF Mono', Menlo, monospace; }
+.cse-cell i { font-style: normal; font-size: 0.68rem; color: var(--text-muted); }
+.cse-cell-fixed {
+  background: none;
+  border: none;
+  min-width: auto;
+  color: var(--text-muted);
+  font-family: 'SF Mono', Menlo, monospace;
+}
+.cse-calc-empty { margin: 0; font-size: 0.85rem; color: var(--text-muted); }
+
+.cse-presets { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.cse-preset {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.76rem;
+  padding: 0.3rem 0.6rem;
+}
+
+/* ==================== 对决卡片 ==================== */
+.cse-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 0.9rem;
+}
+.cse-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.8rem 0.9rem 0.85rem;
+}
+.cse-card-head {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.cse-card-title { font-size: 0.98rem; font-weight: 700; color: var(--text-strong); }
+
+.cse-rules {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.cse-rule {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-inset);
+}
+.cse-rule-win { border-color: var(--accent); background: var(--accent-bg); }
+.cse-sel {
+  font-size: 0.78rem;
+  color: var(--accent-2);
+  word-break: break-all;
+}
+.cse-rule-tuple {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  flex: none;
+}
+.cse-imp {
+  flex: none;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  border-radius: 6px;
+  padding: 0.05em 0.4em;
+}
+.cse-win-badge { font-size: 0.76rem; color: var(--text-secondary); }
+
+.cse-sample {
+  background: var(--surface-2);
+  border: 1px dashed var(--border-strong);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+}
+.cse-sample p { margin: 0; font-weight: 700; font-size: 0.95rem; }
+
+.cse-measured {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+.cse-chip {
+  flex: none;
+  width: 1.1em;
+  height: 1.1em;
+  border-radius: 4px;
+  border: 1px solid var(--border-strong);
+}
+
+.cse-tip {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  background: var(--bg-inset);
+  border-radius: 8px;
+  padding: 0.45rem 0.6rem;
+}
+
+/* ==================== 本质 · 总结 ==================== */
+.cse-block {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  overflow-x: auto;
+}
+.cse-block h3 { margin: 0; font-size: 1.05rem; color: var(--accent-2); }
+.cse-essence,
+.cse-summary {
+  gap: 1.3rem;
+  max-width: 980px;
+  margin: 0 auto;
+}
+.cse-lead { margin: 0; font-size: 0.95rem; line-height: 1.9; color: var(--text); }
+.cse-lead b { color: var(--accent-bright); }
+.cse-lead code,
+.cse-tip code,
+.cse-list code {
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-2);
+  font-size: 0.86em;
+}
+
+.cse-compare { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.cse-compare th,
+.cse-compare td {
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.cse-compare th { background: var(--accent-bg); color: var(--text-strong); font-weight: 600; }
+.cse-compare td:first-child { color: var(--accent-2); font-weight: 600; white-space: nowrap; }
+.cse-compare td b { color: var(--text-strong); }
+.cse-compare td code {
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-2);
+  font-size: 0.84em;
+  white-space: nowrap;
+}
+.cse-compare tbody tr:hover td { background: var(--surface-1); }
+
+.cse-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+.cse-list b { color: var(--text-strong); }
+
+.cse-quote {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-2-bg));
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  line-height: 1.9;
+}
+.cse-quote p { margin: 0 0 0.6rem; }
+.cse-quote p:last-child { margin-bottom: 0; }
+.cse-quote b { color: var(--warning); }
+.cse-quote code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--code-text);
+}
+
+/* ==================== 实跑对拍真实规则 ====================
+ * ⚠️ 与 shared.js 的 DUELS 逐条对应、顺序一致：
+ * 对决③（.first/.second 打平）和对决⑥（属性 vs 类打平）
+ * 的胜负完全取决于这里的书写先后。改动请两边同步！ */
+
+/* 对决① 标签 vs 类 → 类赢（蓝） */
+.cse-live-1 p { color: var(--cse-c1); }
+.cse-live-1 .t { color: var(--cse-c2); }
+
+/* 对决② 类 vs ID → ID 赢（蓝） */
+.cse-live-2 .t { color: var(--cse-c1); }
+#cse-id2 { color: var(--cse-c2); }
+
+/* 对决③ 同权打平 → 后写的赢（蓝） */
+.cse-live-3 .first { color: var(--cse-c3); }
+.cse-live-3 .second { color: var(--cse-c2); }
+
+/* 对决④ :is 取参数最高 / :where 清零 → :is 赢（紫） */
+.cse-live-4 .t { color: var(--cse-c1); }
+:is(#cse-box4, .cse-live-4) .t { color: var(--cse-c4); }
+:where(#cse-box4) .t { color: var(--cse-c5); }
+
+/* 对决⑤ !important 掀桌 → 带 important 的类赢（绿） */
+#cse-id5 { color: var(--cse-c1); }
+.cse-live-5 .t { color: var(--cse-c5) !important; }
+
+/* 对决⑥ 属性 vs 类同列打平 → 后写的赢（蓝） */
+[data-cse-role='hero'] { color: var(--cse-c3); }
+.cse-attr6 { color: var(--cse-c2); }
+
+/* ==================== 窄屏适配 ==================== */
+@media (max-width: 760px) {
+  .cse-grid { grid-template-columns: 1fr; }
+}

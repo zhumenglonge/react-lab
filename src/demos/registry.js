@@ -189,6 +189,28 @@ const rawTopics = [
     loader: () => import('./reverse-questions/index.jsx'),
   },
 
+  {
+    id: 'css-selectors',
+    icon: '🎯',
+    title: 'CSS 选择器与优先级',
+    subtitle: '权重计算器 + 6 组实跑对决：四元组逐列比、后来者居上、!important 掀桌、:is/:where 权重真相',
+    tags: ['CSS', '选择器', '面试高频'],
+    difficulty: '初级',
+    createdAt: '2026-09-24',
+    loader: () => import('./css-selectors/index.jsx'),
+  },
+
+  {
+    id: 'css-box-model',
+    icon: '📦',
+    title: 'CSS 盒模型',
+    subtitle: '标准 vs IE 盒模型双盒实跑对拍：拖 padding/border 看总宽变化 + DOM 实测 + margin 塌陷验证',
+    tags: ['CSS', '盒模型', '面试高频'],
+    difficulty: '初级',
+    createdAt: '2026-09-24',
+    loader: () => import('./css-box-model/index.jsx'),
+  },
+
   /* 👇 未来在这里继续加，例如：
   {
     id: 'useEffect-deep-dive',
