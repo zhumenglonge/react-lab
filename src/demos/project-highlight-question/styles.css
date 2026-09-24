@@ -1,0 +1,64 @@
+/* =========================================================
+ * 主题专属样式：行为面试题 · 印象最深的项目
+ * ---------------------------------------------------------
+ * 类名统一 phq- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）。
+ * ========================================================= */
+
+.phq-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.phq-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.phq-icon { font-size: 2rem; }
+.phq-header h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.3rem;
+  color: var(--text-strong);
+}
+.phq-meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.phq-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+}
+.phq-card h3 {
+  margin: 0 0 0.7rem;
+  font-size: 1.02rem;
+  color: var(--text-strong);
+}
+
+.phq-question {
+  margin: 0;
+  padding: 0.9rem 1.1rem;
+  background: var(--bg-inset);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.phq-todo {
+  margin: 0;
+  padding: 1rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-style: italic;
+  border: 1px dashed var(--border-strong);
+  border-radius: 8px;
+}

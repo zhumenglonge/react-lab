@@ -134,6 +134,17 @@ const rawTopics = [
     loader: () => import('./react-fiber/index.jsx'),
   },
 
+  {
+    id: 'project-highlight-question',
+    icon: '🗣️',
+    title: '面试题：印象最深的项目',
+    subtitle: '行为面试原题「介绍一个印象最深/有亮点的项目，说说你参与的内容」——题目已记录，答案待填充',
+    tags: ['行为面试', '项目经验', '面试高频'],
+    difficulty: '开放题',
+    createdAt: '2026-09-24',
+    loader: () => import('./project-highlight-question/index.jsx'),
+  },
+
   /* 👇 未来在这里继续加，例如：
   {
     id: 'useEffect-deep-dive',
