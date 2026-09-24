@@ -135,6 +135,39 @@ const rawTopics = [
   },
 
   {
+    id: 'for-in-vs-for-of',
+    icon: '🔁',
+    title: 'for...in vs for...of',
+    subtitle: '8 种数据当场对拍：一个遍历键名（含原型链）、一个遍历值（走 Symbol.iterator），区别一网打尽',
+    tags: ['JS 基础', '循环遍历', '面试高频'],
+    difficulty: '初级',
+    createdAt: '2026-09-24',
+    loader: () => import('./for-in-vs-for-of/index.jsx'),
+  },
+
+  {
+    id: 'some-vs-every',
+    icon: '🔍',
+    title: 'some vs every',
+    subtitle: '存在即真 vs 全真才真：实跑短路计数 + some/every/find/filter 家族对比 + 空数组陷阱',
+    tags: ['JS 基础', '数组方法', '面试高频'],
+    difficulty: '初级',
+    createdAt: '2026-09-24',
+    loader: () => import('./some-vs-every/index.jsx'),
+  },
+
+  {
+    id: 'frontend-security',
+    icon: '🛡️',
+    title: '前端安全 & 攻击防护（金融向）',
+    subtitle: 'XSS/CSRF/点击劫持/MITM/重放/供应链逐个给前端手段，叠加金融专项：脱敏/金额精度/幂等/加签/越权/密钥',
+    tags: ['安全', '工程实践', '面试高频'],
+    difficulty: '中级',
+    createdAt: '2026-09-24',
+    loader: () => import('./frontend-security/index.jsx'),
+  },
+
+  {
     id: 'project-highlight-question',
     icon: '🗣️',
     title: '面试题：印象最深的项目',
@@ -143,6 +176,17 @@ const rawTopics = [
     difficulty: '开放题',
     createdAt: '2026-09-24',
     loader: () => import('./project-highlight-question/index.jsx'),
+  },
+
+  {
+    id: 'reverse-questions',
+    icon: '❓',
+    title: '反问环节：该问什么',
+    subtitle: '面试官问“你有什么想了解的”时：可勾选反问清单 + 避雷/分角色 + “还有问题吗≠通过”的信号解读',
+    tags: ['行为面试', '软技能', '面试高频'],
+    difficulty: '开放题',
+    createdAt: '2026-09-24',
+    loader: () => import('./reverse-questions/index.jsx'),
   },
 
   /* 👇 未来在这里继续加，例如：

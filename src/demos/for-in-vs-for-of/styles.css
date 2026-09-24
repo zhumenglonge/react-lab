@@ -1,0 +1,269 @@
+/* =========================================================
+ * 主题专属样式：for...in vs for...of
+ * ---------------------------------------------------------
+ * 通用样式（tabs / demo-wrap / demo-header / demo-sub / code / tip /
+ * btn-row / ghost）在 src/App.css，这里只放本主题独有的。
+ * ⚠️ 类名统一 fio- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）；
+ * in/of 除颜色外还带文字标签，不只靠颜色区分。
+ * ========================================================= */
+
+/* ==================== 基础容器 ==================== */
+.fio-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.fio-root .demo-header { margin-bottom: 0.2rem; }
+.fio-root .demo-header h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.3rem;
+  color: var(--text-strong);
+}
+.fio-root .demo-sub {
+  margin: 0 auto;
+  max-width: 860px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+.fio-root .demo-sub b { color: var(--accent-bright); }
+.fio-root code {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+
+.fio-primary {
+  background: var(--btn-grad);
+  border-color: transparent;
+  color: var(--text-strong);
+  box-shadow: 0 4px 12px var(--accent-shadow);
+  font-weight: 600;
+}
+.fio-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.fio-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.fio-switch input { accent-color: var(--accent); cursor: pointer; }
+.fio-switch:has(input:disabled) { opacity: 0.5; cursor: not-allowed; }
+
+/* ==================== 实跑对拍网格 ==================== */
+.fio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 0.9rem;
+}
+.fio-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.8rem 0.9rem 0.85rem;
+}
+.fio-card-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.fio-card-title { font-size: 0.98rem; font-weight: 700; color: var(--text-strong); }
+.fio-card-src {
+  font-size: 0.76rem;
+  color: var(--accent-2);
+  background: var(--bg-code);
+  padding: 0.15em 0.45em;
+  border-radius: 4px;
+  word-break: break-all;
+}
+
+.fio-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.fio-badge {
+  flex: none;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.15em 0.5em;
+  border-radius: 6px;
+  margin-top: 0.1em;
+}
+.fio-badge-in { background: var(--accent-bg); color: var(--accent-bright); border: 1px solid var(--accent-border); }
+.fio-badge-of { background: var(--accent-2-bg); color: var(--accent-2); border: 1px solid var(--accent-2-border); }
+
+.fio-vals { display: flex; flex-wrap: wrap; gap: 0.3rem; align-items: center; }
+.fio-chip {
+  font-size: 0.78rem;
+  color: var(--text);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.1em 0.55em;
+}
+.fio-empty { font-style: italic; color: var(--text-muted); font-size: 0.8rem; }
+.fio-err {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--danger);
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  border-radius: 6px;
+  padding: 0.15em 0.55em;
+}
+
+.fio-tip {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  background: var(--bg-inset);
+  border-radius: 8px;
+  padding: 0.45rem 0.6rem;
+}
+.fio-note {
+  margin: 0;
+  text-align: center;
+  font-size: 0.86rem;
+  color: var(--text-muted);
+  background: var(--surface-1);
+  border: 1px dashed var(--border-strong);
+  border-radius: 10px;
+  padding: 1rem;
+}
+.fio-note code {
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-2);
+}
+
+/* ==================== 本质 · 选型 ==================== */
+.fio-essence,
+.fio-summary {
+  gap: 1.3rem;
+  max-width: 980px;
+  margin: 0 auto;
+}
+.fio-block {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  overflow-x: auto;
+}
+.fio-block h3 { margin: 0; font-size: 1.05rem; color: var(--accent-2); }
+.fio-lead {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.9;
+  color: var(--text);
+}
+.fio-lead b { color: var(--accent-bright); }
+.fio-lead code {
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-2);
+  font-size: 0.86em;
+}
+
+.fio-compare { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.fio-compare th,
+.fio-compare td {
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.fio-compare th { background: var(--accent-bg); color: var(--text-strong); font-weight: 600; }
+.fio-compare td:first-child { color: var(--accent-2); font-weight: 600; white-space: nowrap; }
+.fio-compare td b { color: var(--text-strong); }
+.fio-compare tbody tr:hover td { background: var(--surface-1); }
+
+.fio-when {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.fio-when li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: 'scene use' 'why why';
+  gap: 0.15rem 0.8rem;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.55rem 0.75rem;
+}
+.fio-when-scene { grid-area: scene; color: var(--text); font-size: 0.88rem; }
+.fio-when-use {
+  grid-area: use;
+  color: var(--success);
+  font-weight: 700;
+  font-size: 0.84rem;
+  white-space: nowrap;
+}
+.fio-when-why { grid-area: why; color: var(--text-muted); font-size: 0.8rem; line-height: 1.6; }
+
+.fio-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+.fio-list b { color: var(--text-strong); }
+
+/* ==================== 🎯 面试总结话术 ==================== */
+.fio-quote {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-2-bg));
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  line-height: 1.9;
+}
+.fio-quote p { margin: 0 0 0.6rem; }
+.fio-quote p:last-child { margin-bottom: 0; }
+.fio-quote b { color: var(--warning); }
+.fio-quote code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--code-text);
+}
+
+/* ==================== 窄屏适配 ==================== */
+@media (max-width: 760px) {
+  .fio-grid { grid-template-columns: 1fr; }
+}

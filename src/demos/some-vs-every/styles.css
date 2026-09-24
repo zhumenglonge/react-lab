@@ -1,0 +1,198 @@
+/* =========================================================
+ * 主题专属样式：some vs every
+ * ---------------------------------------------------------
+ * 通用样式（tabs / demo-wrap / demo-header / demo-sub / code / btn-row /
+ * ghost）在 src/App.css，这里只放本主题独有的。
+ * ⚠️ 类名统一 soe- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）；
+ * true/false 除红绿外还有文字，短路用 ⛔ 文字冗余，不只靠颜色。
+ * ========================================================= */
+
+/* ==================== 基础容器 ==================== */
+.soe-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.soe-root .demo-header { margin-bottom: 0.2rem; }
+.soe-root .demo-header h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.3rem;
+  color: var(--text-strong);
+}
+.soe-root .demo-sub {
+  margin: 0 auto;
+  max-width: 860px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+.soe-root .demo-sub b { color: var(--accent-bright); }
+.soe-root code { font-family: 'SF Mono', Menlo, Consolas, monospace; }
+
+.soe-primary {
+  background: var(--btn-grad);
+  border-color: transparent;
+  color: var(--text-strong);
+  box-shadow: 0 4px 12px var(--accent-shadow);
+  font-weight: 600;
+}
+.soe-toolbar { display: flex; justify-content: center; }
+
+/* ==================== 实跑对拍网格 ==================== */
+.soe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 0.9rem;
+}
+.soe-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.8rem 0.9rem 0.85rem;
+}
+.soe-card-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.soe-card-title { font-size: 0.98rem; font-weight: 700; color: var(--text-strong); }
+.soe-card-src {
+  font-size: 0.76rem;
+  color: var(--accent-2);
+  background: var(--bg-code);
+  padding: 0.15em 0.45em;
+  border-radius: 4px;
+  word-break: break-all;
+}
+
+.soe-row { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+.soe-badge {
+  flex: none;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.15em 0.55em;
+  border-radius: 6px;
+  min-width: 74px;
+  text-align: center;
+}
+.soe-badge-some { background: var(--accent-bg); color: var(--accent-bright); border: 1px solid var(--accent-border); }
+.soe-badge-every { background: var(--accent-2-bg); color: var(--accent-2); border: 1px solid var(--accent-2-border); }
+
+.soe-bool { font-weight: 700; font-size: 0.95rem; font-family: 'SF Mono', Menlo, Consolas, monospace; }
+.soe-bool-true { color: var(--success); }
+.soe-bool-false { color: var(--danger); }
+.soe-checked { font-size: 0.8rem; color: var(--text-muted); }
+
+.soe-tip {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  background: var(--bg-inset);
+  border-radius: 8px;
+  padding: 0.45rem 0.6rem;
+}
+.soe-note {
+  margin: 0;
+  text-align: center;
+  font-size: 0.86rem;
+  color: var(--text-muted);
+  background: var(--surface-1);
+  border: 1px dashed var(--border-strong);
+  border-radius: 10px;
+  padding: 1rem;
+}
+.soe-note code {
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-2);
+}
+
+/* ==================== 本质 · 总结 ==================== */
+.soe-essence,
+.soe-summary {
+  gap: 1.3rem;
+  max-width: 980px;
+  margin: 0 auto;
+}
+.soe-block {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  overflow-x: auto;
+}
+.soe-block h3 { margin: 0; font-size: 1.05rem; color: var(--accent-2); }
+.soe-lead { margin: 0; font-size: 0.95rem; line-height: 1.9; color: var(--text); }
+.soe-lead b { color: var(--accent-bright); }
+.soe-lead code {
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-2);
+  font-size: 0.86em;
+}
+
+.soe-compare { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.soe-compare th,
+.soe-compare td {
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.soe-compare th { background: var(--accent-bg); color: var(--text-strong); font-weight: 600; }
+.soe-compare td:first-child { color: var(--accent-2); font-weight: 600; white-space: nowrap; }
+.soe-compare td b { color: var(--text-strong); }
+.soe-compare tbody tr:hover td { background: var(--surface-1); }
+
+.soe-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+.soe-list b { color: var(--text-strong); }
+
+.soe-quote {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-2-bg));
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  line-height: 1.9;
+}
+.soe-quote p { margin: 0 0 0.6rem; }
+.soe-quote p:last-child { margin-bottom: 0; }
+.soe-quote b { color: var(--warning); }
+.soe-quote code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--code-text);
+}
+
+/* ==================== 窄屏适配 ==================== */
+@media (max-width: 760px) {
+  .soe-grid { grid-template-columns: 1fr; }
+}

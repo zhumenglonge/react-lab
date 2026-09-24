@@ -1,0 +1,152 @@
+/* =========================================================
+ * 主题专属样式：反问环节
+ * ---------------------------------------------------------
+ * 通用样式（tabs / demo-wrap / demo-header / demo-sub / code / btn-row /
+ * ghost）在 App.css，这里只放本主题独有的。
+ * ⚠️ 类名统一 rvq- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）。
+ * ========================================================= */
+
+/* ==================== 基础容器 ==================== */
+.rvq-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.rvq-root .demo-header { margin-bottom: 0.2rem; }
+.rvq-root .demo-header h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.3rem;
+  color: var(--text-strong);
+}
+.rvq-root .demo-sub {
+  margin: 0 auto;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+.rvq-root .demo-sub b { color: var(--accent-bright); }
+
+/* ==================== 选择计数条 ==================== */
+.rvq-counter {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  background: var(--success-bg);
+  border: 1px solid var(--success-border);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.88rem;
+}
+.rvq-counter b { color: var(--success); font-size: 1.05rem; }
+.rvq-counter-warn { background: var(--warning-bg); border-color: var(--warning-border); }
+.rvq-counter-warn b { color: var(--warning); }
+.rvq-clear {
+  margin-left: auto;
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-strong);
+  font-size: 0.8rem;
+  padding: 0.25em 0.7em;
+}
+
+/* ==================== 问题分组 ==================== */
+.rvq-group {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.8rem 1rem 0.9rem;
+}
+.rvq-group h3 {
+  margin: 0 0 0.6rem;
+  font-size: 1rem;
+  color: var(--accent-2);
+}
+.rvq-qlist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+.rvq-q {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-inset);
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text);
+  transition: border-color 0.15s, background 0.15s;
+}
+.rvq-q:hover { border-color: var(--accent); }
+.rvq-q input { accent-color: var(--accent); margin-top: 0.15em; cursor: pointer; }
+.rvq-q-on {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  color: var(--text-strong);
+}
+
+/* ==================== 通用块 / 列表 ==================== */
+.rvq-avoid,
+.rvq-signal { gap: 1.3rem; }
+.rvq-block {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  overflow-x: auto;
+}
+.rvq-block h3 { margin: 0; font-size: 1.05rem; color: var(--accent-2); }
+.rvq-lead { margin: 0; font-size: 0.95rem; line-height: 1.9; color: var(--text); }
+.rvq-lead b { color: var(--accent-bright); }
+
+.rvq-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+.rvq-list b { color: var(--text-strong); }
+.rvq-tips { list-style: decimal; }
+.rvq-good li { color: var(--text); }
+.rvq-good li::marker { content: ''; }
+.rvq-bad li { color: var(--text-secondary); }
+
+/* ==================== 分角色表 ==================== */
+.rvq-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.rvq-table th,
+.rvq-table td {
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.rvq-table th { background: var(--accent-bg); color: var(--text-strong); font-weight: 600; }
+.rvq-table td:first-child { color: var(--accent-2); font-weight: 600; }
+.rvq-td-avoid { color: var(--danger); }
+.rvq-table tbody tr:hover td { background: var(--surface-1); }
+
+/* ==================== 话术 ==================== */
+.rvq-script { white-space: pre-wrap; line-height: 1.85; }
+.rvq-note {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  background: var(--bg-inset);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+}
+.rvq-note b { color: var(--warning); }
