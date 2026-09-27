@@ -18,12 +18,28 @@ const NOTES = [
     a: '把递归改写成「链表 + while 循环」。每个工作单元处理完都返回下一个单元（nextUnitOfWork），控制权交回主循环；循环每转一圈问一次 shouldYield()，当前帧时间（约 5ms）用完就 return，把主线程还给浏览器，下一帧再从 nextUnitOfWork 接着跑。进度保存在 Fiber 链表上，所以能暂停也能恢复。',
   },
   {
+    q: '为什么非要用「链表」结构？只是为了可中断吗？',
+    a: '核心是为了「可中断 + 可恢复」，而链表真正解决的是更难的「恢复」。中断本身不难（while 里 return 就停了），难的是停下来后怎么记住「停在哪、下一帧从哪接着走」。递归的遍历进度存在 JS 调用栈里——引擎私有、你碰不到，一旦 return，栈帧和局部变量全销毁，没法冻结再解冻。链表把遍历状态从不可控的调用栈搬到可控的堆内存：每个 FiberNode 用 child/sibling/return 三根指针显式记录「下一步去哪」，再用一个 nextUnitOfWork 当书签，循环退出时位置一点不丢。附带好处：FiberNode 是信息饱满的工作单元对象（存 props/state/hooks/flags/lanes/alternate），天然支撑双缓存与「优先级打断时丢弃半成品树重来」。（React 试过用生成器 function* 暂停/恢复，但有开销、嵌套复杂、难以支持按优先级丢弃重来，最终手写链表遍历。）',
+  },
+  {
+    q: '时间切片的「一帧」大概多久？为什么 JS 只用 5ms？',
+    a: '基于 60fps 假设：一帧约 1000/60 ≈ 16.6ms。React 把这 16.6ms 切成两块——约 5ms 给 work loop 跑 JS（源码常量 frameYieldMs = 5），剩下约 11ms 留给浏览器绘制、响应输入、跑其他任务。故意只用 5ms 是留足余量，避免占满一帧反而掉帧。两点注意：① 这 5ms 是 JS 执行时间，不含浏览器绘制；② 高刷屏（90/120fps）一帧更短（约 11ms/8ms），但 React 默认仍按 5ms 走，暂未动态适配刷新率。',
+  },
+  {
+    q: 'shouldYield() 是按「时间」还是「节点数」让出的？',
+    a: '按时间，不是节点数。它判断的是「当前帧分给 JS 的额度（约 5ms）用完没」，用完就 return 让出主线程，下一帧从 nextUnitOfWork 接着跑。所以让出边界是时间片，而不是固定处理 N 个节点——这意味着若单个大组件的一次 beginWork 就超过 5ms，也得等这一步做完才检查、才让出（React 无法在一个工作单元内部再切分），所以单个节点太重仍可能造成小卡顿。',
+  },
+  {
     q: '什么是双缓存（Double Buffering）？',
-    a: '内存里同时存在两棵 Fiber 树：current（当前屏幕上显示的）和 workInProgress（正在构建的）。每个 FiberNode 通过 alternate 指向另一棵树的对应节点。更新时在 workInProgress 树上做 diff 和构建，全部完成后一次性把 root.current 指向它，切换成新的 current。这样屏幕上永远不会出现「渲染到一半」的中间状态。',
+    a: '名字借自图形学的 double buffering：内存里同时保留两棵 Fiber 树——current（当前屏幕上正显示的）和 workInProgress（简称 wip，正在后台构建的下一棵）。更新时不碰 current，只在 wip 上做 diff、打 flags、建新节点，全部构建完再一次性切过去，所以屏幕上永远不会出现「渲染到一半」的中间态。两根关键指针别混：① alternate——挂在每个 FiberNode 上，指向另一棵树里「和自己对应的那个节点」（两棵树的对应节点互相指对方），作用是节点复用：更新时顺着它把旧节点的 props/state/DOM/hooks 拿过来，只改变化部分，没有对应节点（首次挂载/新增）才新建；② root.current——挂在 FiberRoot 上，指向「当前哪棵树是显示中的」，commit 结束那一刻执行 root.current = wip 树，一根指针翻转就让整棵 wip 上屏、变成新的 current。翻转后旧 current 不销毁，留作下一次构建 wip 时的 alternate 继续复用，两棵树就这样来回倒、反复共享内存。',
   },
   {
     q: 'render 阶段和 commit 阶段的区别？',
     a: 'render 阶段（beginWork 向下 + completeWork 向上）是可中断的，计算哪些节点需要变更、打上 flags（增删改），不碰真实 DOM；commit 阶段是把 render 的副作用一次性同步应用到 DOM，这一步不可中断（否则用户会看到不一致的界面）。commit 又分 before mutation / mutation / layout 三个子阶段。',
+  },
+  {
+    q: 'work loop 遍历到底在做什么？就是在找哪些节点变了吗？',
+    a: '一句话：work loop 既在「找」、也在「准备」，两件事在同一次遍历里同时完成。「找」——每走到一个节点，beginWork（向下「递」）拿新 props/state 和旧的 diff，找出哪些需要更新；「准备」——同一趟顺手把「将来怎么改」的料备齐：给要动的节点打 flags（Placement 插入 / Update 更新 / Deletion 删除）、执行函数组件 render 和 hooks、在 completeWork（向上「归」）里为新节点创建 DOM 实例（还没插入页面）、并把子节点 flags 冒泡汇总给父节点，最终构建出整棵 workInProgress 影子树。关键：遍历 ≠ 修改，走完只产出「哪里增删改 + 改所需的料」都算好的一棵树，真实 DOM 一个字没动；真正落地是 commit 阶段一次性、同步、不可中断地做——因为「找 + 准备」可以暂停，「改 DOM」不能改一半停下（否则用户会看到半截 UI）。',
   },
   {
     q: 'Lanes 优先级是怎么工作的？',
@@ -107,7 +123,7 @@ export default function Summary() {
           <p>
             "Fiber 的核心是把递归改成<b>链表 + 循环</b>：每个组件对应一个 FiberNode，用 <code>child / sibling / return</code>
             三根指针连成链表；渲染时在一个 <code>while</code> 循环里逐个处理工作单元，每处理完一个就问一句
-            <code>shouldYield()</code>——当前帧时间用完就<b>让出主线程</b>给浏览器绘制和响应输入，下一帧再<b>从断点接着跑</b>。
+            <code>shouldYield()</code>——当前帧分给 JS 的额度（约 5ms，剩下约 11ms 留给浏览器）用完就<b>让出主线程</b>给浏览器绘制和响应输入，下一帧再<b>从断点接着跑</b>。
             进度都保存在 Fiber 上，所以能暂停、能恢复、甚至能丢弃重来。"
           </p>
           <p>
