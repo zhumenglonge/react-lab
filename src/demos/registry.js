@@ -277,6 +277,39 @@ const rawTopics = [
     loader: () => import('./llm-answer-flow/index.jsx'),
   },
 
+  {
+    id: 'mcp-protocol',
+    icon: '🔌',
+    title: '什么是 MCP',
+    subtitle: 'Model Context Protocol 九步握手实跑 + function calling 对拍 + N×M→N+M 矩阵；三层角色/三类原语/安全陷阱/选型决策一次讲透',
+    tags: ['AI 大模型', 'MCP 协议', '面试新趋势'],
+    difficulty: '中级',
+    createdAt: '2026-10-20',
+    loader: () => import('./mcp-protocol/index.jsx'),
+  },
+
+  {
+    id: 'agent-skill',
+    icon: '📚',
+    title: '什么是 Skill',
+    subtitle: 'Agent Skills 渐进式披露三层实跑（目录树+上下文窗口）+ SKILL.md 结构 + Skill vs MCP 网关对拍 + 能力谱系与陷阱',
+    tags: ['AI 大模型', 'Agent Skills', '面试新趋势'],
+    difficulty: '中级',
+    createdAt: '2026-10-20',
+    loader: () => import('./agent-skill/index.jsx'),
+  },
+
+  {
+    id: 'fe-perf-optimization',
+    icon: '🚀',
+    title: '前端性能优化方法',
+    subtitle: '首屏优化模拟器（勾手段看 LCP/体积实时变）+ 重排vs合成/防抖vs节流/预加载三兄弟 + 加载·渲染·脚本三阶段答题框架与 Core Web Vitals',
+    tags: ['性能优化', '工程实践', '面试高频'],
+    difficulty: '中级',
+    createdAt: '2026-10-20',
+    loader: () => import('./fe-perf-optimization/index.jsx'),
+  },
+
   /* 👇 未来在这里继续加，例如：
   {
     id: 'useEffect-deep-dive',
