@@ -1,0 +1,531 @@
+/* =========================================================
+ * 主题专属样式：什么是 MCP（Model Context Protocol）
+ * ---------------------------------------------------------
+ * 通用样式（tabs / demo-wrap / demo-header / code / tip / btn-row）在
+ * src/App.css，这里只放本主题独有的。
+ * ⚠️ 各主题 styles.css 只在该主题加载时才注入、跨主题不共享，
+ *    类名统一 mcp- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）。
+ * ========================================================= */
+
+/* ==================== 通用容器 ==================== */
+.mcp-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 1.1rem 1.15rem;
+  margin-bottom: 1.2rem;
+}
+.mcp-card h4 {
+  margin: 0 0 0.8rem;
+  font-size: 1.05rem;
+  color: var(--accent-2);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.mcp-tag {
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 0.1em 0.6em;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+.mcp-lead {
+  margin: 0 0 0.6rem;
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+.mcp-lead b,
+.mcp-note b,
+.mcp-trap b { color: var(--warning); }
+.mcp-lead code,
+.mcp-note code,
+.mcp-msg-meta code,
+.mcp-verdict code,
+.mcp-block code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.86em;
+  color: var(--code-text);
+}
+.mcp-note {
+  margin: 0.8rem 0 0;
+  font-size: 0.86rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  background: var(--bg-inset);
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+}
+
+/* ==================== 控制面板 / chips / 滑杆 ==================== */
+.mcp-panel {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.mcp-chips { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.9rem; }
+.mcp-chip {
+  padding: 0.4em 0.95em;
+  font-size: 0.84rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.mcp-chip:hover { border-color: var(--accent); }
+.mcp-chip.on {
+  background: var(--btn-grad);
+  color: var(--text-strong);
+  border-color: transparent;
+  box-shadow: 0 4px 14px var(--accent-shadow);
+  font-weight: 600;
+}
+.mcp-slider-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.35rem;
+}
+.mcp-slider-head b {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  color: var(--accent-2);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+.mcp-slider input[type='range'] { width: 100%; height: 6px; accent-color: var(--accent); cursor: pointer; }
+.mcp-slider { margin-bottom: 0.3rem; }
+.mcp-slider-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+/* 结论条 */
+.mcp-verdict {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border);
+  background: var(--bg-inset);
+  color: var(--text-secondary);
+}
+.mcp-verdict.is-success { color: var(--success); border-color: var(--success-border); background: var(--success-bg); }
+.mcp-verdict.is-warning { color: var(--warning); border-color: var(--warning-border); background: var(--warning-bg); }
+.mcp-verdict.is-danger { color: var(--danger); border-color: var(--danger-border); background: var(--danger-bg); }
+.mcp-verdict.is-accent { color: var(--accent-2); border-color: var(--accent-2-border); background: var(--accent-2-bg); }
+
+/* ==================== ① 握手时间线 ==================== */
+.mcp-timeline { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+.mcp-stage {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border);
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.2s, border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+}
+.mcp-stage:hover { opacity: 0.85; border-color: var(--accent); }
+.mcp-stage-done { opacity: 0.9; border-left-color: var(--success); }
+.mcp-stage-active {
+  opacity: 1;
+  border-color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--accent-bg);
+  box-shadow: 0 4px 16px var(--accent-shadow);
+}
+.mcp-stage-badge {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  font-size: 1rem;
+}
+.mcp-stage-active .mcp-stage-badge { border-color: var(--accent); }
+.mcp-stage-done .mcp-stage-badge { color: var(--success); border-color: var(--success-border); background: var(--success-bg); }
+.mcp-stage-main { flex: 1; min-width: 0; }
+.mcp-stage-title { font-weight: 700; color: var(--text-strong); font-size: 0.95rem; }
+.mcp-stage-text {
+  margin: 0.5rem 0 0;
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  animation: mcp-fade 0.25s ease;
+}
+@keyframes mcp-fade { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+/* JSON-RPC 消息气泡 */
+.mcp-msg {
+  margin-top: 0.6rem;
+  border-radius: 8px;
+  border: 1px solid var(--accent-2-border);
+  background: var(--bg-code);
+  overflow: hidden;
+}
+.mcp-msg-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+.mcp-msg-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+.mcp-msg pre {
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.74rem;
+  line-height: 1.55;
+  color: var(--code-text);
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow-x: auto;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+/* 结果角色徽标条 */
+.mcp-roles {
+  margin-top: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.mcp-role-line {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.45rem 0.7rem;
+  line-height: 1.6;
+}
+.mcp-role-line b { color: var(--accent-2); white-space: nowrap; }
+
+/* 控制条 */
+.mcp-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.1rem;
+}
+.mcp-progress { font-size: 0.8rem; color: var(--text-muted); }
+.mcp-controls .btn-row button { border-color: var(--border-strong); }
+.mcp-controls .btn-row button:not(.ghost) {
+  background: var(--btn-grad);
+  color: var(--text-strong);
+  border-color: transparent;
+}
+.mcp-controls .btn-row button.ghost { background: var(--surface-2); color: var(--text-secondary); }
+.mcp-controls .btn-row button.ghost:hover { border-color: var(--accent); color: var(--text-strong); }
+.mcp-controls .btn-row button:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+
+/* ==================== ② 双栏对拍 ==================== */
+.mcp-duel { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+@media (max-width: 860px) { .mcp-duel { grid-template-columns: 1fr; } }
+.mcp-duel-col {
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface-1);
+  padding: 0.9rem 1rem;
+  min-width: 0;
+}
+.mcp-duel-col.tone-success { border-color: var(--success-border); background: var(--success-bg); }
+.mcp-duel-col.tone-warning { border-color: var(--warning-border); background: var(--warning-bg); }
+.mcp-duel-col.tone-danger { border-color: var(--danger-border); background: var(--danger-bg); }
+.mcp-duel-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-weight: 700;
+  color: var(--text-strong);
+  font-size: 0.95rem;
+  margin-bottom: 0.7rem;
+}
+.mcp-step-line {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  padding: 0.4rem 0;
+  border-top: 1px dashed var(--border);
+  font-size: 0.85rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+.mcp-step-who {
+  flex-shrink: 0;
+  min-width: 74px;
+  font-weight: 600;
+  color: var(--text-strong);
+  font-size: 0.8rem;
+  padding-top: 0.1rem;
+}
+
+/* ==================== ② N×M vs N+M 矩阵 ==================== */
+.mcp-matrix-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+  margin-top: 0.9rem;
+}
+@media (max-width: 860px) { .mcp-matrix-wrap { grid-template-columns: 1fr; } }
+.mcp-matrix-box {
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-inset);
+  padding: 0.8rem 0.9rem;
+}
+.mcp-matrix-box.is-good { border-color: var(--success-border); background: var(--success-bg); }
+.mcp-matrix-box.is-bad { border-color: var(--danger-border); background: var(--danger-bg); }
+.mcp-matrix-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-strong);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.mcp-matrix-title b {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 1rem;
+}
+.mcp-matrix-title b.is-bad { color: var(--danger); }
+.mcp-matrix-title b.is-good { color: var(--success); }
+.mcp-matrix {
+  display: grid;
+  gap: 4px;
+}
+.mcp-cell {
+  aspect-ratio: 1 / 1;
+  min-width: 0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+}
+.mcp-cell.head { background: transparent; color: var(--text-muted); font-size: 0.66rem; aspect-ratio: auto; }
+.mcp-cell.wire { background: var(--danger); box-shadow: inset 0 0 0 1px var(--danger-border); }
+.mcp-cell.plug { background: var(--accent); }
+.mcp-cell.empty { background: var(--surface-2); border: 1px dashed var(--border); }
+
+/* ==================== ③ 本质与陷阱 ==================== */
+.mcp-breakdown {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.8rem;
+}
+.mcp-breakdown-card {
+  border-radius: 10px;
+  border: 1px solid var(--accent-2-border);
+  background: var(--accent-2-bg);
+  padding: 0.85rem 1rem;
+}
+.mcp-breakdown-k { font-weight: 700; color: var(--text-strong); font-size: 0.95rem; margin-bottom: 0.35rem; }
+.mcp-breakdown-v { font-size: 0.85rem; line-height: 1.7; color: var(--text-secondary); margin: 0; }
+
+.mcp-roles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.8rem;
+}
+.mcp-role-card {
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-inset);
+  padding: 0.9rem 1rem;
+}
+.mcp-role-card:hover { border-color: var(--accent); }
+.mcp-role-name { font-weight: 700; color: var(--text-strong); font-size: 0.95rem; display: flex; align-items: center; gap: 0.45rem; }
+.mcp-role-en { font-size: 0.75rem; color: var(--accent-2); }
+.mcp-role-desc { margin: 0.45rem 0 0.5rem; font-size: 0.85rem; line-height: 1.7; color: var(--text-secondary); }
+.mcp-role-ex { font-size: 0.76rem; color: var(--text-muted); margin: 0; }
+
+.mcp-layers { display: flex; flex-direction: column; gap: 0.6rem; }
+.mcp-layer {
+  border-left: 3px solid var(--accent);
+  background: var(--bg-inset);
+  border-radius: 0 10px 10px 0;
+  padding: 0.65rem 0.9rem;
+}
+.mcp-layer-name { font-weight: 700; color: var(--text-strong); font-size: 0.9rem; margin-bottom: 0.25rem; }
+.mcp-layer-items { font-size: 0.85rem; line-height: 1.7; color: var(--text-secondary); margin: 0; }
+.mcp-layer-note { font-size: 0.78rem; line-height: 1.6; color: var(--warning); margin: 0.3rem 0 0; }
+
+.mcp-map-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.8rem; }
+.mcp-map-card {
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-inset);
+  padding: 0.8rem 0.9rem;
+  text-align: center;
+}
+.mcp-map-eq { font-size: 0.92rem; font-weight: 700; color: var(--text-strong); margin-bottom: 0.4rem; }
+.mcp-map-eq .to { color: var(--accent-2); margin: 0 0.3rem; }
+.mcp-map-note { font-size: 0.8rem; line-height: 1.65; color: var(--text-secondary); margin: 0; text-align: left; }
+
+.mcp-compare { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.mcp-compare th,
+.mcp-compare td {
+  padding: 0.5rem 0.65rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+.mcp-compare th { background: var(--accent-bg); color: var(--text-strong); font-weight: 600; }
+.mcp-compare td:first-child { color: var(--accent-2); font-weight: 600; white-space: nowrap; }
+.mcp-compare td b { color: var(--text-strong); }
+.mcp-compare code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--code-text);
+}
+.mcp-compare tbody tr:hover td { background: var(--surface-1); }
+
+.mcp-trap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 0.8rem;
+}
+.mcp-trap-card {
+  position: relative;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-inset);
+  padding: 0.9rem 1rem 0.9rem 3rem;
+}
+.mcp-trap-card:hover { border-color: var(--danger); }
+.mcp-trap-idx {
+  position: absolute;
+  left: 0.7rem;
+  top: 0.85rem;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--danger);
+}
+.mcp-trap-title { font-weight: 700; color: var(--text-strong); font-size: 0.92rem; margin-bottom: 0.4rem; }
+.mcp-trap-detail { margin: 0; font-size: 0.85rem; line-height: 1.7; color: var(--text-secondary); }
+
+/* ==================== ④ 选型决策台 ==================== */
+.mcp-qa {
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: var(--text);
+  margin-bottom: 0.8rem;
+}
+.mcp-opt-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0.6rem; margin-bottom: 0.8rem; }
+.mcp-opt {
+  padding: 0.55em 0.8em;
+  font-size: 0.85rem;
+  border-radius: 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  text-align: center;
+}
+.mcp-opt:hover { border-color: var(--accent); }
+.mcp-opt.right {
+  background: var(--success-bg);
+  border-color: var(--success-border);
+  color: var(--success);
+  font-weight: 700;
+}
+.mcp-opt.wrong {
+  background: var(--danger-bg);
+  border-color: var(--danger-border);
+  color: var(--danger);
+  text-decoration: line-through;
+  opacity: 0.8;
+}
+.mcp-why {
+  font-size: 0.86rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  background: var(--bg-inset);
+  border-left: 3px solid var(--success);
+  border-radius: 0 8px 8px 0;
+  padding: 0.6rem 0.8rem;
+  animation: mcp-fade 0.25s ease;
+}
+.mcp-why b { color: var(--success); }
+.mcp-score { font-size: 0.82rem; color: var(--text-muted); margin-left: 0.6rem; }
+
+/* ==================== 🎯 面试总结 ==================== */
+.mcp-summary { display: flex; flex-direction: column; gap: 1.4rem; max-width: 1000px; margin: 0 auto; }
+.mcp-block h3 { margin: 0 0 0.6rem; font-size: 1.1rem; color: var(--accent-2); }
+.mcp-summary .mcp-lead { font-size: 0.96rem; line-height: 1.85; }
+.mcp-summary pre.code { white-space: pre-wrap; word-break: break-all; }
+.mcp-block ul {
+  margin: 0;
+  padding-left: 1.35rem;
+  line-height: 1.9;
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+}
+.mcp-block ul b { color: var(--warning); }
+.mcp-summary blockquote {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-2-bg));
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  line-height: 1.85;
+  white-space: pre-wrap;
+}
