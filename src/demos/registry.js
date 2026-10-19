@@ -266,6 +266,17 @@ const rawTopics = [
     loader: () => import('./http-cache/index.jsx'),
   },
 
+  {
+    id: 'llm-answer-flow',
+    icon: '🤖',
+    title: '问大模型一个问题，背后发生了什么',
+    subtitle: '八步实跑：拼上下文 → 分词 → Transformer 前向 → 温度采样 → 自回归 → SSE 流式 → 前端渲染；窗口/计费/幻觉/工具调用一次讲透',
+    tags: ['AI 大模型', '推理链路', '面试新趋势'],
+    difficulty: '中级',
+    createdAt: '2026-10-19',
+    loader: () => import('./llm-answer-flow/index.jsx'),
+  },
+
   /* 👇 未来在这里继续加，例如：
   {
     id: 'useEffect-deep-dive',
