@@ -69,7 +69,7 @@ const STAGES = [
     title: '浏览器解析与渲染',
     brief: 'DOM + CSSOM → 渲染树 → 布局 → 绘制 → 合成',
     detail:
-      '拿到 HTML 后进入关键渲染路径：解析 HTML 构建 DOM 树，解析 CSS 构建 CSSOM 树，两者合成渲染树（Render Tree，只含可见节点），再布局（Layout / 回流，算位置和大小）、绘制（Paint，填像素）、合成（Composite，多图层合成上屏）。遇到 <script> 会阻塞解析（除非 async/defer）。细节见 ④ 渲染流程 tab。',
+      '拿到 HTML 后进入关键渲染路径：解析 HTML 构建 DOM 树，解析 CSS 构建 CSSOM 树，两者合成渲染树（Render Tree，只含可见节点），再布局（Layout / 重排，算位置和大小）、绘制（Paint，填像素）、合成（Composite，多图层合成上屏）。遇到 <script> 会阻塞解析（除非 async/defer）。细节见 ④ 渲染流程 tab。',
     code: 'HTML → DOM 树\nCSS  → CSSOM 树\nDOM + CSSOM → 渲染树\n→ Layout 布局 → Paint 绘制 → Composite 合成',
   },
   {

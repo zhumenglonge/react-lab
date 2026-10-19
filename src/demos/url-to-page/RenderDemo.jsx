@@ -150,22 +150,22 @@ const STEPS = [
   {
     key: 'layout',
     pill: '④ Layout 布局',
-    title: '布局 / 回流（Reflow）',
-    note: (<>根据渲染树计算每个节点在屏幕上的<b>精确位置和大小</b>（几何信息），这一步叫 <b>Layout 布局</b>，也叫<b>回流</b>。此时只有"盒子在哪、多大"，还没有颜色。</>),
+    title: '布局 / 重排（Reflow）',
+    note: (<>根据渲染树计算每个节点在屏幕上的<b>精确位置和大小</b>（几何信息），这一步叫 <b>Layout 布局</b>，也叫<b>重排</b>。此时只有"盒子在哪、多大"，还没有颜色。</>),
     art: LayoutArt,
   },
   {
     key: 'paint',
     pill: '⑤ Paint 绘制',
     title: '绘制（Repaint）',
-    note: (<>把每个节点转成<b>实际的像素</b>：填充颜色、画文字、图片、边框、阴影……这一步叫 <b>Paint 绘制</b>，改颜色/背景等只影响外观不影响布局的属性，只会触发<b>重绘</b>而不会回流。</>),
+    note: (<>把每个节点转成<b>实际的像素</b>：填充颜色、画文字、图片、边框、阴影……这一步叫 <b>Paint 绘制</b>，改颜色/背景等只影响外观不影响布局的属性，只会触发<b>重绘</b>而不会重排。</>),
     art: PaintArt,
   },
   {
     key: 'composite',
     pill: '⑥ Composite 合成',
     title: '合成（Composite）',
-    note: (<>页面常分成多个<b>图层</b>，分别绘制后由 <b>GPU 合成</b>成最终画面显示到屏幕上。用 <code>transform</code>/<code>opacity</code> 做动画能直接走合成，<b>不触发回流和重绘</b>，所以最流畅。</>),
+    note: (<>页面常分成多个<b>图层</b>，分别绘制后由 <b>GPU 合成</b>成最终画面显示到屏幕上。用 <code>transform</code>/<code>opacity</code> 做动画能直接走合成，<b>不触发重排和重绘</b>，所以最流畅。</>),
     art: CompositeArt,
   },
 ]
@@ -248,7 +248,7 @@ export default function RenderDemo() {
       </div>
 
       <p className="tip">
-        💡 <b>回流（Layout/Reflow）</b>必然引发<b>重绘（Paint）</b>，但重绘不一定回流。回流要重新算布局，代价大：
+        💡 <b>重排（Layout/Reflow）</b>必然引发<b>重绘（Paint）</b>，但重绘不一定重排。重排要重新算布局，代价大：
         改元素尺寸/位置/内容、窗口 resize、读取 <code>offsetTop</code>/<code>clientWidth</code> 等都会触发。
         <br />
         💡 优化：<b>批量改样式</b>（用 class 一次性改）、让动画元素<b>脱离文档流</b>（absolute/fixed）、

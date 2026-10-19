@@ -255,6 +255,17 @@ const rawTopics = [
     loader: () => import('./ts-type-interface/index.jsx'),
   },
 
+  {
+    id: 'http-cache',
+    icon: '🗄️',
+    title: 'HTTP 缓存：强缓存 vs 协商缓存',
+    subtitle: '可交互决策流水线跑通 200/304/全新下载 + Cache-Control 取值台 + Expires·ETag 陷阱对拍，把网络缓存面试点讲透',
+    tags: ['网络', '浏览器原理', '面试高频'],
+    difficulty: '中级',
+    createdAt: '2026-10-19',
+    loader: () => import('./http-cache/index.jsx'),
+  },
+
   /* 👇 未来在这里继续加，例如：
   {
     id: 'useEffect-deep-dive',

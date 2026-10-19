@@ -49,7 +49,7 @@ export default function Summary() {
             <tr><td>TCP 连接</td><td>三次握手建连，HTTPS 再 TLS 握手</td><td>为什么是三次、TLS 密钥协商</td></tr>
             <tr><td>HTTP 请求</td><td>请求行 + 请求头 + 请求体</td><td>GET/POST 区别、常见请求头</td></tr>
             <tr><td>服务器响应</td><td>状态行 + 响应头 + 响应体</td><td>状态码 200/301/304/404/500</td></tr>
-            <tr><td>浏览器渲染</td><td>DOM/CSSOM → 渲染树 → 布局 → 绘制 → 合成</td><td>回流 vs 重绘、阻塞、async/defer</td></tr>
+            <tr><td>浏览器渲染</td><td>DOM/CSSOM → 渲染树 → 布局 → 绘制 → 合成</td><td>重绘 vs 重排、阻塞、async/defer</td></tr>
             <tr><td>连接收尾</td><td>四次挥手断开，或 keep-alive 复用</td><td>TIME_WAIT、HTTP/2 多路复用</td></tr>
           </tbody>
         </table>
@@ -77,15 +77,15 @@ export default function Summary() {
       </section>
 
       <section className="up-sum-block">
-        <h3>🎨 回流 vs 重绘 vs 合成（渲染必考）</h3>
+        <h3>🎨 重绘 vs 重排 vs 合成（渲染必考）</h3>
         <table className="up-compare">
           <thead>
-            <tr><th></th><th>回流 Reflow / Layout</th><th>重绘 Repaint</th><th>合成 Composite</th></tr>
+            <tr><th></th><th>重绘 Repaint</th><th>重排 Reflow / Layout</th><th>合成 Composite</th></tr>
           </thead>
           <tbody>
-            <tr><td>触发</td><td>几何变化：位置、尺寸、增删节点、resize</td><td>外观变化：颜色、背景、visibility</td><td>transform、opacity、will-change</td></tr>
-            <tr><td>代价</td><td>最大（要重算布局，还可能连锁）</td><td>中（重新填像素）</td><td>最小（GPU 处理）</td></tr>
-            <tr><td>关系</td><td>回流<b>必</b>导致重绘</td><td>重绘<b>不一定</b>回流</td><td>可跳过前两者</td></tr>
+            <tr><td>触发</td><td>外观变化：颜色、背景、visibility</td><td>几何变化：位置、尺寸、增删节点、resize</td><td>transform、opacity、will-change</td></tr>
+            <tr><td>代价</td><td>中（重新填像素）</td><td>最大（要重算布局，还可能连锁）</td><td>最小（GPU 处理）</td></tr>
+            <tr><td>关系</td><td>重绘<b>不一定</b>重排</td><td>重排<b>必</b>导致重绘</td><td>可跳过前两者</td></tr>
           </tbody>
         </table>
         <p className="up-note">
@@ -125,9 +125,9 @@ export default function Summary() {
             <b>网络部分</b>：浏览器先<b>解析 URL</b>（判断是网址还是搜索词、补协议、编码），然后<b>查缓存</b>——先看强缓存 <code>Cache-Control</code> 有没有过期，没过期直接用本地；过期了就带 <code>ETag</code> 走协商缓存，服务器返回 <code>304</code> 就还用本地。缓存没命中，就<b>DNS 解析</b>把域名转成 IP，这一步是浏览器缓存→系统→路由器→ISP 递归解析器，再由它去问根、顶级、权威服务器（递归 + 迭代）。拿到 IP 后<b>建立 TCP 连接</b>，三次握手确认双方收发正常，HTTPS 还要再做 TLS 握手协商密钥。连接建好<b>发 HTTP 请求</b>，服务器处理后<b>返回响应</b>——状态行、响应头、响应体（HTML）。"
           </p>
           <p>
-            <b>渲染部分</b>：浏览器走<b>关键渲染路径</b>——解析 HTML 建 <b>DOM 树</b>、解析 CSS 建 <b>CSSOM 树</b>，合成只含可见节点的<b>渲染树</b>，再经过 <b>Layout 布局</b>（算位置大小，即回流）、<b>Paint 绘制</b>（填像素，即重绘）、<b>Composite 合成</b>（GPU 把多图层合成上屏）。期间同步 <code>&lt;script&gt;</code> 会阻塞解析，可以用 <code>defer/async</code> 优化。最后请求结束，连接<b>四次挥手</b>关闭，或者 keep-alive 复用。"
+            <b>渲染部分</b>：浏览器走<b>关键渲染路径</b>——解析 HTML 建 <b>DOM 树</b>、解析 CSS 建 <b>CSSOM 树</b>，合成只含可见节点的<b>渲染树</b>，再经过 <b>Layout 布局</b>（算位置大小，即重排）、<b>Paint 绘制</b>（填像素，即重绘）、<b>Composite 合成</b>（GPU 把多图层合成上屏）。期间同步 <code>&lt;script&gt;</code> 会阻塞解析，可以用 <code>defer/async</code> 优化。最后请求结束，连接<b>四次挥手</b>关闭，或者 keep-alive 复用。"
           </p>
-          <p>"如果让我挑一个环节深入，我可以展开讲<b>缓存策略</b>、<b>TCP 握手</b>或<b>渲染优化（回流/重绘）</b>中的任意一个。"</p>
+          <p>"如果让我挑一个环节深入，我可以展开讲<b>缓存策略</b>、<b>TCP 握手</b>或<b>渲染优化（重绘/重排）</b>中的任意一个。"</p>
         </blockquote>
       </section>
     </div>
