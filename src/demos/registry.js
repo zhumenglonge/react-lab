@@ -303,7 +303,7 @@ const rawTopics = [
     id: 'fe-perf-optimization',
     icon: '🚀',
     title: '前端性能优化方法',
-    subtitle: '首屏优化模拟器（勾手段看 LCP/体积实时变）+ 重排vs合成/防抖vs节流/预加载三兄弟 + 加载·渲染·脚本三阶段答题框架与 Core Web Vitals',
+    subtitle: '首屏优化模拟器（勾手段看 LCP/体积实时变）+ 重排vs合成/防抖vs节流/预加载三兄弟/SWR与ahooks/分包与打包分析 + 加载·渲染·脚本三阶段答题框架与 Core Web Vitals',
     tags: ['性能优化', '工程实践', '面试高频'],
     difficulty: '中级',
     createdAt: '2026-10-20',

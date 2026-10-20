@@ -12,7 +12,8 @@ import './styles.css'
  *      首次·二次访问，看请求数 / 传输体积 / FCP / LCP 实时前后对比，
  *      并按 Core Web Vitals 阈值给出评级。
  *   ② 本质与陷阱：重排 vs 合成动画（真跑）、防抖 vs 节流（实时计数）、
- *      preload/prefetch/preconnect 三兄弟对比。
+ *      preload/prefetch/preconnect 三兄弟、SWR 策略与成熟库(ahooks/React Query)映射、
+ *      构建分包策略可视化与 webpack/vite 打包分析。
  *   🎯 面试总结：分阶段答题主线 + 分层手段表 + Core Web Vitals + 话术模板。
  * 每个子 demo 自包含数据与交互，删除本文件夹即可整体移除。
  * ========================================================= */

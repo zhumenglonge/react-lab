@@ -117,6 +117,8 @@ export default function Summary() {
           <li><b>长任务怎么处理？</b>拆小任务、<code>requestIdleCallback</code> 延后、或丢进 <code>Web Worker</code>，保证主线程可响应。</li>
           <li><b>首屏白屏太久先查什么？</b>关键渲染路径——阻塞的 JS/CSS、体积过大的首包、瀑布式串行请求。</li>
           <li><b>为什么不盲目上 HTTP2 域名分片？</b>H2 多路复用后已不需要分片，反而多连接增加开销——老优化在新协议下要重新评估。</li>
+          <li><b>实际项目用什么库落地？</b>别只会手写——数据请求与缓存用 <code>SWR</code>/<code>React Query</code>（stale-while-revalidate、请求去重、乐观更新），防抖节流/虚拟滚动/进入视口等用 <code>ahooks</code>（<code>useDebounceFn</code>/<code>useVirtualList</code>/<code>useInViewport</code>）。<b>原理能手写 + 落地会用成熟库</b>才显工程成熟度。</li>
+          <li><b>分包怎么拆？</b>目标：首屏只下必需。路由懒加载动态 <code>import()</code> 拆包 + <code>splitChunks</code> 抽公共 vendor（按库细分）+ runtime 单独抽 + 文件名带 <code>contenthash</code> 吃长缓存。<b>怎么知道拆得对不对？</b>用 <code>webpack-bundle-analyzer</code>/vite 的 <code>rollup-plugin-visualizer</code> 看产物 treemap，找最大块与重复依赖。</li>
         </ul>
       </section>
 
