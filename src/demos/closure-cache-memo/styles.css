@@ -1,0 +1,274 @@
+/* =========================================================
+ * 主题专属样式：闭包缓存 & 累加
+ * ---------------------------------------------------------
+ * 通用样式（tabs / demo-wrap / demo-header / demo-sub / btn-row / ghost）
+ * 在 src/App.css，这里只放本主题独有的。
+ * ⚠️ 类名统一 clo- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）；
+ * 命中/未命中除颜色外还带 ✅/⚠️ 文字冗余，不只靠颜色区分。
+ * ========================================================= */
+
+/* ==================== 基础容器 ==================== */
+.clo-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.clo-root .demo-header { margin-bottom: 0.2rem; }
+.clo-root .demo-header h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.3rem;
+  color: var(--text-strong);
+}
+.clo-root .demo-sub {
+  margin: 0 auto;
+  max-width: 900px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+.clo-root .demo-sub b { color: var(--accent-bright); }
+.clo-root code,
+.clo-root pre {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+
+.clo-primary {
+  background: var(--btn-grad);
+  border-color: transparent;
+  color: var(--text-strong);
+  box-shadow: 0 4px 12px var(--accent-shadow);
+  font-weight: 600;
+}
+
+/* ==================== 实跑对拍卡片 ==================== */
+.clo-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1rem 1rem;
+}
+.clo-card-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.clo-card-title { font-size: 1rem; font-weight: 700; color: var(--text-strong); }
+.clo-card-src {
+  font-size: 0.76rem;
+  color: var(--accent-2);
+  background: var(--bg-code);
+  padding: 0.18em 0.5em;
+  border-radius: 4px;
+  word-break: break-all;
+}
+
+.clo-code {
+  margin: 0;
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.8rem;
+  line-height: 1.65;
+  color: var(--code-text);
+  overflow-x: auto;
+  white-space: pre;
+}
+.clo-code-full { font-size: 0.82rem; }
+
+.clo-toolbar { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
+.clo-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+}
+.clo-field input {
+  width: 7rem;
+  background: var(--bg-inset);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 0.35em 0.5em;
+  font-size: 0.86rem;
+}
+.clo-field input:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 1px; }
+
+/* 结果 / 事件记录 */
+.clo-logs { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
+.clo-logs-stack { flex-direction: column; align-items: stretch; gap: 0.35rem; }
+.clo-chip {
+  font-size: 0.8rem;
+  color: var(--text);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.15em 0.6em;
+}
+.clo-chip b { color: var(--accent-bright); }
+.clo-total {
+  margin-left: auto;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--success);
+}
+.clo-empty { font-style: normal; color: var(--text-muted); font-size: 0.84rem; margin: 0; line-height: 1.6; }
+
+.clo-event {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.clo-event b { color: var(--warning); }
+.clo-tag {
+  flex: none;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.12em 0.5em;
+  border-radius: 6px;
+}
+.clo-tag-hit { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+.clo-tag-miss { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning-border); }
+
+.clo-stats { margin: 0; font-size: 0.88rem; color: var(--text-secondary); }
+.clo-stats b { color: var(--text-strong); }
+
+/* 全局 vs 闭包 对拍 */
+.clo-duel { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+.clo-duel-side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-radius: 10px;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--border);
+}
+.clo-duel-bad { background: var(--danger-bg); border-color: var(--danger-border); }
+.clo-duel-good { background: var(--success-bg); border-color: var(--success-border); }
+.clo-duel-title { margin: 0; font-size: 0.9rem; font-weight: 700; color: var(--text-strong); }
+.clo-duel-readout { margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-strong); }
+.clo-duel-bad .clo-duel-readout { color: var(--danger); }
+.clo-duel-good .clo-duel-readout { color: var(--success); }
+
+.clo-tip {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  background: var(--bg-inset);
+  border-radius: 8px;
+  padding: 0.45rem 0.6rem;
+}
+.clo-tip b { color: var(--accent-bright); }
+
+/* ==================== 本质 · 总结容器 ==================== */
+.clo-essence,
+.clo-summary {
+  gap: 1.3rem;
+  max-width: 980px;
+  margin: 0 auto;
+}
+.clo-block {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  overflow-x: auto;
+}
+.clo-block h3 { margin: 0; font-size: 1.05rem; color: var(--accent-2); }
+.clo-lead {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.9;
+  color: var(--text);
+}
+.clo-lead b { color: var(--accent-bright); }
+.clo-lead code {
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-2);
+  font-size: 0.86em;
+}
+
+.clo-compare { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.clo-compare th,
+.clo-compare td {
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.clo-compare th { background: var(--accent-bg); color: var(--text-strong); font-weight: 600; }
+.clo-compare td:first-child { color: var(--accent-2); font-weight: 600; white-space: nowrap; }
+.clo-compare td b { color: var(--text-strong); }
+.clo-compare tbody tr:hover td { background: var(--surface-1); }
+
+.clo-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+.clo-list b { color: var(--text-strong); }
+
+.clo-pit {
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--warning);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+}
+.clo-pit-name { margin: 0 0 0.25rem; font-size: 0.9rem; font-weight: 700; color: var(--warning); }
+.clo-pit-detail { margin: 0; font-size: 0.84rem; line-height: 1.7; color: var(--text-secondary); }
+
+/* ==================== 🎯 面试话术 ==================== */
+.clo-quote {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-2-bg));
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  line-height: 1.9;
+}
+.clo-quote p { margin: 0 0 0.6rem; }
+.clo-quote p:last-child { margin-bottom: 0; }
+.clo-quote b { color: var(--warning); }
+.clo-quote code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--code-text);
+}
+
+/* ==================== 窄屏适配 ==================== */
+@media (max-width: 760px) {
+  .clo-duel { grid-template-columns: 1fr; }
+}
