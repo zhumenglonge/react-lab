@@ -1,0 +1,298 @@
+/* =========================================================
+ * 主题专属样式：CSS 常用布局
+ * ---------------------------------------------------------
+ * 通用样式（tabs / demo-wrap / demo-header / demo-sub / code / btn-row /
+ * ghost）在 src/App.css，这里只放本主题独有的。
+ * ⚠️ 类名统一 cl- 前缀自包含，删除本文件夹即可整体移除。
+ * ⚠️ 颜色一律引用 index.css 的 var(--*)，禁止硬编码；
+ *    5 个演示盒子用不同语义色 + 编号，色弱友好不只靠颜色区分。
+ * ========================================================= */
+
+.cl-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.cl-root .demo-header { margin-bottom: 0.2rem; }
+.cl-root .demo-header h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.3rem;
+  color: var(--text-strong);
+}
+.cl-root .demo-sub {
+  margin: 0 auto;
+  max-width: 880px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+.cl-root .demo-sub b { color: var(--accent-bright); }
+.cl-root code { font-family: 'SF Mono', Menlo, Consolas, monospace; }
+
+/* ==================== 通用块 ==================== */
+.cl-block {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  overflow-x: auto;
+}
+.cl-block h3 { margin: 0; font-size: 1.05rem; color: var(--accent-2); }
+.cl-lead { margin: 0; font-size: 0.92rem; line-height: 1.9; color: var(--text); }
+.cl-lead b { color: var(--accent-bright); }
+.cl-lead code {
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-2);
+  font-size: 0.86em;
+}
+
+/* ==================== 布局模式切换条 ==================== */
+.cl-modebar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.cl-pill {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.cl-pill:hover { border-color: var(--accent); color: var(--text-strong); }
+.cl-pill.active {
+  background: var(--btn-grad);
+  border-color: transparent;
+  color: var(--text-strong);
+  font-weight: 600;
+  box-shadow: 0 4px 12px var(--accent-shadow);
+}
+
+/* ==================== 参数控制 ==================== */
+.cl-controls { flex-direction: column; gap: 0.7rem; }
+.cl-seg {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.cl-seg-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-family: 'SF Mono', Menlo, monospace;
+  min-width: 130px;
+}
+.cl-mini {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.22rem 0.55rem;
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: 'SF Mono', Menlo, monospace;
+}
+.cl-mini:hover { border-color: var(--accent); color: var(--text-strong); }
+.cl-mini.active {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  color: var(--accent-bright);
+  font-weight: 700;
+}
+.cl-check {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.cl-check input { accent-color: var(--accent); cursor: pointer; }
+.cl-check code {
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-2);
+  font-size: 0.85em;
+}
+.cl-slider {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  max-width: 360px;
+}
+.cl-slider b { color: var(--accent-bright); font-family: 'SF Mono', Menlo, monospace; }
+.cl-slider input { flex: 1; accent-color: var(--accent); cursor: pointer; }
+
+/* ==================== 舞台 ==================== */
+.cl-stage {
+  background: var(--bg-inset);
+  border: 1px dashed var(--border-strong);
+  border-radius: 8px;
+  padding: 0.9rem;
+  overflow-x: auto;
+  min-height: 120px;
+}
+.cl-container { width: 100%; }
+.cl-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #1c1c1e;
+  box-sizing: border-box;
+}
+/* 5 个盒子用语义色区分（编号冗余，色弱友好） */
+.cl-item-1 { background: var(--accent); color: var(--text-strong); }
+.cl-item-2 { background: var(--accent-2); color: #0b1a1e; }
+.cl-item-3 { background: var(--success); color: #0b1a12; }
+.cl-item-4 { background: var(--warning); color: #1c1400; }
+.cl-item-5 { background: var(--danger); color: var(--text-strong); }
+
+.cl-code {
+  margin: 0;
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--code-text);
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* ==================== 浮动塌陷 BFC 实测 ==================== */
+.cl-bfc-duel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0.9rem;
+}
+.cl-bfc-card {
+  display: block;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.8rem 0.9rem 0.85rem;
+}
+/* ⚠️ 塌陷盒必须是普通块级流：若让 .cl-bfc-box 成为 flex/grid 项，
+   它会自动建立独立格式化上下文而“包”住浮动，塌陷演示就失效了 */
+.cl-bfc-head { font-size: 0.92rem; font-weight: 700; color: var(--text-strong); margin-bottom: 0.5rem; }
+.cl-bfc-box {
+  background: var(--accent-bg);
+  border: 2px solid var(--accent-border);
+  border-radius: 8px;
+  padding: 4px;
+  margin-bottom: 0.5rem;
+}
+.cl-bfc-float {
+  float: left;
+  background: var(--warning);
+  color: #1c1400;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: 'SF Mono', Menlo, monospace;
+}
+.cl-bfc-num {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+.cl-bfc-num b { color: var(--text-strong); }
+.cl-ok { color: var(--success); font-weight: 700; }
+.cl-toolbar { display: flex; justify-content: center; }
+.cl-primary {
+  background: var(--btn-grad);
+  border-color: transparent;
+  color: var(--text-strong);
+  box-shadow: 0 4px 12px var(--accent-shadow);
+  font-weight: 600;
+}
+
+/* ==================== 对比表 / 列表 / 话术 ==================== */
+.cl-compare { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.cl-compare th,
+.cl-compare td {
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.cl-compare th { background: var(--accent-bg); color: var(--text-strong); font-weight: 600; }
+.cl-compare td:first-child { color: var(--accent-2); font-weight: 600; }
+.cl-compare td b { color: var(--text-strong); }
+.cl-compare td code {
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-2);
+  font-size: 0.84em;
+}
+.cl-compare tbody tr:hover td { background: var(--surface-1); }
+
+.cl-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+.cl-list b { color: var(--text-strong); }
+
+.cl-quote {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-2-bg));
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  line-height: 1.9;
+}
+.cl-quote p { margin: 0 0 0.6rem; }
+.cl-quote p:last-child { margin-bottom: 0; }
+.cl-quote b { color: var(--warning); }
+.cl-quote code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--code-text);
+}
+
+.cl-essence,
+.cl-summary {
+  gap: 1.3rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* ==================== 窄屏适配 ==================== */
+@media (max-width: 760px) {
+  .cl-bfc-duel { grid-template-columns: 1fr; }
+  .cl-seg-label { min-width: 100%; }
+}

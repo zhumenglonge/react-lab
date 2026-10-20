@@ -1,0 +1,314 @@
+/* =========================================================
+ * 主题专属样式：防抖 & 节流
+ * ---------------------------------------------------------
+ * 通用样式（topic-root / tabs / content / demo-wrap / demo-header）
+ * 在 src/App.css，这里只放本主题独有的。
+ * ⚠️ 类名统一 dbt- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）；
+ * 执行/拦截等状态除颜色外还带 ✅/🚫/⏳ 文字冗余，不只靠颜色区分。
+ * ========================================================= */
+
+/* ==================== 基础容器 ==================== */
+.dbt-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.dbt-root .demo-header { margin-bottom: 0.2rem; }
+.dbt-root .demo-header h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.3rem;
+  color: var(--text-strong);
+}
+.dbt-root .demo-sub {
+  margin: 0 auto;
+  max-width: 900px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+.dbt-root .demo-sub b { color: var(--accent-bright); }
+.dbt-root code,
+.dbt-root pre {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+
+.dbt-btn {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.86rem;
+  padding: 0.45em 0.9em;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.dbt-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent-bright); }
+.dbt-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+.dbt-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.dbt-btn-danger:hover:not(:disabled) { border-color: var(--danger); color: var(--danger); }
+
+/* ==================== 实跑对拍卡片 ==================== */
+.dbt-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1rem 1rem;
+}
+.dbt-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.dbt-card-title { font-size: 1rem; font-weight: 700; color: var(--text-strong); }
+.dbt-card-src {
+  font-size: 0.76rem;
+  color: var(--accent-2);
+  background: var(--bg-code);
+  padding: 0.18em 0.5em;
+  border-radius: 4px;
+  word-break: break-all;
+}
+
+.dbt-code {
+  margin: 0;
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.8rem;
+  line-height: 1.65;
+  color: var(--code-text);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.dbt-toolbar { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
+.dbt-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+}
+.dbt-field input {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 0.35em 0.5em;
+  font-size: 0.86rem;
+}
+.dbt-field input[type='number'] { width: 6rem; }
+.dbt-field input:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+.dbt-input-row { flex-wrap: wrap; }
+.dbt-input-row input { flex: 1; min-width: 12rem; }
+
+.dbt-chip {
+  font-size: 0.8rem;
+  color: var(--text);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.15em 0.6em;
+}
+.dbt-chip b { color: var(--accent-bright); }
+.dbt-empty { font-style: normal; color: var(--text-muted); font-size: 0.84rem; margin: 0; line-height: 1.7; }
+.dbt-empty b { color: var(--accent-bright); }
+.dbt-empty code {
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-2);
+  font-size: 0.86em;
+}
+
+/* 事件时间线 */
+.dbt-logs { display: flex; flex-direction: column; align-items: stretch; gap: 0.35rem; }
+.dbt-event {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.dbt-event b { color: var(--warning); }
+.dbt-arg { color: var(--text-muted); }
+.dbt-tag {
+  flex: none;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.12em 0.5em;
+  border-radius: 6px;
+}
+.dbt-tag-pending { background: var(--accent-bg); color: var(--accent-bright); border: 1px solid var(--accent); }
+.dbt-tag-run { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+.dbt-tag-run-tail { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+.dbt-tag-blocked { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger); }
+
+/* 防抖 vs 节流 并排对拍 */
+.dbt-duel { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+.dbt-duel-side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-radius: 10px;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--border);
+  background: var(--surface-1);
+}
+.dbt-duel-debounce { border-color: var(--accent); }
+.dbt-duel-throttle { border-color: var(--accent-2); }
+.dbt-duel-title { margin: 0; font-size: 0.9rem; font-weight: 700; color: var(--text-strong); }
+
+.dbt-tip {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  background: var(--bg-inset);
+  border-radius: 8px;
+  padding: 0.45rem 0.6rem;
+}
+.dbt-tip b { color: var(--accent-bright); }
+.dbt-tip code {
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-2);
+  font-size: 0.86em;
+}
+
+/* ==================== 本质 · 总结容器 ==================== */
+.dbt-essence,
+.dbt-summary {
+  gap: 1.3rem;
+  max-width: 980px;
+  margin: 0 auto;
+}
+.dbt-block {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  overflow-x: auto;
+}
+.dbt-block h3 { margin: 0; font-size: 1.05rem; color: var(--accent-2); }
+.dbt-lead {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.9;
+  color: var(--text);
+}
+.dbt-lead b { color: var(--accent-bright); }
+.dbt-lead code {
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-2);
+  font-size: 0.86em;
+}
+
+.dbt-compare { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.dbt-compare th,
+.dbt-compare td {
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.dbt-compare th { background: var(--accent-bg); color: var(--text-strong); font-weight: 600; }
+.dbt-compare td:first-child { color: var(--accent-2); font-weight: 600; white-space: nowrap; }
+.dbt-compare td b { color: var(--text-strong); }
+.dbt-compare td code {
+  background: var(--bg-code);
+  padding: 0.05em 0.35em;
+  border-radius: 4px;
+  color: var(--accent-2);
+  font-size: 0.86em;
+}
+.dbt-compare tbody tr:hover td { background: var(--surface-1); }
+
+.dbt-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+.dbt-list b { color: var(--text-strong); }
+.dbt-list code {
+  background: var(--bg-code);
+  padding: 0.05em 0.35em;
+  border-radius: 4px;
+  color: var(--accent-2);
+  font-size: 0.86em;
+}
+
+.dbt-pit {
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--warning);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+}
+.dbt-pit-name { margin: 0 0 0.25rem; font-size: 0.9rem; font-weight: 700; color: var(--warning); }
+.dbt-pit-detail { margin: 0; font-size: 0.84rem; line-height: 1.7; color: var(--text-secondary); }
+
+/* ==================== 🎯 面试话术 & 追问 ==================== */
+.dbt-quote {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-2-bg));
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  line-height: 1.9;
+}
+.dbt-quote p { margin: 0 0 0.6rem; }
+.dbt-quote p:last-child { margin-bottom: 0; }
+.dbt-quote b { color: var(--warning); }
+.dbt-quote code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--code-text);
+}
+
+.dbt-note {
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+}
+.dbt-note-q { margin: 0 0 0.25rem; font-size: 0.9rem; font-weight: 700; color: var(--accent-bright); }
+.dbt-note-a { margin: 0; font-size: 0.84rem; line-height: 1.7; color: var(--text-secondary); }
+
+/* ==================== 窄屏适配 ==================== */
+@media (max-width: 760px) {
+  .dbt-duel { grid-template-columns: 1fr; }
+}

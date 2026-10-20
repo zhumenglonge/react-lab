@@ -1,0 +1,218 @@
+/* =========================================================
+ * 主题专属样式：浏览器存储（Cookie / localStorage / sessionStorage）
+ * ---------------------------------------------------------
+ * 通用样式（tabs / demo-wrap / demo-header / btn-row）在 src/App.css，
+ * 这里只放本主题独有的。
+ * ⚠️ 各主题 styles.css 只在该主题加载时才注入、跨主题不共享，
+ *    类名统一 ws- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）。
+ * ========================================================= */
+
+.ws-sub { margin: 0; font-size: 0.95rem; line-height: 1.8; color: var(--text-secondary); }
+.ws-sub b { color: var(--warning); }
+.ws-sub code, .ws-tip code, .ws-note code, .ws-faq-a code {
+  background: var(--surface-2); padding: 0.1em 0.4em; border-radius: 3px;
+  font-size: 0.86em; color: var(--code-text);
+}
+
+/* ==================== 通用卡片 ==================== */
+.ws-card {
+  background: var(--surface-1); border: 1px solid var(--border);
+  border-radius: 12px; padding: 1rem 1.1rem 1.15rem; margin-bottom: 1.2rem;
+}
+.ws-card h4 {
+  margin: 0 0 0.8rem; font-size: 1.05rem; color: var(--accent-2);
+  display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+}
+.ws-card-head { display: flex; align-items: baseline; gap: 0.7rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
+.ws-card-title { font-weight: 700; color: var(--text-strong); font-size: 1rem; }
+.ws-card-src {
+  font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 0.76rem;
+  color: var(--text-muted); background: var(--bg-inset); padding: 0.15em 0.6em; border-radius: 4px;
+}
+.ws-tag {
+  font-size: 0.7rem; font-weight: 500; padding: 0.1em 0.6em; border-radius: 999px;
+  background: var(--surface-2); color: var(--text-muted); border: 1px solid var(--border);
+}
+.ws-empty {
+  margin: 0.6rem 0 0; font-size: 0.86rem; line-height: 1.7; color: var(--text-muted);
+  background: var(--bg-inset); border-radius: 6px; padding: 0.6rem 0.8rem;
+}
+.ws-tip {
+  margin: 0.7rem 0 0; font-size: 0.86rem; line-height: 1.75; color: var(--text-secondary);
+  background: var(--bg-inset); border-radius: 6px; padding: 0.6rem 0.8rem;
+}
+.ws-tip b { color: var(--warning); }
+.ws-note {
+  margin: 0.6rem 0 0; font-size: 0.84rem; line-height: 1.7; color: var(--text-secondary);
+}
+.ws-note b { color: var(--warning); }
+
+/* ==================== ① 读写台 ==================== */
+.ws-toolbar { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
+.ws-field {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-size: 0.9rem; color: var(--text-secondary);
+}
+.ws-field input {
+  background: var(--bg-inset); border: 1px solid var(--border-strong); border-radius: 6px;
+  color: var(--text); padding: 0.35em 0.6em; font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.88rem; width: 12rem;
+}
+.ws-field input:focus { outline: none; border-color: var(--accent); }
+.ws-toolbar .ws-primary, .ws-card .ws-primary {
+  background: var(--btn-grad); color: var(--text-strong); border-color: transparent;
+  box-shadow: 0 4px 14px var(--accent-shadow);
+}
+.ws-readout { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.9rem; }
+.ws-readrow {
+  display: grid; grid-template-columns: 8.5rem 1fr; gap: 0.4rem 0.8rem; align-items: baseline;
+  background: var(--bg-inset); border: 1px solid var(--border); border-radius: 8px;
+  padding: 0.55rem 0.8rem;
+}
+.ws-readrow b { color: var(--text-strong); font-size: 0.92rem; }
+.ws-readrow code {
+  font-size: 0.76rem; color: var(--text-muted); font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+.ws-readrow span { grid-column: 1 / -1; font-size: 0.88rem; }
+.ws-have { color: var(--success); }
+.ws-none { color: var(--text-muted); }
+
+/* ==================== ②③④ 日志 / 请求头 ==================== */
+.ws-logs { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.9rem; }
+.ws-event {
+  margin: 0; font-size: 0.86rem; line-height: 1.65; color: var(--text-secondary);
+  background: var(--bg-inset); border: 1px solid var(--border); border-left: 3px solid var(--border-strong);
+  border-radius: 6px; padding: 0.5rem 0.8rem;
+}
+.ws-event b { color: var(--text-strong); }
+.ws-ok { border-left-color: var(--success); }
+.ws-ok b { color: var(--success); }
+.ws-bad { border-left-color: var(--danger); }
+.ws-bad b { color: var(--danger); }
+
+.ws-req {
+  margin: 0.9rem 0 0; padding: 0.9rem 1rem; overflow-x: auto;
+  background: var(--bg-code); border: 1px solid var(--border); border-radius: 8px;
+  font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 0.84rem; line-height: 1.8;
+}
+.ws-req span { display: block; white-space: pre-wrap; }
+.ws-req em { font-style: normal; color: var(--text-muted); }
+.ws-req-plain { color: var(--code-text); }
+.ws-req-ok { color: var(--success); }
+.ws-req-ok em { color: var(--success); opacity: 0.8; }
+.ws-req-bad { color: var(--danger); }
+.ws-req-mute { color: var(--text-muted); }
+
+/* ==================== 本质与陷阱 ==================== */
+.ws-vs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+@media (max-width: 700px) { .ws-vs { grid-template-columns: 1fr; } }
+.ws-vs-col {
+  border-radius: 10px; padding: 0.8rem 0.9rem; border: 1px solid var(--border);
+  background: var(--bg-inset);
+}
+.ws-vs-head { font-weight: 700; color: var(--text-strong); font-size: 0.92rem; margin: 0 0 0.5rem; }
+.ws-vs-col p { margin: 0 0 0.5rem; font-size: 0.86rem; line-height: 1.7; color: var(--text-secondary); }
+.ws-vs-col p:last-child { margin-bottom: 0; }
+.ws-vs-col code {
+  background: var(--surface-2); padding: 0.1em 0.4em; border-radius: 3px;
+  font-size: 0.85em; color: var(--code-text);
+}
+.ws-vs-verdict { font-weight: 600; color: var(--accent-2) !important; }
+
+/* Session 流水线步骤 */
+.ws-steps { display: flex; flex-direction: column; gap: 0.45rem; margin-bottom: 0.7rem; }
+.ws-step {
+  background: var(--bg-inset); border: 1px solid var(--border);
+  border-left: 3px solid var(--accent); border-radius: 8px;
+  padding: 0.5rem 0.85rem; font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary);
+}
+
+/* 安全属性 chips */
+.ws-chips { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.9rem; }
+.ws-chip {
+  padding: 0.4em 0.95em; font-size: 0.84rem; border-radius: 999px;
+  background: var(--surface-2); border: 1px solid var(--border); color: var(--text-secondary);
+  cursor: pointer; transition: all 0.2s; font-family: inherit;
+}
+.ws-chip:hover { border-color: var(--accent); }
+.ws-chip.on {
+  background: var(--btn-grad); color: var(--text-strong);
+  border-color: transparent; box-shadow: 0 4px 14px var(--accent-shadow); font-weight: 600;
+}
+.ws-attr {
+  border-radius: 10px; padding: 0.9rem 1rem; border: 1px solid var(--border);
+  background: var(--bg-inset);
+}
+.ws-attr-ok { border-color: var(--success-border); background: var(--success-bg); }
+.ws-attr-accent { border-color: var(--accent-border); background: var(--accent-bg); }
+.ws-attr-warn { border-color: var(--warning-border); background: var(--warning-bg); }
+.ws-attr-head { margin: 0 0 0.5rem; font-size: 0.95rem; color: var(--text-strong); }
+.ws-attr-head code {
+  background: var(--surface-2); padding: 0.1em 0.4em; border-radius: 3px;
+  font-size: 0.88em; color: var(--code-text);
+}
+.ws-attr-head b { color: var(--warning); }
+.ws-attr-desc { margin: 0; font-size: 0.9rem; line-height: 1.75; color: var(--text-secondary); }
+
+/* 陷阱列表 */
+.ws-pitfalls {
+  margin: 0; padding-left: 1.35rem; line-height: 1.95;
+  color: var(--text-secondary); font-size: 0.92rem;
+}
+.ws-pitfalls li { margin-bottom: 0.35rem; }
+.ws-pitfalls li::marker { color: var(--warning); }
+
+/* ==================== 🎯 面试总结 ==================== */
+.ws-summary { display: flex; flex-direction: column; gap: 1.4rem; max-width: 960px; margin: 0 auto; }
+.ws-block h3 { margin: 0 0 0.6rem; font-size: 1.1rem; color: var(--accent-2); }
+.ws-block ul {
+  margin: 0; padding-left: 1.35rem; line-height: 1.9;
+  color: var(--text-secondary); font-size: 0.94rem;
+}
+.ws-block ul b { color: var(--warning); }
+.ws-block ul code {
+  background: var(--surface-2); padding: 0.1em 0.4em; border-radius: 3px;
+  font-size: 0.85em; color: var(--code-text);
+}
+.ws-note-block {
+  margin-top: 0.7rem; background: var(--bg-inset); border-radius: 6px; padding: 0.6rem 0.8rem;
+}
+.ws-compare { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+.ws-compare th,
+.ws-compare td {
+  padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--border);
+  text-align: left; vertical-align: top; line-height: 1.55; color: var(--text-secondary);
+}
+.ws-compare th { background: var(--accent-bg); color: var(--text-strong); font-weight: 600; }
+.ws-compare td:first-child { color: var(--accent-2); font-weight: 600; }
+.ws-compare tbody tr:hover td { background: var(--surface-1); }
+.ws-summary blockquote {
+  margin: 0; padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-2-bg));
+  border-left: 4px solid var(--accent); border-radius: 6px;
+  color: var(--text-secondary); font-size: 0.94rem; line-height: 1.85;
+}
+.ws-summary blockquote p { margin: 0; }
+.ws-summary blockquote b { color: var(--warning); }
+
+/* 追问折叠列表 */
+.ws-faq { display: flex; flex-direction: column; gap: 0.5rem; }
+.ws-faq-item {
+  border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  background: var(--bg-inset);
+}
+.ws-faq-item.open { border-color: var(--accent-border); }
+.ws-faq-q {
+  width: 100%; display: flex; align-items: baseline; gap: 0.5rem; text-align: left;
+  background: none; border: none; cursor: pointer; padding: 0.65rem 0.85rem;
+  font-family: inherit; font-size: 0.92rem; font-weight: 600; color: var(--text-strong);
+}
+.ws-faq-q:hover { color: var(--accent-bright); }
+.ws-faq-mark { color: var(--accent); flex-shrink: 0; }
+.ws-faq-a {
+  margin: 0; padding: 0 0.85rem 0.8rem; font-size: 0.88rem; line-height: 1.8;
+  color: var(--text-secondary); animation: ws-fade 0.25s ease;
+}
+.ws-faq-a b { color: var(--warning); }
+@keyframes ws-fade { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }

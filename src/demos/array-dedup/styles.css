@@ -1,0 +1,266 @@
+/* =========================================================
+ * 主题专属样式：数组去重
+ * ---------------------------------------------------------
+ * 通用样式（topic-root / tabs / demo-wrap / demo-header / demo-sub / btn-row）
+ * 在 src/App.css，这里只放本主题独有的。
+ * ⚠️ 类名统一 dedup- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）；
+ * NaN 去得掉/去不掉除颜色外还带 ✅/⚠️ 文字冗余，不只靠颜色区分。
+ * ========================================================= */
+
+/* ==================== 基础容器 ==================== */
+.dedup-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.dedup-root .demo-header { margin-bottom: 0.2rem; }
+.dedup-root .demo-header h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.3rem;
+  color: var(--text-strong);
+}
+.dedup-root .demo-sub {
+  margin: 0 auto;
+  max-width: 900px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+.dedup-root .demo-sub b { color: var(--accent-bright); }
+.dedup-root code,
+.dedup-root pre {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+
+.dedup-primary {
+  background: var(--btn-grad);
+  border-color: transparent;
+  color: var(--text-strong);
+  box-shadow: 0 4px 12px var(--accent-shadow);
+  font-weight: 600;
+}
+
+/* ==================== 实跑对拍卡片 ==================== */
+.dedup-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1rem 1rem;
+}
+.dedup-card-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.dedup-card-title { font-size: 1rem; font-weight: 700; color: var(--text-strong); }
+.dedup-card-src {
+  font-size: 0.76rem;
+  color: var(--accent-2);
+  background: var(--bg-code);
+  padding: 0.18em 0.5em;
+  border-radius: 4px;
+  word-break: break-all;
+  width: fit-content;
+}
+
+.dedup-toolbar { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
+.dedup-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+}
+.dedup-field input {
+  width: 22rem;
+  background: var(--bg-inset);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 0.35em 0.5em;
+  font-size: 0.86rem;
+}
+.dedup-field input:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 1px; }
+
+.dedup-input-line { margin: 0; font-size: 0.86rem; color: var(--text-secondary); }
+.dedup-input-line code { color: var(--accent-bright); background: var(--bg-code); padding: 0.1em 0.5em; border-radius: 4px; }
+
+.dedup-empty { font-style: normal; color: var(--text-muted); font-size: 0.84rem; margin: 0; line-height: 1.6; }
+
+/* 六种方法结果并排 */
+.dedup-results { display: flex; flex-direction: column; gap: 0.5rem; }
+.dedup-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.55rem 0.75rem;
+}
+.dedup-row-head { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+.dedup-row-name { font-size: 0.88rem; font-weight: 700; color: var(--text-strong); }
+.dedup-row-src {
+  font-size: 0.74rem;
+  color: var(--accent-2);
+  background: var(--bg-code);
+  padding: 0.12em 0.5em;
+  border-radius: 4px;
+}
+.dedup-row-out {
+  font-size: 0.85rem;
+  color: var(--success);
+  background: var(--inset);
+  border: 1px dashed var(--success-border);
+  border-radius: 6px;
+  padding: 0.35em 0.6em;
+  overflow-x: auto;
+  white-space: pre;
+}
+.dedup-row-note { margin: 0; font-size: 0.78rem; color: var(--text-muted); line-height: 1.6; }
+
+.dedup-tag {
+  flex: none;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.12em 0.5em;
+  border-radius: 6px;
+}
+.dedup-tag-ok { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+.dedup-tag-warn { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning-border); }
+
+.dedup-chip {
+  font-size: 0.8rem;
+  color: var(--text);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.15em 0.6em;
+}
+.dedup-chip b { color: var(--accent-bright); }
+
+/* ==================== 本质 · 总结容器 ==================== */
+.dedup-essence,
+.dedup-summary {
+  gap: 1.3rem;
+  max-width: 980px;
+  margin: 0 auto;
+}
+.dedup-block {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  overflow-x: auto;
+}
+.dedup-block h3 { margin: 0; font-size: 1.05rem; color: var(--accent-2); }
+
+.dedup-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.dedup-table th,
+.dedup-table td {
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.dedup-table th { background: var(--accent-bg); color: var(--text-strong); font-weight: 600; }
+.dedup-table td:first-child { color: var(--accent-2); font-weight: 600; white-space: nowrap; }
+.dedup-table td b { color: var(--success); }
+.dedup-table tbody tr:hover td { background: var(--surface-1); }
+.dedup-table code {
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--code-text);
+  font-size: 0.88em;
+  white-space: nowrap;
+}
+
+.dedup-tip {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  background: var(--bg-inset);
+  border-radius: 8px;
+  padding: 0.45rem 0.6rem;
+}
+.dedup-tip b { color: var(--accent-bright); }
+.dedup-tip code { color: var(--accent-2); }
+
+.dedup-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+.dedup-list b { color: var(--text-strong); }
+.dedup-list code {
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent-2);
+  font-size: 0.86em;
+}
+
+.dedup-pit {
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--warning);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+}
+.dedup-pit-name { margin: 0 0 0.25rem; font-size: 0.9rem; font-weight: 700; color: var(--warning); }
+.dedup-pit-detail { margin: 0; font-size: 0.84rem; line-height: 1.7; color: var(--text-secondary); }
+.dedup-pit-detail code { color: var(--accent-2); }
+
+/* ==================== 代码块 / 面试话术 ==================== */
+.dedup-code {
+  margin: 0;
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.8rem;
+  line-height: 1.65;
+  color: var(--code-text);
+  overflow-x: auto;
+  white-space: pre;
+}
+.dedup-code-full { font-size: 0.82rem; }
+
+.dedup-quote {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-2-bg));
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  line-height: 1.9;
+}
+.dedup-quote p { margin: 0 0 0.6rem; }
+.dedup-quote p:last-child { margin-bottom: 0; }
+.dedup-quote b { color: var(--warning); }
+.dedup-quote code {
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--code-text);
+}
