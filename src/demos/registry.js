@@ -310,6 +310,17 @@ const rawTopics = [
     loader: () => import('./fe-perf-optimization/index.jsx'),
   },
 
+  {
+    id: 'closure-cache-memo',
+    icon: '🧠',
+    title: '闭包实战：累加器 & 缓存函数',
+    subtitle: '「用闭包写累加/缓存函数」实跑对拍：累加器当场加、memoize 命中/未命中实测、全局 vs 私有变量污染对比 + 链式 add(1)(2)(3) + 手写模板与内存泄漏陷阱',
+    tags: ['JS 基础', '闭包', '面试高频'],
+    difficulty: '中级',
+    createdAt: '2026-10-20',
+    loader: () => import('./closure-cache-memo/index.jsx'),
+  },
+
   /* 👇 未来在这里继续加，例如：
   {
     id: 'useEffect-deep-dive',
