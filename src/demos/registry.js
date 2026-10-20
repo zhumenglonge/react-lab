@@ -212,6 +212,17 @@ const rawTopics = [
   },
 
   {
+    id: 'css-layout',
+    icon: '🧩',
+    title: 'CSS 常用布局',
+    subtitle: '布局切换台实跑对拍：文档流/inline-block/浮动/flex/grid/定位当场重排 + 浮动塌陷 BFC 实测 + Flex vs Grid 与经典三栏话术',
+    tags: ['CSS', '布局', '面试高频'],
+    difficulty: '初级',
+    createdAt: '2026-10-20',
+    loader: () => import('./css-layout/index.jsx'),
+  },
+
+  {
     id: 'prototype-chain',
     icon: '🪜',
     title: '原型链与继承',
@@ -319,6 +330,61 @@ const rawTopics = [
     difficulty: '中级',
     createdAt: '2026-10-20',
     loader: () => import('./closure-cache-memo/index.jsx'),
+  },
+
+  {
+    id: 'web-storage',
+    icon: '🍪',
+    title: '浏览器存储：Cookie / localStorage / sessionStorage',
+    subtitle: '真调浏览器 API 当场读写：4KB cookie 静默丢弃实测、请求头只有 Cookie 上行、跨标签 storage 事件广播；再掰开“缓存 vs 存储”、Cookie↔Session 柜子与钥匙、安全三件套与选型话术',
+    tags: ['浏览器原理', '存储', '面试高频'],
+    difficulty: '中级',
+    createdAt: '2026-10-20',
+    loader: () => import('./web-storage/index.jsx'),
+  },
+
+  {
+    id: 'debounce-throttle',
+    icon: '⏱️',
+    title: '防抖 vs 节流：高频事件两种拦截术',
+    subtitle: '「防抖节流有什么区别」实跑对拍：同一条事件流并排跑时间线（待重置/被拦截/补尾炮当场可见）、定时器 vs 时间戳无尾炮实验、手写模板 + 场景选型与 leading/trailing、React 闭包陷阱',
+    tags: ['JS 基础', '闭包', '面试高频'],
+    difficulty: '中级',
+    createdAt: '2026-10-20',
+    loader: () => import('./debounce-throttle/index.jsx'),
+  },
+
+  {
+    id: 'event-loop',
+    icon: '🌀',
+    title: 'Event Loop 事件循环',
+    subtitle: '宏任务/微任务逐帧对拍：setTimeout vs Promise 输出顺序、await 后续归微任务、链式 then 插队、Node(nextTick/setImmediate) 与浏览器差异',
+    tags: ['JS 核心', '事件循环', '面试高频'],
+    difficulty: '中级',
+    createdAt: '2026-10-20',
+    loader: () => import('./event-loop/index.jsx'),
+  },
+
+  {
+    id: 'array-dedup',
+    icon: '🧹',
+    title: '数组去重：6 种写法实跑对拍',
+    subtitle: '「数字数组怎么去重」六种写法同一数组并排真跑 + 5 万项性能基准真计时；NaN/+0/-0 特殊值实测，=== vs SameValueZero 判等真相与面试话术',
+    tags: ['JS 基础', '数组方法', '面试高频'],
+    difficulty: '初级',
+    createdAt: '2026-10-20',
+    loader: () => import('./array-dedup/index.jsx'),
+  },
+
+  {
+    id: 'move-zeroes',
+    icon: '↪️',
+    title: '移动零（把 0 移到末尾）',
+    subtitle: '「数组 [1,2,0,0,4,5,6] 把 0 移到最后」LeetCode 283：双指针逐帧动画 + 3 种写法操作量对拍；原地/单趟/保序三要求与 truthy 误伤 false/null 陷阱',
+    tags: ['JS 基础', '数组方法', '面试高频'],
+    difficulty: '初级',
+    createdAt: '2026-10-20',
+    loader: () => import('./move-zeroes/index.jsx'),
   },
 
   /* 👇 未来在这里继续加，例如：
