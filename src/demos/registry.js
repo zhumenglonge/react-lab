@@ -409,6 +409,17 @@ const rawTopics = [
     loader: () => import('./find-laxative-dish/index.jsx'),
   },
 
+  {
+    id: 'four-people-bridge',
+    icon: '🌉',
+    title: '逻辑题：四人过桥',
+    subtitle: '贪心陷阱→全局最短 17 分：常规(19) vs 最优逐步对拍，让最慢两人结伴过、两个快的当摆渡',
+    tags: ['逻辑推理', '贪心与最优', '面试原题'],
+    difficulty: '开放题',
+    createdAt: '2026-10-22',
+    loader: () => import('./four-people-bridge/index.jsx'),
+  },
+
   /* 👇 未来在这里继续加，例如：
   {
     id: 'useEffect-deep-dive',

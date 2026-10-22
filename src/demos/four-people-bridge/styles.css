@@ -1,0 +1,181 @@
+/* =========================================================
+ * 主题专属样式：逻辑题 · 四人过桥（贪心陷阱 / 全局最优）
+ * ---------------------------------------------------------
+ * 类名统一 bd- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）。
+ * ========================================================= */
+
+.bd-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.bd-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.bd-icon { font-size: 2rem; }
+.bd-header h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.3rem;
+  color: var(--text-strong);
+}
+.bd-meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.bd-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+}
+.bd-card h3 {
+  margin: 0 0 0.7rem;
+  font-size: 1.02rem;
+  color: var(--text-strong);
+}
+
+.bd-question {
+  margin: 0;
+  padding: 0.9rem 1.1rem;
+  background: var(--bg-inset);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.bd-people {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+}
+.bd-person {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 0.25rem 0.8rem;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+.bd-person b { color: var(--accent-2); }
+
+.bd-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
+}
+.bd-toolbar h3 { margin: 0; }
+.bd-switch { display: flex; gap: 0.5rem; }
+.bd-seg {
+  background: var(--bg-elevated);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.86rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.bd-seg:hover { border-color: var(--accent); }
+.bd-seg-on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.bd-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.bd-table th,
+.bd-table td {
+  border: 1px solid var(--border);
+  padding: 0.45rem 0.6rem;
+  text-align: center;
+}
+.bd-table th {
+  background: var(--bg-inset);
+  color: var(--text-strong);
+  font-weight: 600;
+}
+.bd-table td { color: var(--text); }
+.bd-row-hidden { opacity: 0.25; }
+.bd-cost { color: var(--accent-bright); font-weight: 600; }
+.bd-cum {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  color: var(--success);
+  font-weight: 700;
+}
+
+.bd-controls {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.9rem 0 0;
+}
+.bd-btn {
+  background: var(--bg-elevated);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.4rem 1rem;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.bd-btn:hover:not(:disabled) { border-color: var(--accent); }
+.bd-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.bd-btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.bd-note {
+  margin: 0.9rem 0 0;
+  padding: 0.7rem 0.9rem;
+  border-radius: 8px;
+  background: var(--bg-inset);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--text);
+}
+.bd-note h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  color: var(--warning);
+}
+.bd-note ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.bd-note li { color: var(--text); font-size: 0.9rem; line-height: 1.7; }
+.bd-note b { color: var(--text-strong); }
+.bd-tone-ok { border-left: 3px solid var(--success); }
+.bd-tone-bad { border-left: 3px solid var(--danger); }
+
+.bd-conclusion { border-color: var(--success); }
+.bd-slogan {
+  margin: 0 0 0.5rem;
+  line-height: 1.8;
+  color: var(--text);
+}
+.bd-slogan b { color: var(--success); }

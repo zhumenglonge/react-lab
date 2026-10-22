@@ -176,6 +176,19 @@ export default function FindLaxativeDish() {
         </div>
       </section>
 
+      <section className="lx-card lx-source">
+        <h3>📚 题目出处：《编程之美》</h3>
+        <p className="lx-text">
+          本题（10 盘菜找泻药）的原型是《编程之美：微软技术面试心得》（《编程之美》小组著、邹欣领衔，电子工业出版社 2008）里的经典智力题
+          <b>“放猪试毒 / 老鼠试毒”</b>：1000 桶水只有 1 桶有毒，毒发需 1 小时，用最少的猪在 1 小时内测出——
+          解法就是这里的 <b>二进制编码</b>。
+        </p>
+        <p className="lx-sub">
+          💡 以后遇到这类“编码 / 博弈 / 共同知识”逻辑题，先去 <b>《编程之美》</b>（尤其“第 6 章 智力题”）找原型：
+          称球找假币、四人过桥、分金条（7 天切两刀）、取石子博弈、猜帽子颜色（共同知识）等大多出自此书。
+        </p>
+      </section>
+
       <section className="lx-card lx-conclusion">
         <h3>✅ 结论 & 记忆点</h3>
         <p className="lx-slogan">

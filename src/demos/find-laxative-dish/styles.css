@@ -192,6 +192,10 @@
 .lx-readout-ok b { font-size: 1.15rem; }
 .lx-readout-none { color: var(--text-muted); font-size: 0.9rem; }
 
+.lx-source { border-left: 3px solid var(--accent-2); }
+.lx-source b { color: var(--accent-2); }
+.lx-source .lx-sub { font-style: normal; }
+
 .lx-conclusion { border-color: var(--success); }
 .lx-slogan {
   margin: 0 0 0.9rem;
