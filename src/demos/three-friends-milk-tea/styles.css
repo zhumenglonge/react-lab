@@ -1,0 +1,186 @@
+/* =========================================================
+ * 主题专属样式：逻辑推理题 · 三个朋友点奶茶
+ * ---------------------------------------------------------
+ * 类名统一 mt- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）。
+ * ========================================================= */
+
+.mt-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.mt-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.mt-icon { font-size: 2rem; }
+.mt-header h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.3rem;
+  color: var(--text-strong);
+}
+.mt-meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.mt-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+}
+.mt-card h3 {
+  margin: 0 0 0.7rem;
+  font-size: 1.02rem;
+  color: var(--text-strong);
+}
+
+.mt-question {
+  margin: 0;
+  padding: 0.9rem 1.1rem;
+  background: var(--bg-inset);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.mt-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
+}
+.mt-toolbar h3 { margin: 0; }
+.mt-btns { display: flex; gap: 0.5rem; }
+.mt-btn {
+  background: var(--bg-elevated);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.mt-btn:hover:not(:disabled) { border-color: var(--accent); }
+.mt-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.mt-btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.mt-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.mt-step {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transform: translateY(6px);
+  transition: opacity 0.35s, transform 0.35s, max-height 0.35s;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0 1rem;
+  background: var(--bg-inset);
+}
+.mt-step-show {
+  opacity: 1;
+  max-height: 320px;
+  transform: translateY(0);
+  padding: 0.8rem 1rem;
+}
+
+.mt-step-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+.mt-step-who {
+  font-weight: 700;
+  color: var(--text-strong);
+}
+.mt-step-said {
+  color: var(--accent-bright);
+  font-style: italic;
+}
+.mt-step-key {
+  margin-left: auto;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+}
+.mt-tone-ok {
+  color: var(--success);
+  background: rgba(55, 214, 122, 0.14);
+}
+
+.mt-step-infer {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.92rem;
+  line-height: 1.75;
+}
+
+.mt-hint {
+  margin: 0.9rem 0 0;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-style: italic;
+}
+
+.mt-conclusion {
+  border-color: var(--success);
+}
+.mt-slogan {
+  margin: 0 0 0.9rem;
+  line-height: 1.8;
+  color: var(--text);
+}
+.mt-slogan b { color: var(--success); }
+
+.mt-note {
+  background: var(--bg-inset);
+  border: 1px dashed var(--border-strong);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+}
+.mt-note h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  color: var(--warning);
+}
+.mt-note ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.mt-note li {
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+.mt-note b { color: var(--text-strong); }

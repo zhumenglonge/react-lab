@@ -387,6 +387,28 @@ const rawTopics = [
     loader: () => import('./move-zeroes/index.jsx'),
   },
 
+  {
+    id: 'three-friends-milk-tea',
+    icon: '🧠',
+    title: '逻辑题：三个朋友点奶茶',
+    subtitle: '“不知道”暴露了什么：逐步揭示共同知识推理链，拆出“三人都想喝奶茶”与严谨补充',
+    tags: ['逻辑推理', '脑筋急转弯', '面试原题'],
+    difficulty: '开放题',
+    createdAt: '2026-10-22',
+    loader: () => import('./three-friends-milk-tea/index.jsx'),
+  },
+
+  {
+    id: 'find-laxative-dish',
+    icon: '🌶️',
+    title: '逻辑题：10 盘菜里找泻药',
+    subtitle: '串行转并行 + 二进制编码：方案 A 每人一菜，方案 B 只用 4 人 1 分钟锁定（附编号对照表与可交互反推解码器）',
+    tags: ['逻辑推理', '信息编码', '面试原题'],
+    difficulty: '开放题',
+    createdAt: '2026-10-22',
+    loader: () => import('./find-laxative-dish/index.jsx'),
+  },
+
   /* 👇 未来在这里继续加，例如：
   {
     id: 'useEffect-deep-dive',

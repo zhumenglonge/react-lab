@@ -1,0 +1,226 @@
+/* =========================================================
+ * 主题专属样式：逻辑题 · 10 盘菜里找泻药（并行 + 二进制编码）
+ * ---------------------------------------------------------
+ * 类名统一 lx- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）。
+ * ========================================================= */
+
+.lx-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.lx-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.lx-icon { font-size: 2rem; }
+.lx-header h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.3rem;
+  color: var(--text-strong);
+}
+.lx-meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.lx-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+}
+.lx-card h3 {
+  margin: 0 0 0.7rem;
+  font-size: 1.02rem;
+  color: var(--text-strong);
+}
+
+.lx-question {
+  margin: 0;
+  padding: 0.9rem 1.1rem;
+  background: var(--bg-inset);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.lx-text {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.94rem;
+  line-height: 1.8;
+}
+.lx-text b { color: var(--accent-bright); }
+.lx-sub {
+  margin: 0.6rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  line-height: 1.7;
+}
+.lx-sub b { color: var(--text-strong); }
+.lx-sub code {
+  background: var(--bg-code);
+  padding: 0.05rem 0.4rem;
+  border-radius: 5px;
+  color: var(--accent-2);
+}
+
+.lx-pitfall { border-left: 3px solid var(--warning); }
+.lx-pitfall b { color: var(--warning); }
+
+.lx-rules {
+  margin: 0.8rem 0 0;
+  padding-left: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--text);
+  font-size: 0.92rem;
+  line-height: 1.75;
+}
+.lx-rules b { color: var(--accent-bright); }
+
+.lx-table-title {
+  margin: 1.1rem 0 0.5rem;
+  font-size: 0.95rem;
+  color: var(--text-strong);
+}
+.lx-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+.lx-table th,
+.lx-table td {
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.6rem;
+  text-align: center;
+}
+.lx-table th {
+  background: var(--bg-inset);
+  color: var(--text-strong);
+  font-weight: 600;
+  line-height: 1.4;
+}
+.lx-table td { color: var(--text); }
+.lx-num { font-weight: 700; color: var(--text-strong); }
+.lx-bin {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  letter-spacing: 0.15em;
+  color: var(--accent-2);
+}
+
+/* 通用规律公式条 */
+.lx-formula {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin: 0.7rem 0 0.9rem;
+}
+.lx-formula span {
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.lx-formula b { color: var(--accent-bright); }
+.lx-formula sup { font-size: 0.7em; }
+
+/* 反推解码器 */
+.lx-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 0.9rem;
+}
+.lx-toggle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  min-width: 96px;
+  padding: 0.6rem 0.7rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.lx-toggle:hover { border-color: var(--accent); }
+.lx-toggle-bit {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+.lx-toggle-state { font-size: 0.82rem; }
+.lx-toggle-on {
+  border-color: var(--danger);
+  background: rgba(255, 107, 87, 0.16);
+}
+
+.lx-readout {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem 1rem;
+  background: var(--bg-inset);
+  border-radius: 8px;
+}
+.lx-readout-bits {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 1.15rem;
+  letter-spacing: 0.2em;
+  color: var(--accent-2);
+}
+.lx-readout-ok { color: var(--success); font-size: 0.95rem; }
+.lx-readout-ok b { font-size: 1.15rem; }
+.lx-readout-none { color: var(--text-muted); font-size: 0.9rem; }
+
+.lx-conclusion { border-color: var(--success); }
+.lx-slogan {
+  margin: 0 0 0.9rem;
+  line-height: 1.8;
+  color: var(--text);
+}
+.lx-slogan b { color: var(--success); }
+
+.lx-note {
+  background: var(--bg-inset);
+  border: 1px dashed var(--border-strong);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+}
+.lx-note h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  color: var(--warning);
+}
+.lx-note ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.lx-note li {
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+.lx-note b { color: var(--text-strong); }
