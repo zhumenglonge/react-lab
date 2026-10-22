@@ -99,7 +99,9 @@ export default function RunDemo() {
     total += step;
     return total;
   };
-}`}</pre>
+}
+// 什么时候才死？—— 等 add 本身再也引用不到时，连 total 一起交给 GC
+// 本例里 add 存在 useState 里，所以上面那个时刻 = 组件卸载（详见「本质与陷阱」）`}</pre>
         <div className="btn-row">
           {[1, 10, 100].map((step) => (
             <button key={step} className="ghost" onClick={() => runAccumulate(step)}>
