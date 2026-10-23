@@ -1,0 +1,362 @@
+/* =========================================================
+ * 主题专属样式：忙循环里的优先级调度
+ * ---------------------------------------------------------
+ * 通用样式（topic-root / tabs / content / demo-wrap / demo-header）
+ * 在 src/App.css，这里只放本主题独有的。
+ * ⚠️ 类名统一 sp- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）；
+ * 循环片/紧急任务除颜色外还带 🔁/⚡ + 文字标签冗余，不只靠颜色区分。
+ * ========================================================= */
+
+/* ==================== 基础容器 ==================== */
+.sp-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.sp-root .demo-header { margin-bottom: 0.2rem; }
+.sp-root .demo-header h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.3rem;
+  color: var(--text-strong);
+}
+.sp-root .demo-sub {
+  margin: 0 auto;
+  max-width: 900px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+.sp-root .demo-sub b { color: var(--accent-bright); }
+.sp-root code,
+.sp-root pre {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+
+/* ==================== 卡片 ==================== */
+.sp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1rem 1rem;
+}
+.sp-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.sp-card-title { font-size: 1rem; font-weight: 700; color: var(--text-strong); }
+.sp-card-src {
+  font-size: 0.76rem;
+  color: var(--accent-2);
+  background: var(--bg-code);
+  padding: 0.18em 0.5em;
+  border-radius: 4px;
+  word-break: break-all;
+}
+
+.sp-code {
+  margin: 0;
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.8rem;
+  line-height: 1.65;
+  color: var(--code-text);
+  overflow-x: auto;
+  white-space: pre;
+}
+.sp-talk { white-space: pre-wrap; }
+.sp-hint {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.sp-hint b { color: var(--accent-bright); }
+.sp-note { margin-top: -0.4rem; }
+
+/* ==================== 按钮 ==================== */
+.sp-btn {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.84rem;
+  padding: 0.4em 0.8em;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.sp-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent-bright); }
+.sp-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+.sp-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.sp-btn-play { border-color: var(--accent); color: var(--accent-bright); font-weight: 700; }
+.sp-btn-stop { border-color: var(--danger-border); color: var(--danger); }
+.sp-btn-stop:hover:not(:disabled) { border-color: var(--danger); color: var(--danger); }
+.sp-btn-urgent { border-color: var(--warning-border); color: var(--warning); }
+.sp-btn-urgent:hover:not(:disabled) { border-color: var(--warning); color: var(--warning); }
+.sp-controls { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+/* 模式选择胶囊 */
+.sp-picks { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.sp-pick {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  padding: 0.35em 0.9em;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.sp-pick:hover:not(:disabled) { border-color: var(--accent); color: var(--accent-bright); }
+.sp-pick.active {
+  background: var(--btn-grad);
+  border-color: transparent;
+  color: #fff;
+  font-weight: 700;
+}
+
+/* ==================== 实跑台：日志 + 侧栏 ==================== */
+.sp-stage {
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+}
+.sp-log {
+  flex: 2 1 420px;
+  min-width: 0;
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 0.7rem;
+  max-height: 340px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.sp-empty {
+  margin: 0.4rem;
+  font-size: 0.84rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+.sp-empty b { color: var(--accent-bright); }
+.sp-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--code-text);
+}
+.sp-line-now { color: var(--text-strong); }
+.sp-time {
+  flex: none;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  min-width: 62px;
+}
+.sp-line-text { flex: 1; }
+
+/* 事件徽章：颜色 + emoji + 文字三重冗余 */
+.sp-badge {
+  flex: none;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.1em 0.45em;
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+.sp-badge-slice  { color: var(--accent);      background: var(--accent-bg);      border-color: var(--accent-border); }
+.sp-badge-urgent { color: var(--warning);     background: var(--warning-bg);     border-color: var(--warning-border); }
+.sp-badge-click  { color: var(--accent-2);    background: var(--accent-2-bg);    border-color: var(--accent-2-border); }
+.sp-badge-gap    { color: var(--danger);      background: var(--danger-bg);      border-color: var(--danger-border); }
+.sp-badge-done   { color: var(--success);     background: var(--success-bg);     border-color: var(--success-border); }
+.sp-badge-info   { color: var(--text-secondary); background: var(--surface-2);   border-color: var(--border-strong); }
+
+/* 侧栏 */
+.sp-side {
+  flex: 1 1 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.sp-col-title { font-size: 0.78rem; color: var(--text-secondary); font-weight: 700; }
+.sp-fps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.45em 0.7em;
+}
+.sp-fps .sp-col-title { font-weight: 400; font-size: 0.76rem; }
+.sp-fps-num { font-size: 0.95rem; font-weight: 800; color: var(--success); }
+.sp-fps-frozen .sp-fps-num { color: var(--danger); }
+
+/* 时间轴：宽 = 占用时长（flex-grow 按毫秒给） */
+.sp-timeline {
+  display: flex;
+  gap: 2px;
+  align-items: stretch;
+  height: 26px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px;
+  overflow: hidden;
+}
+.sp-timeline .sp-q-empty {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  align-self: center;
+  padding-left: 0.4em;
+}
+.sp-timeline > span[title] {
+  flex-grow: 1;
+  flex-basis: 0;
+  min-width: 6px;
+  border-radius: 3px;
+}
+.sp-bar-slice { background: var(--accent); opacity: 0.85; }
+.sp-bar-urgent { background: var(--warning); opacity: 0.95; }
+
+.sp-legend {
+  margin: 0;
+  padding-left: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  list-style: none;
+}
+.sp-legend li { display: flex; align-items: center; gap: 0.4rem; }
+.sp-dot { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+.sp-dot-slice { background: var(--accent); }
+.sp-dot-urgent { background: var(--warning); }
+
+/* 对拍结论条 */
+.sp-verdict {
+  margin-top: 0.4rem;
+  border-radius: 8px;
+  padding: 0.65em 0.9em;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  border: 1px solid transparent;
+}
+.sp-verdict b { color: var(--text-strong); }
+.sp-verdict-naive  { color: var(--danger);  background: var(--danger-bg);  border-color: var(--danger-border); }
+.sp-verdict-micro  { color: var(--warning); background: var(--warning-bg); border-color: var(--warning-border); }
+.sp-verdict-sliced { color: var(--success); background: var(--success-bg); border-color: var(--success-border); }
+
+/* ==================== 本质与陷阱 ==================== */
+.sp-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+.sp-list b { color: var(--accent-bright); }
+
+.sp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+.sp-table th {
+  text-align: left;
+  padding: 0.5em 0.6em;
+  color: var(--text-strong);
+  border-bottom: 2px solid var(--border-strong);
+  white-space: nowrap;
+}
+.sp-table td {
+  padding: 0.5em 0.6em;
+  border-bottom: 1px solid var(--border);
+  line-height: 1.6;
+  vertical-align: top;
+}
+.sp-table code {
+  color: var(--accent-2);
+  background: var(--bg-code);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  font-size: 0.78rem;
+}
+.sp-row-good td { background: var(--success-bg); }
+.sp-row-bad td { background: var(--danger-bg); }
+
+.sp-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 0.7rem;
+}
+.sp-col-card {
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+}
+.sp-col-card h3 { margin: 0 0 0.4rem; font-size: 0.9rem; color: var(--text-strong); }
+.sp-col-card p { margin: 0; font-size: 0.82rem; line-height: 1.7; color: var(--text-secondary); }
+.sp-col-card code { color: var(--accent-2); }
+
+.sp-traps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.sp-traps li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--danger);
+  border-radius: 8px;
+  padding: 0.55em 0.8em;
+}
+.sp-trap-name { font-size: 0.85rem; font-weight: 700; color: var(--danger); }
+.sp-trap-truth { font-size: 0.82rem; line-height: 1.65; color: var(--text-secondary); }
+
+/* ==================== 面试总结 ==================== */
+.sp-fas {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.sp-fas li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6em 0.85em;
+}
+.sp-fa-q { font-size: 0.87rem; font-weight: 700; color: var(--accent-bright); }
+.sp-fa-a { font-size: 0.83rem; line-height: 1.7; color: var(--text-secondary); }

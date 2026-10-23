@@ -420,6 +420,17 @@ const rawTopics = [
     loader: () => import('./four-people-bridge/index.jsx'),
   },
 
+  {
+    id: 'scheduler-preempt',
+    icon: '🔀',
+    title: '忙循环里的优先级调度',
+    subtitle: '手写题「循环不让它闲着，新任务却要优先执行」：裸同步/微任务假异步/切片+让步三种跑法真跑对拍，rAF 心跳与排队毫秒当场可见；打通 React Fiber 时间切片',
+    tags: ['JS 核心', '任务调度', '面试高频'],
+    difficulty: '中级',
+    createdAt: '2026-10-22',
+    loader: () => import('./scheduler-preempt/index.jsx'),
+  },
+
   /* 👇 未来在这里继续加，例如：
   {
     id: 'useEffect-deep-dive',
