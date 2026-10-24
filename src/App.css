@@ -41,6 +41,92 @@
 .home {
   animation: fadeIn 0.3s ease-out;
 }
+
+/* 标题搜索框 */
+.search-bar {
+  position: relative;
+  max-width: 480px;
+  margin: 0 auto 0.9rem;
+}
+.search-icon {
+  position: absolute;
+  left: 0.95rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+.search-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.62em 2.9em 0.62em 2.7em;
+  font: inherit;
+  font-size: 0.92rem;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+.search-input:focus {
+  border-color: var(--accent);
+  background: var(--bg-elevated);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+/* 隐藏原生 search 小叉，统一用右侧自定义按钮 */
+.search-input::-webkit-search-cancel-button {
+  display: none;
+}
+.search-clear {
+  position: absolute;
+  right: 0.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0.1em 0.55em;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  background: transparent;
+  border-color: transparent;
+  border-radius: 999px;
+}
+.search-clear:hover {
+  color: var(--text-strong);
+  background: var(--accent-bg);
+  border-color: transparent;
+}
+/* 标题中命中的关键词高亮 */
+.search-hit {
+  background: var(--warning-bg);
+  color: var(--warning);
+  border-radius: 3px;
+  padding: 0 0.1em;
+}
+/* 空搜索结果里的补充说明与行内按钮 */
+.empty-tip-sub {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+.link-btn {
+  padding: 0;
+  margin-left: 0.3em;
+  font: inherit;
+  color: var(--link);
+  background: none;
+  border: none;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.link-btn:hover {
+  color: var(--link-hover);
+  border-color: transparent;
+}
+
 .home-stats {
   display: flex;
   justify-content: center;

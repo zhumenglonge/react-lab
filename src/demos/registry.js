@@ -462,11 +462,18 @@ export const topics = rawTopics.map((t) => ({
   Component: lazy(t.loader),
 }))
 
+// 按标题搜索：只匹配 title，忽略大小写与首尾空格；空关键词返回全部
+export function searchTopicsByTitle(keyword, list = topics) {
+  const q = keyword.trim().toLowerCase()
+  if (!q) return list
+  return list.filter((t) => t.title.toLowerCase().includes(q))
+}
+
 // 按分类聚合，方便首页分组展示（现在只有一个分组，未来可扩展）
-export function groupTopicsByCategory() {
+export function groupTopicsByCategory(list = topics) {
   // 目前先按 tags 里第一个作为分类
   const groups = new Map()
-  for (const t of topics) {
+  for (const t of list) {
     const cat = t.tags?.[0] ?? '其他'
     if (!groups.has(cat)) groups.set(cat, [])
     groups.get(cat).push(t)
