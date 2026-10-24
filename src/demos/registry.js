@@ -431,6 +431,17 @@ const rawTopics = [
     loader: () => import('./scheduler-preempt/index.jsx'),
   },
 
+  {
+    id: 'react-router-core',
+    icon: '🧭',
+    title: 'React Router 三个标签：BrowserRouter / Routes / Route',
+    subtitle: 'Vue 转 React 最容易卡住的一处：Router 报地址、Routes 挑一条、Route 当候选，换 URL 实跑三步流水线 + JSX→createElement 翻译；再对拍 Outlet 三写法、具体度排名与 Pages 子路径刷新 404',
+    tags: ['React 架构', '路由', '面试高频'],
+    difficulty: '中级',
+    createdAt: '2026-10-24',
+    loader: () => import('./react-router-core/index.jsx'),
+  },
+
   /* 👇 未来在这里继续加，例如：
   {
     id: 'useEffect-deep-dive',
