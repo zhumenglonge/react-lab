@@ -442,6 +442,17 @@ const rawTopics = [
     loader: () => import('./react-router-core/index.jsx'),
   },
 
+  {
+    id: 'english-interview',
+    icon: '🗣️',
+    title: '英文面试（原题 + 地道口语）',
+    subtitle: '外企面试碰到的英文题：先出声答再对照参考话术（30s/要点/加分句/收尾/坑）+ 英式改写 + 口语速查与 ever 等语法坑',
+    tags: ['行为面试', '英文面试', '面试高频'],
+    difficulty: '开放题',
+    createdAt: '2026-10-26',
+    loader: () => import('./english-interview/index.jsx'),
+  },
+
   /* 👇 未来在这里继续加，例如：
   {
     id: 'useEffect-deep-dive',

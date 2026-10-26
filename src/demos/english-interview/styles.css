@@ -1,0 +1,307 @@
+/* =========================================================
+ * 主题专属样式：英文面试（外企面试原题 + 地道口语）
+ * ---------------------------------------------------------
+ * 通用样式（tabs / content / btn 等）在 App.css，这里只放本主题独有。
+ * ⚠️ 类名统一 eie- 前缀自包含，删除本文件夹即可整体移除。
+ * 颜色一律引用 index.css 的 CSS 变量（色弱友好高对比调色板）。
+ * ========================================================= */
+
+/* ==================== 基础容器 ==================== */
+.eie-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 940px;
+  margin: 0 auto;
+}
+
+/* ==================== 顶部工具栏 ==================== */
+.eie-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.88rem;
+}
+.eie-progress { color: var(--text-secondary); }
+.eie-progress b { color: var(--accent-bright); font-size: 1.05rem; }
+.eie-filter {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text);
+  cursor: pointer;
+}
+.eie-filter input { accent-color: var(--accent); cursor: pointer; }
+.eie-search {
+  flex: 1;
+  min-width: 240px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.45rem 0.7rem;
+  color: var(--text);
+  font-size: 0.88rem;
+}
+.eie-search:focus { outline: 2px solid var(--focus-ring); border-color: transparent; }
+
+/* ==================== 按钮 ==================== */
+.eie-btn-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.eie-btn {
+  padding: 0.4em 0.9em;
+  font-size: 0.84rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.eie-btn:hover { border-color: var(--accent); color: var(--text); }
+.eie-btn-primary {
+  background: var(--btn-grad);
+  color: var(--text-strong);
+  border-color: transparent;
+}
+.eie-btn-on {
+  background: var(--accent-bg);
+  color: var(--text-strong);
+  border-color: var(--accent);
+}
+
+/* ==================== 问答卡片 ==================== */
+.eie-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem 1.1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.eie-card-done { border-color: var(--success-border); }
+.eie-card-head { display: flex; gap: 0.7rem; align-items: flex-start; }
+.eie-num {
+  flex: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-strong);
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  border-radius: 8px;
+  padding: 0.25rem 0.5rem;
+}
+.eie-head-main { min-width: 0; }
+.eie-meta { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-bottom: 0.35rem; }
+.eie-tag {
+  font-size: 0.75rem;
+  background: var(--accent-2-bg);
+  color: var(--accent-2);
+  border-radius: 6px;
+  padding: 0.1rem 0.45rem;
+  font-weight: 600;
+}
+.eie-tag-ok { background: var(--success-bg); color: var(--success); }
+.eie-source { font-size: 0.75rem; color: var(--text-muted); }
+.eie-question {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.65;
+  color: var(--text-strong);
+  font-style: italic;
+}
+
+/* ==================== 原题点评 ==================== */
+.eie-verdict {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--text);
+  background: var(--warning-bg);
+  border-left: 3px solid var(--warning);
+  border-radius: 0 8px 8px 0;
+  padding: 0.55rem 0.75rem;
+}
+.eie-verdict b { color: var(--warning); }
+
+/* ==================== 提示（答案未揭示 / 空态） ==================== */
+.eie-hide-tip {
+  font-size: 0.86rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  background: var(--bg-inset);
+  border-radius: 8px;
+  padding: 0.55rem 0.8rem;
+}
+.eie-hide-tip b { color: var(--accent-bright); }
+.eie-empty {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  padding: 1.5rem 0;
+}
+
+/* ==================== 答案正文 ==================== */
+.eie-answer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  animation: fadeIn 0.25s ease-out;
+}
+.eie-lead {
+  font-size: 0.84rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  background: var(--bg-inset);
+  border-radius: 8px;
+  padding: 0.55rem 0.8rem;
+}
+.eie-lead b { color: var(--text-strong); }
+.eie-lead-tag {
+  display: inline-block;
+  font-weight: 700;
+  color: var(--accent);
+  margin-right: 0.4rem;
+}
+
+.eie-sec {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg-inset);
+}
+.eie-sec-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: left;
+  background: var(--surface-2);
+  border: none;
+  border-radius: 0;
+  color: var(--text-strong);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.55rem 0.8rem;
+  cursor: pointer;
+  font-family: inherit;
+}
+.eie-sec-caret { color: var(--accent); }
+.eie-sec-count {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border-radius: 999px;
+  padding: 0.05rem 0.5rem;
+}
+.eie-sec > *:not(.eie-sec-head) { margin: 0.7rem 0.8rem; }
+
+/* ==================== 话术块 ==================== */
+.eie-script { display: flex; flex-direction: column; gap: 0.35rem; }
+.eie-script-head { display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; }
+.eie-chip {
+  flex: none;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-bright);
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  border-radius: 6px;
+  padding: 0.05rem 0.4rem;
+}
+.eie-chip-uk { color: var(--warning); background: var(--warning-bg); border-color: var(--warning-border); }
+.eie-zh { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+.eie-en {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.85;
+  color: var(--text-strong);
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+}
+
+/* ==================== 表格 ==================== */
+.eie-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+.eie-table th,
+.eie-table td {
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+.eie-table th { background: var(--accent-bg); color: var(--text-strong); font-weight: 600; }
+.eie-table td:first-child { color: var(--accent-2); font-weight: 600; white-space: nowrap; }
+.eie-table tbody tr:hover td { background: var(--surface-1); }
+
+/* ==================== 英式改写 ==================== */
+.eie-rewrite {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.8rem 0.9rem;
+}
+.eie-rewrite-lead { margin: 0; font-size: 0.84rem; color: var(--text-secondary); }
+.eie-rw { display: flex; flex-direction: column; gap: 0.3rem; }
+.eie-rw-note { margin: 0; font-size: 0.78rem; color: var(--text-muted); line-height: 1.6; }
+
+/* ==================== 坑列表 ==================== */
+.eie-tips { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.45rem; }
+.eie-tips li { display: flex; gap: 0.6rem; align-items: baseline; font-size: 0.85rem; line-height: 1.65; }
+.eie-tips code { color: var(--warning); font-weight: 600; white-space: nowrap; }
+.eie-tips span { color: var(--text-secondary); }
+
+/* ==================== 速查（口语 tab） ==================== */
+.eie-block {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  overflow-x: auto;
+}
+.eie-block h3 { margin: 0; font-size: 1.05rem; color: var(--accent-2); }
+.eie-td-note { color: var(--text-muted); }
+.eie-gram { display: flex; flex-direction: column; gap: 0.5rem; }
+.eie-gram-title { margin: 0; font-size: 0.92rem; font-weight: 600; color: var(--text-strong); }
+.eie-warn {
+  margin: 0;
+  font-size: 0.83rem;
+  line-height: 1.7;
+  color: var(--text);
+  background: var(--danger-bg);
+  border-left: 3px solid var(--danger);
+  border-radius: 0 8px 8px 0;
+  padding: 0.5rem 0.75rem;
+}
+.eie-bullets {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.86rem;
+  line-height: 1.85;
+  color: var(--text-secondary);
+  list-style: decimal;
+}
+.eie-bullets code { color: var(--accent-bright); }
