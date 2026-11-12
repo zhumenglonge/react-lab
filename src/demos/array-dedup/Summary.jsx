@@ -22,7 +22,8 @@ export default function Summary() {
             所以 <b>NaN 也能被去掉</b>，时间复杂度 O(n)、保持稳定顺序。」
           </p>
           <p>
-            「如果是 ES5 环境，我用 indexOf 双循环或 filter + indexOf，但要先说清代价：
+            「手写我用 forEach + includes 累积：includes 同样是 SameValueZero，NaN 能正确去重，代价是 O(n²)。
+            若限定 ES5，我用 indexOf 双循环或 filter + indexOf，但要先说清代价：
             一是 <b>O(n²)</b>，大数据量我会换 Map 标记把查找降回 O(1)；
             二是 indexOf 用 === 比较，NaN !== NaN，会让 NaN 失真（双循环把它全保留、filter 又全丢掉），需要先做哨兵替换。」
           </p>
@@ -35,9 +36,18 @@ export default function Summary() {
       </section>
 
       <section className="dedup-block">
-        <h3>手写区：面试纸上要能默写出来的两段</h3>
+        <h3>手写区：面试纸上要能默写出来的三段</h3>
         <pre className="dedup-code dedup-code-full">{`// ES6 首选
 const unique = (arr) => [...new Set(arr)]
+
+// 手写累积版（ES2016）：includes 也是 SameValueZero，NaN 能去重；代价 O(n²)
+function uniqueIncludes(arr) {
+  const res = []
+  arr.forEach((item) => {
+    if (!res.includes(item)) res.push(item)
+  })
+  return res
+}
 
 // ES5 经典（能去重 NaN 的安全版：indexOf 判重 + NaN 单独放行）
 function uniqueES5(arr) {

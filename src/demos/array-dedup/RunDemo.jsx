@@ -4,6 +4,7 @@ import {
   bench,
   fmtArr,
   dedupSet,
+  dedupIncludes,
   dedupIndexOf,
   dedupFilter,
   dedupMap,
@@ -12,9 +13,9 @@ import {
 } from './shared.js'
 
 /* =========================================================
- * ⚔️ 实跑对拍：同一个数字数组，6 种去重写法当场各跑一遍
+ * ⚔️ 实跑对拍：同一个数字数组，7 种去重写法当场各跑一遍
  * ---------------------------------------------------------
- * 输入可改（逗号/空格分隔），点「跑一遍」六种结果并排对比；
+ * 输入可改（逗号/空格分隔），点「跑一遍」七种结果并排对比；
  * 底部「性能基准」真计时：Set/Map/sort 喂 5 万项，indexOf 只喂 5 千
  * （O(n²) 的量级差距亲眼可见，这就是面试话术里"为什么首选 Set"的实证）。
  * ========================================================= */
@@ -33,6 +34,7 @@ function parseInput(text) {
 // key → 实现，全部引用 shared.js 里那份（面试手写标准答案）
 const IMPL = {
   set: dedupSet,
+  includes: dedupIncludes,
   indexOf: dedupIndexOf,
   filter: dedupFilter,
   map: dedupMap,
@@ -59,10 +61,10 @@ export default function RunDemo() {
   return (
     <div className="dedup-root">
       <div className="demo-header">
-        <h2>⚔️ 六种去重写法，同一条数组并排真跑</h2>
+        <h2>⚔️ 七种去重写法，同一条数组并排真跑</h2>
         <p className="demo-sub">
           面试原题<b>「一个数字数组，怎么去重？」</b>。改一改输入（支持 NaN、-0），
-          点运行看六种写法的<b>真实返回</b>；NaN 在哪些方法里"去不掉"，一眼对拍出来。
+          点运行看七种写法的<b>真实返回</b>；NaN 在哪些方法里"去不掉"，一眼对拍出来。
         </p>
       </div>
 
@@ -76,7 +78,7 @@ export default function RunDemo() {
               placeholder="1, 2, 2, 3…"
             />
           </label>
-          <button className="dedup-primary" onClick={run}>▶ 跑一遍六种方法</button>
+          <button className="dedup-primary" onClick={run}>▶ 跑一遍七种方法</button>
         </div>
 
         {results ? (
@@ -98,7 +100,7 @@ export default function RunDemo() {
             </div>
           </>
         ) : (
-          <p className="dedup-empty">还没跑 —— 点上面按钮，六种写法的结果会在这里并排展开。</p>
+          <p className="dedup-empty">还没跑 —— 点上面按钮，七种写法的结果会在这里并排展开。</p>
         )}
       </div>
 
@@ -122,9 +124,9 @@ export default function RunDemo() {
             </thead>
             <tbody>
               <tr><td>① Set 展开</td><td>50,000</td><td><b>{benchResult.set.ms.toFixed(1)} ms</b></td><td>O(n)</td></tr>
-              <tr><td>④ Map 标记</td><td>50,000</td><td><b>{benchResult.map.ms.toFixed(1)} ms</b></td><td>O(n)</td></tr>
-              <tr><td>⑤ sort + 相邻比较</td><td>50,000</td><td><b>{benchResult.sort.ms.toFixed(1)} ms</b></td><td>O(n log n)</td></tr>
-              <tr><td>② indexOf 双循环</td><td>5,000（只敢喂 1/10）</td><td><b>{benchResult.indexOfSmall.ms.toFixed(1)} ms</b></td><td>O(n²)，5 千已如此，5 万耗时约再×100</td></tr>
+              <tr><td>⑤ Map 标记</td><td>50,000</td><td><b>{benchResult.map.ms.toFixed(1)} ms</b></td><td>O(n)</td></tr>
+              <tr><td>⑥ sort + 相邻比较</td><td>50,000</td><td><b>{benchResult.sort.ms.toFixed(1)} ms</b></td><td>O(n log n)</td></tr>
+              <tr><td>③ indexOf 双循环</td><td>5,000（只敢喂 1/10）</td><td><b>{benchResult.indexOfSmall.ms.toFixed(1)} ms</b></td><td>O(n²)，5 千已如此，5 万耗时约再×100</td></tr>
             </tbody>
           </table>
         ) : (

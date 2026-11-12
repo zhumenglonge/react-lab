@@ -1,7 +1,7 @@
 /* =========================================================
  * 数组去重 · 共享工具（纯函数，无 JSX，不导出组件）
  * ---------------------------------------------------------
- * 面试原题「一个数字数组，怎么去重？」——这里给 6 种真能跑的写法，
+ * 面试原题「一个数字数组，怎么去重？」——这里给 7 种真能跑的写法，
  * RunDemo 拿到的都是浏览器当场执行的结果，不是背出来的截图。
  * 约定：所有方法都返回新数组、不改原数组（sort 版内部先 [...arr] 拷贝）。
  * ========================================================= */
@@ -11,7 +11,16 @@ export function dedupSet(arr) {
   return [...new Set(arr)]
 }
 
-// ② indexOf 双循环（ES5 经典）：结果数组里找不到就 push；indexOf 用 ===，NaN !== NaN
+// ② includes 累积（ES2016 手写首选）：includes 用 SameValueZero 判等，indexOf 去不掉的 NaN 它能去掉
+export function dedupIncludes(arr) {
+  const res = []
+  arr.forEach((item) => {
+    if (!res.includes(item)) res.push(item)
+  })
+  return res
+}
+
+// ③ indexOf 双循环（ES5 经典）：结果数组里找不到就 push；indexOf 用 ===，NaN !== NaN
 export function dedupIndexOf(arr) {
   const res = []
   for (let i = 0; i < arr.length; i += 1) {
@@ -20,12 +29,12 @@ export function dedupIndexOf(arr) {
   return res
 }
 
-// ③ filter + indexOf：第一个出现的位置等于当前下标才保留（去重本质 = 只留首次出现）
+// ④ filter + indexOf：第一个出现的位置等于当前下标才保留（去重本质 = 只留首次出现）
 export function dedupFilter(arr) {
   return arr.filter((v, i) => arr.indexOf(v) === i)
 }
 
-// ④ Map 标记：key 存在与否判重，逻辑同 ② 但查找从 O(n) 降到 O(1)，适合大数据量
+// ⑤ Map 标记：key 存在与否判重，逻辑同 ③④ 但查找从 O(n) 降到 O(1)，适合大数据量
 export function dedupMap(arr) {
   const seen = new Map()
   const res = []
@@ -38,13 +47,13 @@ export function dedupMap(arr) {
   return res
 }
 
-// ⑤ sort + 相邻比较：排完序重复项必然挨着，只留和前一个不同的；O(n log n) 且会打乱原始顺序
+// ⑥ sort + 相邻比较：排完序重复项必然挨着，只留和前一个不同的；O(n log n) 且会打乱原始顺序
 export function dedupSortAdjacent(arr) {
   const sorted = [...arr].sort((a, b) => a - b)
   return sorted.filter((v, i) => i === 0 || v !== sorted[i - 1])
 }
 
-// ⑥ reduce 版 filter：把 ③ 收进一次 reduce，面试常考「用 reduce 怎么写」
+// ⑦ reduce 版 filter：把 ④ 收进一次 reduce，面试常考「用 reduce 怎么写」
 export function dedupReduce(arr) {
   return arr.reduce((acc, v) => (acc.includes(v) ? acc : [...acc, v]), [])
 }
@@ -52,11 +61,12 @@ export function dedupReduce(arr) {
 // 注册表：RunDemo 遍历它渲染卡片，顺序即面试推荐顺序
 export const DEDUP_METHODS = [
   { key: 'set', name: '① Set 展开', src: '[...new Set(arr)]', note: 'ES6 首选，一行搞定；SameValueZero 判等' },
-  { key: 'indexOf', name: '② indexOf 双循环', src: "res.indexOf(v) === -1 && res.push(v)", note: 'ES5 经典；NaN 去不掉——indexOf 找不到 NaN，每个都保留' },
-  { key: 'filter', name: '③ filter + indexOf', src: 'arr.filter((v, i) => arr.indexOf(v) === i)', note: '只留首次出现；但 indexOf(NaN) 恒 -1，会把 NaN 全丢' },
-  { key: 'map', name: '④ Map 标记', src: 'seen.has(v) || (seen.set(v, 1), res.push(v))', note: 'O(n) 查找，大数据量比 ②③ 快' },
-  { key: 'sort', name: '⑤ sort + 相邻比较', src: 'sorted.filter((v, i) => i === 0 || v !== sorted[i - 1])', note: 'O(n log n)；打乱原序，且比较器遇 NaN 失效、结果不可靠' },
-  { key: 'reduce', name: '⑥ reduce 版', src: "arr.reduce((a, v) => a.includes(v) ? a : [...a, v], [])", note: '每步展开新数组，最慢，仅展示思路' },
+  { key: 'includes', name: '② includes 累积', src: 'if (!res.includes(item)) res.push(item)', note: 'forEach + includes 手写版；SameValueZero 判等，NaN 能去重，比 ③ 正确；O(n²)' },
+  { key: 'indexOf', name: '③ indexOf 双循环', src: "res.indexOf(v) === -1 && res.push(v)", note: 'ES5 经典；NaN 去不掉——indexOf 找不到 NaN，每个都保留' },
+  { key: 'filter', name: '④ filter + indexOf', src: 'arr.filter((v, i) => arr.indexOf(v) === i)', note: '只留首次出现；但 indexOf(NaN) 恒 -1，会把 NaN 全丢' },
+  { key: 'map', name: '⑤ Map 标记', src: 'seen.has(v) || (seen.set(v, 1), res.push(v))', note: 'O(n) 查找，大数据量比 ③④ 快' },
+  { key: 'sort', name: '⑥ sort + 相邻比较', src: 'sorted.filter((v, i) => i === 0 || v !== sorted[i - 1])', note: 'O(n log n)；打乱原序，且比较器遇 NaN 失效、结果不可靠' },
+  { key: 'reduce', name: '⑦ reduce 版', src: "arr.reduce((a, v) => a.includes(v) ? a : [...a, v], [])", note: '每步展开新数组，最慢，仅展示思路' },
 ]
 
 // 格式化数字：-0 单独标出来（`${-0}` 会打印 "0"，看不出去重差异）
@@ -68,19 +78,20 @@ export function fmtArr(arr) {
   return `[${arr.map(fmtNum).join(', ')}]`
 }
 
-// ②③⑥（=== 家族）与 ①④（SameValueZero 家族）对特殊值的处理差异，全部当场真跑出来
+// ③④（=== 家族）与 ①②⑤⑦（SameValueZero 家族）对特殊值的处理差异，全部当场真跑出来
 const SPECIAL_ARR = [NaN, 1, NaN, 2, 2, +0, -0, 3]
 
 export function specialRun() {
   return {
     input: SPECIAL_ARR,
     set: dedupSet(SPECIAL_ARR),
+    includes: dedupIncludes(SPECIAL_ARR),
     indexOf: dedupIndexOf(SPECIAL_ARR),
     filter: dedupFilter(SPECIAL_ARR),
     map: dedupMap(SPECIAL_ARR),
     sort: dedupSortAdjacent(SPECIAL_ARR),
     reduce: dedupReduce(SPECIAL_ARR),
-    // 判等规则本身也用真跑验证：Set/Map 有 NaN、 indexOf/includes 没有
+    // 判等规则本身也用真跑验证：Set/Map/includes 找得到 NaN，indexOf 找不到
     setHasNaN: new Set([NaN]).has(NaN),
     mapHasNaN: new Map([[NaN, 1]]).has(NaN),
     indexOfFindsNaN: [NaN].indexOf(NaN), // -1：找不到

@@ -93,7 +93,7 @@
 
 .dedup-empty { font-style: normal; color: var(--text-muted); font-size: 0.84rem; margin: 0; line-height: 1.6; }
 
-/* 六种方法结果并排 */
+/* 七种方法结果并排 */
 .dedup-results { display: flex; flex-direction: column; gap: 0.5rem; }
 .dedup-row {
   display: flex;
