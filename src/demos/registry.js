@@ -380,7 +380,7 @@ const rawTopics = [
     id: 'move-zeroes',
     icon: '↪️',
     title: '移动零（把 0 移到末尾）',
-    subtitle: '「数组 [1,2,0,0,4,5,6] 把 0 移到最后」LeetCode 283：双指针逐帧动画 + 3 种写法操作量对拍；原地/单趟/保序三要求与 truthy 误伤 false/null 陷阱',
+    subtitle: '「数组 [1,2,0,0,4,5,6] 把 0 移到最后」LeetCode 283：双指针逐帧动画 + 4 种写法操作量对拍（含自己手写推出来的第④版）；原地/单趟/保序三要求与 truthy 误伤 false/null 陷阱',
     tags: ['JS 基础', '数组方法', '面试高频'],
     difficulty: '初级',
     createdAt: '2026-10-20',

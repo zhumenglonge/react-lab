@@ -3,7 +3,7 @@
  * ---------------------------------------------------------
  * 面试原题「把数组里的 0 都移到末尾，保持非零元素相对顺序，
  * 且尽量少的操作次数、必须原地」——就是 LeetCode 283。
- * 这里给 3 种写法 + 双指针逐快照 + truthy 陷阱，全部当场真跑。
+ * 这里给 4 种写法（④ 是自己手写推出来的版本，原样收录）+ 双指针逐快照 + truthy 陷阱，全部当场真跑。
  * ========================================================= */
 
 export const DEFAULT_ARR = [1, 2, 0, 0, 4, 5, 6]
@@ -57,13 +57,47 @@ export function moveZeroesFilter(input) {
   return { result, ops: input.length * 2, opsKind: '次遍历(filter 双趟)' }
 }
 
+// ④ 手写版（单趟，原地）——自己推的写法，核心循环原样收录（连 4 空格缩进、
+//    分号风格、console.log 和函数名 test 都保留）。只做了两处必要适配：
+//    ① 原码里写死的 [1,0,0,2,4] 改为入参 input；
+//    ② 交换行后加了一行 ops 计数，用于和其它写法对拍操作次数。
+//    思路：外层先看 slow 站的位是不是 0（坑），是坑就停住让 fast 去找非零来填；
+//    不是坑说明 slow 已就位，双双前进。顺带避免了 slow===fast 的自交换。
+export function moveZeroesMine(input) {
+  const arr = [...input]
+  let ops = 0
+  const test = () => {
+      let slow = 0;
+      let fast = 0;
+      while (fast < arr.length) {
+          if (arr[slow] === 0) {
+              if (arr[fast] === 0) {
+                  fast++;
+              } else {
+                  [arr[slow], arr[fast]] = [arr[fast], arr[slow]];
+                  ops += 1; // ← 唯一新增的一行：计数用于对拍
+                  fast++;
+                  slow++;
+              }
+          } else {
+              slow++;
+              fast++;
+          }
+      }
+      console.log(arr)
+      return arr
+  }
+  return { result: test(), ops, opsKind: '次交换' }
+}
+
 export const MOVE_METHODS = [
   { key: 'swap', name: '② 双指针交换（推荐）', src: 'if (arr[f]!==0){ swap(arr,slow++,f) }', note: '单趟、原地、保序；交换次数最少' },
   { key: 'write', name: '① 双指针覆盖写', src: '非零写到 slow++，收尾补 0', note: '单趟读+补零，赋值次数=数组长度' },
   { key: 'filter', name: '③ filter 一行', src: '[...a.filter(v=>v!==0), ...a.filter(v=>v===0)]', note: '好记，但新建数组、不原地' },
+  { key: 'mine', name: '④ 手写版（自己推的）', src: '外层先看 slow 落没落坑，再决定 fast 走不走', note: '与②完全等价：单趟原地、交换次数一样少，三层嵌套换来不做自交换' },
 ]
 
-const IMPL = { swap: moveZeroesSwap, write: moveZeroesWrite, filter: moveZeroesFilter }
+const IMPL = { swap: moveZeroesSwap, write: moveZeroesWrite, filter: moveZeroesFilter, mine: moveZeroesMine }
 export function runMethod(key, arr) {
   return IMPL[key](arr)
 }
