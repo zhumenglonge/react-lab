@@ -105,6 +105,37 @@
   font-family: 'SF Mono', Menlo, Consolas, monospace;
 }
 
+/* ==================== 测试对象构造展示 ==================== */
+.ptc-origin {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.6rem 0.85rem;
+}
+.ptc-origin-title {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--accent-2);
+}
+.ptc-origin-line {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.7rem;
+  line-height: 1.6;
+}
+.ptc-origin-line code {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.76rem;
+  color: var(--code-text);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.ptc-origin-note { font-size: 0.74rem; color: var(--text-muted); }
+
 .ptc-chain {
   display: flex;
   align-items: stretch;

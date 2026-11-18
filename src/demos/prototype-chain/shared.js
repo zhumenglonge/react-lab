@@ -65,6 +65,26 @@ function makeArray() {
 
 const MAKERS = { person: makePerson, array: makeArray }
 
+/* ---------- 测试对象的真实构造（展示在页面上，与上面 makers 一致） ---------- */
+
+export const TARGET_ORIGIN = {
+  person: {
+    title: '🧪 p 从哪来 —— 本用例对象的真实构造',
+    lines: [
+      { code: 'function Person(name) {\n  this.name = name\n}', note: '构造函数：this.xxx 会写成 p 的自有属性' },
+      { code: 'Person.prototype.sayHi = function sayHi() {\n  return `你好，我是 ${this.name}`\n}', note: '共享方法完整地挂在原型上，实例自己并没有' },
+      { code: "const p = new Person('张三')", note: "所以 p 自身只有 { name: '张三' }，__proto__ → Person.prototype" },
+    ],
+  },
+  array: {
+    title: '🧪 arr 从哪来 —— 本用例对象的真实构造',
+    lines: [
+      { code: 'const arr = [1, 2, 3]', note: '字面量写法，等价于 new Array(1, 2, 3)' },
+      { code: '// arr 自身只有 0/1/2 和 length，方法都在原型上', note: '__proto__ → Array.prototype → Object.prototype → null' },
+    ],
+  },
+}
+
 export const LOOKUP_CASES = [
   {
     id: 'own',

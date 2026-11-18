@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { LOOKUP_CASES, runLookup, runInheritCompare } from './shared.js'
+import { LOOKUP_CASES, TARGET_ORIGIN, runLookup, runInheritCompare } from './shared.js'
 
 /* =========================================================
  * ⚔️ 实跑对拍：属性查找播放器 + ES5 继承 vs class
@@ -16,6 +16,7 @@ export default function RunDemo() {
   const [caseId, setCaseId] = useState(LOOKUP_CASES[0].id)
   const current = useMemo(() => runLookup(caseId), [caseId])
   const chain = current.chain
+  const origin = TARGET_ORIGIN[current.target]
 
   const totalFrames = chain.steps.length + (chain.reachedNull ? 1 : 0)
   const [step, setStep] = useState(0)
@@ -93,6 +94,17 @@ export default function RunDemo() {
       <div className="ptc-viz">
         <div className="ptc-target">
           🎯 查找属性：<b>{current.prop}</b>（表达式 <code>{current.label}</code>）
+        </div>
+
+        {/* 测试对象的真实构造：先交代 p / arr 是什么，再看它怎么爬链 */}
+        <div className="ptc-origin">
+          <div className="ptc-origin-title">{origin.title}</div>
+          {origin.lines.map((l) => (
+            <div className="ptc-origin-line" key={l.code}>
+              <code>{l.code}</code>
+              <span className="ptc-origin-note">{l.note}</span>
+            </div>
+          ))}
         </div>
 
         <div className="ptc-chain">
