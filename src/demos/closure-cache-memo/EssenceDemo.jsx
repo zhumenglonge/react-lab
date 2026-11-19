@@ -45,55 +45,6 @@ export default function EssenceDemo() {
       </section>
 
       <section className="clo-block">
-        <h3>📊 状态存哪了：四种写法对拍</h3>
-        <table className="clo-compare">
-          <thead>
-            <tr>
-              <th>写法</th>
-              <th>状态位置</th>
-              <th>外部能直接改吗</th>
-              <th>多实例隔离</th>
-              <th>典型场景</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>全局变量</td>
-              <td>全局作用域</td>
-              <td>❌ 谁都能读改</td>
-              <td>❌ 共用一份</td>
-              <td>反面教材</td>
-            </tr>
-            <tr>
-              <td><b>闭包</b>（本题）</td>
-              <td>堆上的词法环境</td>
-              <td>✅ 只能通过返回的方法</td>
-              <td>✅ 每次调用新建一份</td>
-              <td>累加器 / memoize / 防抖节流</td>
-            </tr>
-            <tr>
-              <td>class 实例</td>
-              <td>this 上的属性</td>
-              <td>⚠️ 可访问，# 私有字段才真正封住</td>
-              <td>✅ new 一个隔离一份</td>
-              <td>需要多个方法协同的状态</td>
-            </tr>
-            <tr>
-              <td>模块级变量</td>
-              <td>ES Module 作用域</td>
-              <td>✅ import 不到的就是私有</td>
-              <td>❌ 全应用单例</td>
-              <td>全局缓存单例、计数器埋点</td>
-            </tr>
-          </tbody>
-        </table>
-        <p className="clo-tip">
-          💡 面试加分句：闭包版本的 total 相当于<b>私有成员变量</b>，返回的方法相当于<b>暴露的接口</b>——
-          这和 class 的封装思想同源，只是更轻。
-        </p>
-      </section>
-
-      <section className="clo-block">
         <h3>🔗 变量到底"存哪了"（追问高发区）</h3>
         <ul className="clo-list">
           <li>
@@ -101,7 +52,7 @@ export default function EssenceDemo() {
             活在<b>堆上的词法环境（Environment Record）</b>里，由闭包的内层函数通过作用域链持有。
           </li>
           <li>
-            <b>回收规则：</b>闭包函数本身被 GC 判死，它拽着的这份作用域才会一起回收。
+            <b>回收规则：</b>内层函数（被 return 出去、逃逸到外部的那个）被 GC 判死，它拽着的这份作用域才会一起回收。
             所以 setTimeout 的回调、挂在 window 上的函数，会把自己的 outer 一路吊住。
           </li>
           <li>

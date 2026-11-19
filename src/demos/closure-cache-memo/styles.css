@@ -209,21 +209,6 @@
   font-size: 0.86em;
 }
 
-.clo-compare { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-.clo-compare th,
-.clo-compare td {
-  padding: 0.5rem 0.7rem;
-  border-bottom: 1px solid var(--border);
-  text-align: left;
-  vertical-align: top;
-  line-height: 1.6;
-  color: var(--text-secondary);
-}
-.clo-compare th { background: var(--accent-bg); color: var(--text-strong); font-weight: 600; }
-.clo-compare td:first-child { color: var(--accent-2); font-weight: 600; white-space: nowrap; }
-.clo-compare td b { color: var(--text-strong); }
-.clo-compare tbody tr:hover td { background: var(--surface-1); }
-
 .clo-list {
   margin: 0;
   padding-left: 1.25rem;
