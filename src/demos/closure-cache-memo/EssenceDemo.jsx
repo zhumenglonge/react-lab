@@ -71,7 +71,8 @@ export default function EssenceDemo() {
         </p>
 
         <p className="clo-lead">先准备一段只差封装方式的对照样本（仓库里的 <code>src/index.html</code> 就是 A 版本，外面套一层 IIFE 即 B 版本）：</p>
-        <pre className="clo-code clo-code-full">{`const Person = () => {
+        <pre className="clo-code clo-code-full">{`// 第 0 步：先粘这段进 Console（只定义不调用，不产生闭包，要在拍基线之前）
+const Person = () => {
   let age = 1;
   return { growUp: () => { age++ } };   // 箭头函数一样有闭包，照样捕获 age
 };
@@ -98,7 +99,10 @@ person.growUp();
           这就是 B 版本存在的意义：把持有者关进局部作用域，才能等到一个"能死"的时机。
         </p>
 
-        <p className="clo-lead">实测路线六步，A/B 各跑一遍对比着看：</p>
+        <p className="clo-lead">
+          实测路线六步，A/B 各跑一遍对比着看。开工前先把上面的 <code>Person</code> 定义粘进 Console——
+          只是定义、不调用，不产生闭包；放在拍基线快照<b>之前</b>就位，后面的快照差值才不会被它污染。
+        </p>
         <ol className="clo-list">
           <li>
             <b>开面板：</b>DevTools（F12）→ <b>Memory</b> → 选 <b>Heap snapshot</b> →
@@ -106,7 +110,7 @@ person.growUp();
           </li>
           <li>
             <b>拍之前先手动 GC：</b>点 Memory 面板左上角的<b>垃圾桶图标</b>强制回收。
-            跳过这步，"已经不可达但还没回收"的对象会留在快照里，你会误判成"回收不掉"。
+            若跳过这步，"已经不可达但还没回收"的对象会留在快照里，你会误判成"回收不掉"。
           </li>
           <li>
             <b>执行动作：</b>打开 A 版本页面（或跑一遍 B 的 IIFE），回 DevTools 拍第二张。
