@@ -81,7 +81,7 @@ const person = Person();
 person.growUp();
 // 引用链：全局词法环境(GC Root) → person → {growUp} → Context → age
 // 哪怕把 person.growUp() 这行删掉，age 照样活着；
-// 而且写成 const 连 person = null 都做不到（TypeError），只能等页面卸载。
+// person = null 能手动断链（在下一次 GC 会被回收），否则只能等页面卸载。
 
 // B. 可以回收：把持有者降级成局部变量（IIFE）
 (function () {
