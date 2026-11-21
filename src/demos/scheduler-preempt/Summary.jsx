@@ -5,6 +5,8 @@
  * ③优先队列自己实现 ④能报出 React Fiber/scheduler 的对应物。
  * ========================================================= */
 
+import { highlightJs } from './highlight.jsx'
+
 const WHITEBOARD = `// 「循环不闲着 + 新任务优先」白板模板（30 秒写完骨架）
 const queue = [];                       // 优先级队列：urgent 在队首
 
@@ -101,7 +103,7 @@ export default function Summary() {
           <span className="sp-card-title">✍️ 白板代码模板（背这个骨架）</span>
           <span className="sp-card-src">与 shared.js 的 createQueue + runSliced 同构</span>
         </div>
-        <pre className="sp-code">{WHITEBOARD}</pre>
+        <pre className="sp-code">{highlightJs(WHITEBOARD)}</pre>
         <p className="sp-hint">
           💡 写完后主动补两句：<b>"生产环境我会把 setTimeout 换成 MessageChannel 或 scheduler.yield，
           避开 4ms 钳制"</b>、<b>"这就是 React Fiber 的 shouldYield 模式"</b>——这是手写题从"写出来"到"写得懂"的分水岭。

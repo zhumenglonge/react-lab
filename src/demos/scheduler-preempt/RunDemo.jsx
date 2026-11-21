@@ -10,6 +10,7 @@ import {
   NAIVE_MS,
   MICRO_MAX,
 } from './shared.js'
+import { highlightJs } from './highlight.jsx'
 
 /* =========================================================
  * ⚔️ 实跑对拍：忙循环 vs 时间切片 + 优先级队列
@@ -47,8 +48,7 @@ function createQueue() {
     peek: () => tasks[0] || null,          // 只看队首，不取出
     add(kind, fn, label) {
       const task = { kind, fn, label, t0: Date.now() };
-      kind === 'urgent' ? tasks.unshift(task)  // 紧急任务：插队首
-                        : tasks.push(task);    // 循环任务：排队尾
+      kind === 'urgent' ? tasks.unshift(task) : tasks.push(task); // 紧急插队首 / 循环排队尾
     },
     next: () => tasks.shift() || null,     // 取出并删除队首
   };
@@ -70,9 +70,15 @@ async function step() {
 // step 在下个让步点读到它才体面退场——正在忙的那一片依旧跑完`
 
 const CODE_NAIVE = `// A 组真跑的 runNaive（shared.js）：一整段同步 while，占死主线程
-function runNaive({ totalMs }) {
-  busyWork(totalMs);      // 里面就是 while (Date.now() - start < ms) {} —— 不让它闲着 ✔
-  // 但没有任何让步点：期间点击/定时器/rAF 全部排队，新任务永远轮不到 ✘
+// busyWork 真身：烧时间专用——从 start 起空转 ms 毫秒，期间 CPU 全被它占着
+function busyWork(ms) {
+  const start = Date.now();
+  while (Date.now() - start < ms) {}   // 循环体是空的：纯耗时间，不让它闲着 ✔
+}
+
+function runNaive({ totalMs = 800 }) { // totalMs：这轮总共忙多少毫秒（A 组固定 800）
+  busyWork(totalMs);                   // ← 就这一句把主线程占死 800ms
+  // 没有任何让步点：期间点击/定时器/rAF 全部排队，新任务永远轮不到 ✘
 }`;
 
 function badgeOf(kind) {
@@ -212,7 +218,7 @@ export default function RunDemo() {
             </button>
           ))}
         </div>
-        <pre className="sp-code">{mode === 'naive' ? CODE_NAIVE : CODE_CORE}</pre>
+        <pre className="sp-code">{highlightJs(mode === 'naive' ? CODE_NAIVE : CODE_CORE)}</pre>
         <p className="sp-hint">💡 {MODES.find((m) => m.id === mode).hint}</p>
       </section>
 

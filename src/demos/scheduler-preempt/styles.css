@@ -74,6 +74,14 @@
   overflow-x: auto;
   white-space: pre;
 }
+/* JS 语法高亮 token（highlight.jsx 分词；颜色全引用 index.css 变量，
+   色弱友好靠亮度差 + 斜体/加粗冗余，不新增色值） */
+.sp-code .tok-plain   { color: var(--code-text); }
+.sp-code .tok-comment { color: var(--text-muted); font-style: italic; }
+.sp-code .tok-string  { color: var(--success); }
+.sp-code .tok-kw      { color: var(--accent-bright); font-weight: 700; }
+.sp-code .tok-num     { color: var(--warning); }
+.sp-code .tok-call    { color: var(--accent-2); }
 .sp-talk { white-space: pre-wrap; }
 .sp-hint {
   margin: 0;
