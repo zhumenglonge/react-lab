@@ -40,7 +40,8 @@ const MODES = [
   },
 ]
 
-/* 下面两段都是真实跑的代码：①shared.js 里的 createQueue + runSliced 核心段（注释有压缩）；②runNaive 全文 */
+/* 下面各段都是真实跑的代码：①shared.js 里的 createQueue + runSliced 核心段（注释有压缩），
+ * B/C 两版只差让步行——shared.js 里由 yieldWay 参数切换；②runNaive 全文 */
 const CODE_CORE = `// ① queue 的真身：shared.js 的 createQueue() —— 一个闭包私有数组 + 三个动作
 function createQueue() {
   const tasks = [];                        // 队列本体，外面摸不到
@@ -68,6 +69,23 @@ async function step() {
 }
 // 停止 = 协作式：cancel() 只置一个 stopped 标志，
 // step 在下个让步点读到它才体面退场——正在忙的那一片依旧跑完`
+
+// B 组真跑的版本：与 C 版只有「让步行」不同（shared.js 里由 yieldWay 参数切换）——
+// await Promise.resolve() 只排微任务：微任务队列永远清不完，事件循环轮不到新宏任务。
+// 差异行如实替换，避免「展示 setTimeout、实际跑 Promise.resolve」的误导
+const CODE_CORE_MICRO = CODE_CORE
+  .replace(
+    'await new Promise((r) => setTimeout(r, 0)); // 让出事件循环：外层新任务在这之后被处理',
+    'await Promise.resolve();                    // 只排微任务：从不让出事件循环，点击等新宏任务永远挤不进来'
+  )
+  .replace(
+    '下一片，回到让步点（没有片数上限，一直跑）',
+    '下一片，回到让步点（片数由看门狗上限兜底，到点强制停——真无限跑页面会永久卡死）'
+  )
+  .replace(
+    '// 停止 = 协作式：cancel() 只置一个 stopped 标志，\n// step 在下个让步点读到它才体面退场——正在忙的那一片依旧跑完',
+    '// 停止 = 协作式：cancel() 置 stopped 标志，但微任务链里只有下个 await 点能读到它，\n// 实际退场靠看门狗兜底强制停——「停不下来」是 B 组暴露的第二个问题'
+  );
 
 const CODE_NAIVE = `// A 组真跑的 runNaive（shared.js）：一整段同步 while，占死主线程
 // busyWork 真身：烧时间专用——从 start 起空转 ms 毫秒，期间 CPU 全被它占着
@@ -218,7 +236,7 @@ export default function RunDemo() {
             </button>
           ))}
         </div>
-        <pre className="sp-code">{highlightJs(mode === 'naive' ? CODE_NAIVE : CODE_CORE)}</pre>
+        <pre className="sp-code">{highlightJs(mode === 'naive' ? CODE_NAIVE : mode === 'micro' ? CODE_CORE_MICRO : CODE_CORE)}</pre>
         <p className="sp-hint">💡 {MODES.find((m) => m.id === mode).hint}</p>
       </section>
 
