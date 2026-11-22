@@ -82,6 +82,28 @@
 .sp-code .tok-kw      { color: var(--accent-bright); font-weight: 700; }
 .sp-code .tok-num     { color: var(--warning); }
 .sp-code .tok-call    { color: var(--accent-2); }
+
+/* 复制代码按钮：贴在代码块右上角，容器 hover 时才完全显眼 */
+.sp-codebox { position: relative; }
+.sp-copy {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 2;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0.72;
+  transition: opacity 0.15s, color 0.15s, border-color 0.15s;
+}
+.sp-codebox:hover .sp-copy,
+.sp-copy:focus-visible { opacity: 1; }
+.sp-copy:hover { color: var(--accent-bright); border-color: var(--accent-border); }
+.sp-copy-on { color: var(--success); border-color: var(--success-border); }
 .sp-talk { white-space: pre-wrap; }
 .sp-hint {
   margin: 0;

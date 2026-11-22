@@ -32,9 +32,15 @@ const MODES = [
   },
 ]
 
-/* 下面各段都是真实跑的代码：①shared.js 里的 createQueue + runSliced 核心段（注释有压缩），
- * B/C 两版只差让步行——shared.js 里由 yieldWay 参数切换 */
-const CODE_CORE = `// ① queue 的真身：shared.js 的 createQueue() —— 一个闭包私有数组 + 三个动作
+/* 下面就是 shared.js 的真身全文：busyWork + createQueue + maybePromise + runSliced。
+ * B/C 跑的是同一份调度器，差异只在调用参数（yieldWay / maxSlices）——见 ③ 开头注释 */
+const CODE_CORE = `// ① busyWork 真身：烧时间专用——从 start 起空转 ms 毫秒，期间 CPU 全被它占着
+function busyWork(ms) {
+  const start = Date.now();
+  while (Date.now() - start < ms) {}   // 循环体是空的：纯耗时间，不让它闲着 ✔
+}
+
+// ② queue 的真身：shared.js 的 createQueue() —— 一个闭包私有数组 + 三个动作
 function createQueue() {
   const tasks = [];                        // 队列本体，外面摸不到
   return {
@@ -47,37 +53,62 @@ function createQueue() {
   };
 }
 
-// ② 调度器：shared.js 的 runSliced 核心段（q 就是 createQueue() 的返回）
-async function step() {
-  // 让步点：队首是 urgent 就先挨个跑掉（你点「⚡ 插入紧急任务」就是 add('urgent') 进这里）
-  while (q.peek() && q.peek().kind === 'urgent') {
-    const t = q.next();
-    onEvent({ kind: 'urgent', text: \`⚡ 优先执行「\${t.label}」（排队等了 \${Date.now() - t.t0}ms）\` });
-    busyWork(URGENT_MS);                   // 紧急任务本身也真忙一会儿
-  }
-  busyWork(WORK_MS);                       // 再干一片循环任务：不闲着
-  await new Promise((r) => setTimeout(r, 0)); // 让出事件循环：外层新任务在这之后被处理
-  step();                                  // 下一片，回到让步点（没有片数上限，一直跑）
+// ③ 调度器：shared.js 的 runSliced 全文——B/C 共用这一份，差异只在调用参数：
+//    B：runMicroChain → yieldWay:'micro' + 看门狗 20 片强制停；C：默认 yieldWay:'timeout'，无限跑
+function maybePromise(r) {                 // 兼容同步 / Promise 两种任务
+  return r && typeof r.then === 'function' ? r : Promise.resolve(r);
 }
-// 停止 = 协作式：cancel() 只置一个 stopped 标志，
-// step 在下个让步点读到它才体面退场——正在忙的那一片依旧跑完`
 
-// B 组真跑的版本：与 C 版只有「让步行」不同（shared.js 里由 yieldWay 参数切换）——
-// await Promise.resolve() 只排微任务：微任务队列永远清不完，事件循环轮不到新宏任务。
-// 差异行如实替换，避免「展示 setTimeout、实际跑 Promise.resolve」的误导
-const CODE_CORE_MICRO = CODE_CORE
-  .replace(
-    'await new Promise((r) => setTimeout(r, 0)); // 让出事件循环：外层新任务在这之后被处理',
-    'await Promise.resolve();                    // 只排微任务：从不让出事件循环，点击等新宏任务永远挤不进来'
-  )
-  .replace(
-    '下一片，回到让步点（没有片数上限，一直跑）',
-    '下一片，回到让步点（片数由看门狗上限兜底，到点强制停——真无限跑页面会永久卡死）'
-  )
-  .replace(
-    '// 停止 = 协作式：cancel() 只置一个 stopped 标志，\n// step 在下个让步点读到它才体面退场——正在忙的那一片依旧跑完',
-    '// 停止 = 协作式：cancel() 置 stopped 标志，但微任务链里只有下个 await 点能读到它，\n// 实际退场靠看门狗兜底强制停——「停不下来」是 B 组暴露的第二个问题'
-  );
+export function runSliced(q, { onEvent, onDone, sliceMs = WORK_MS, yieldWay = 'timeout', maxSlices = Infinity }) {
+  let i = 0;             // 已跑的循环片数
+  let stopped = false;   // 协作式停止的唯一开关（cancel() 只置它）
+  const latencies = [];  // 每个 urgent 的排队等待 ms，结束时交给 onDone
+
+  function stop(text) {  // 体面退场：发结束日志 + 回收延迟数据
+    onEvent({ kind: 'done', text });
+    onDone(latencies);
+  }
+
+  async function step() {
+    if (stopped) {       // cancel() 置的标志要到让步点才被读到——协作式，不是抢占
+      return stop(yieldWay === 'micro'
+        ? '⏹ 已停止 — 注意：微任务链里 cancel() 只能在下一个 await 点被读到（实跑时靠看门狗兜底）'
+        : '⏹ 已停止 — cancel() 在下一个让步点被读到（协作式退场，不是抢占）');
+    }
+    // —— 让步点 1：队首是 urgent 就先挨个跑掉（你点「⚡ 插入紧急任务」就是 add('urgent') 进这里）
+    while (q.peek() && q.peek().kind === 'urgent') {
+      const t = q.next();
+      onEvent({ kind: 'urgent', text: \`⚡ 优先执行插队任务「\${t.label}」（排队等了 \${Date.now() - t.t0}ms）\` });
+      await maybePromise(t.fn());  // 真跑任务本身（按钮传的是空任务，靠下一行烧时间）
+      busyWork(URGENT_MS);         // 紧急任务本身也真忙一会儿
+      latencies.push(Date.now() - t.t0);
+    }
+    if (i >= maxSlices) {          // 看门狗：B 组微任务链跑满 20 片强制停，防页面永久卡死
+      return stop(yieldWay === 'micro'
+        ? \`⛔ 微任务链跑了 \${maxSlices} 片没让过一次路，看门狗强制停止（否则页面永久卡死）\`
+        : '⛔ 触发看门狗上限，强制停止');
+    }
+    // —— 主循环干活：所谓「普通任务」就是这一片（它不走队列，它就是循环自身）
+    i += 1;
+    const label = yieldWay === 'micro'
+      ? \`🔁 第 \${i} 片（微任务链从未让路 · 已连续霸占约 \${i * sliceMs}ms）\`
+      : \`🔁 第 \${i} 片 · 忙 \${sliceMs}ms\`;
+    onEvent({ kind: 'slice', text: label, ms: sliceMs });
+    busyWork(sliceMs);
+    // —— 让步点 2：让出事件循环，外层新宏任务（点击）在这之后才被处理
+    if (yieldWay === 'timeout') await new Promise((r) => setTimeout(r, 0)); // C：宏任务让步 ✅ 事件循环能转一圈
+    else await Promise.resolve();                                          // B：微任务续片 ❌ 微任务队列永远清不完
+    step();                        // 下一片，回到让步点 1
+  }
+
+  step();                          // 立刻开跑第一片
+  return {
+    cancel() {                     // 停止 = 只置标志：手头这片跑完，下个让步点体面退场
+      if (stopped) return;
+      stopped = true;
+    },
+  };
+}`
 
 function badgeOf(kind) {
   if (kind === 'slice') return { label: '🔁 循环片', cls: 'slice' };
@@ -85,6 +116,39 @@ function badgeOf(kind) {
   if (kind === 'click') return { label: '🖱️ 点击', cls: 'click' };
   if (kind === 'done') return { label: '✅ 结束', cls: 'done' };
   return { label: 'ℹ️ 信息', cls: 'info' };
+}
+
+/* 带复制按钮的代码块：复制的是高亮前的原始文本（code 原样入剪贴板） */
+function CodeBlock({ code }) {
+  const [copied, setCopied] = useState(false);
+  const timerRef = useRef(null);
+  useEffect(() => () => clearTimeout(timerRef.current), []); // 卸载时清掉反馈定时器
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+    } catch {
+      // 降级：非安全上下文 / 旧浏览器用临时 textarea + execCommand
+      const ta = document.createElement('textarea');
+      ta.value = code;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+    }
+    setCopied(true);
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setCopied(false), 1600); // 1.6s 后恢复按钮文案
+  };
+  return (
+    <div className="sp-codebox">
+      <button type="button" className={'sp-copy' + (copied ? ' sp-copy-on' : '')} onClick={copy}>
+        {copied ? '✅ 已复制' : '📋 复制代码'}
+      </button>
+      <pre className="sp-code">{highlightJs(code)}</pre>
+    </div>
+  );
 }
 
 export default function RunDemo() {
@@ -196,7 +260,7 @@ export default function RunDemo() {
             </button>
           ))}
         </div>
-        <pre className="sp-code">{highlightJs(mode === 'micro' ? CODE_CORE_MICRO : CODE_CORE)}</pre>
+        <CodeBlock code={CODE_CORE} />
         <p className="sp-hint">💡 {MODES.find((m) => m.id === mode).hint}</p>
       </section>
 
