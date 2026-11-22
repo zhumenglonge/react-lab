@@ -2,12 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import {
   createQueue,
   runSliced,
-  runNaive,
   runMicroChain,
   busyWork,
   WORK_MS,
   URGENT_MS,
-  NAIVE_MS,
   MICRO_MAX,
 } from './shared.js'
 import { highlightJs } from './highlight.jsx'
@@ -15,19 +13,13 @@ import { highlightJs } from './highlight.jsx'
 /* =========================================================
  * ⚔️ 实跑对拍：忙循环 vs 时间切片 + 优先级队列
  * ---------------------------------------------------------
- * 三种跑法都用真函数（shared.js）在主线程上真跑：
- *   A 裸同步循环   —— 期间点击/定时器全部排队，rAF 计数器卡死
+ * 两种跑法都用真函数（shared.js）在主线程上真跑：
  *   B 微任务连续片 —— 「假异步」：await Promise.resolve() 从不让出宏任务队列
  *   C 切片+让步    —— 正解：每片之间清 urgent 队列 + setTimeout 让路
  * 「插入紧急任务」按钮的响应延迟（排队等待 ms）当场量出来。
  * ========================================================= */
 
 const MODES = [
-  {
-    id: 'naive',
-    tab: 'A · 裸同步循环（错误示范）',
-    hint: `一整段 ${NAIVE_MS}ms 的 while 占住调用栈。跑起来之后狂点「插入紧急任务」：按钮不会立刻响应，rAF 计数器直接冻住——事件全在排队。`,
-  },
   {
     id: 'micro',
     tab: 'B · 微任务续片（假异步）',
@@ -41,7 +33,7 @@ const MODES = [
 ]
 
 /* 下面各段都是真实跑的代码：①shared.js 里的 createQueue + runSliced 核心段（注释有压缩），
- * B/C 两版只差让步行——shared.js 里由 yieldWay 参数切换；②runNaive 全文 */
+ * B/C 两版只差让步行——shared.js 里由 yieldWay 参数切换 */
 const CODE_CORE = `// ① queue 的真身：shared.js 的 createQueue() —— 一个闭包私有数组 + 三个动作
 function createQueue() {
   const tasks = [];                        // 队列本体，外面摸不到
@@ -87,23 +79,10 @@ const CODE_CORE_MICRO = CODE_CORE
     '// 停止 = 协作式：cancel() 置 stopped 标志，但微任务链里只有下个 await 点能读到它，\n// 实际退场靠看门狗兜底强制停——「停不下来」是 B 组暴露的第二个问题'
   );
 
-const CODE_NAIVE = `// A 组真跑的 runNaive（shared.js）：一整段同步 while，占死主线程
-// busyWork 真身：烧时间专用——从 start 起空转 ms 毫秒，期间 CPU 全被它占着
-function busyWork(ms) {
-  const start = Date.now();
-  while (Date.now() - start < ms) {}   // 循环体是空的：纯耗时间，不让它闲着 ✔
-}
-
-function runNaive({ totalMs = 800 }) { // totalMs：这轮总共忙多少毫秒（A 组固定 800）
-  busyWork(totalMs);                   // ← 就这一句把主线程占死 800ms
-  // 没有任何让步点：期间点击/定时器/rAF 全部排队，新任务永远轮不到 ✘
-}`;
-
 function badgeOf(kind) {
   if (kind === 'slice') return { label: '🔁 循环片', cls: 'slice' };
   if (kind === 'urgent') return { label: '⚡ 紧急', cls: 'urgent' };
   if (kind === 'click') return { label: '🖱️ 点击', cls: 'click' };
-  if (kind === 'gap') return { label: '🧊 冻结', cls: 'gap' };
   if (kind === 'done') return { label: '✅ 结束', cls: 'done' };
   return { label: 'ℹ️ 信息', cls: 'info' };
 }
@@ -114,7 +93,6 @@ export default function RunDemo() {
   const [running, setRunning] = useState(false);
   const [latencies, setLatencies] = useState([]);
   const [fps, setFps] = useState(0);
-  const [accumulated, setAccumulated] = useState(0); // naive 模式：冻结期间积压的点击数
   const queueRef = useRef(null);
   if (!queueRef.current) queueRef.current = createQueue(); // 渲染期惰性初始化，不走 setState
   const cancelRef = useRef(null);
@@ -151,7 +129,6 @@ export default function RunDemo() {
     cancelRef.current?.cancel();
     setEvents([]);
     setLatencies([]);
-    setAccumulated(0);
     clickCountRef.current = 0;
     queueRef.current = createQueue();
   };
@@ -171,23 +148,7 @@ export default function RunDemo() {
       }
     };
     const onDone = () => setRunning(false);
-    if (mode === 'naive') {
-      clickCountRef.current = 0;
-      // 先让出一拍，让「冻结前」的状态先渲染出来，再同步死循环
-      setTimeout(() => {
-        runNaive({ onEvent, onDone });
-        // 冻结期间积压的点击：要等事件循环恢复后、作为后续宏任务才派发——
-        // 所以再延后一拍去读计数（这个细节本身就是本题的考点）
-        setTimeout(() => {
-          const clicks = clickCountRef.current;
-          if (clicks > 0) {
-            push('click', `🖱️ 冻结期间积压了 ${clicks} 次点击 → 事件循环恢复后才挨个派发（onClick 回调是积压的宏任务）`);
-            push('urgent', `⚡ 紧急任务第 1 个此刻才执行，其余 ${Math.max(0, clicks - 1)} 个继续排队 — 全程零优先`);
-            setAccumulated(clicks);
-          }
-        }, 0);
-      }, 60);
-    } else if (mode === 'micro') {
+    if (mode === 'micro') {
       cancelRef.current = runMicroChain(q, { onEvent, onDone });
     } else {
       cancelRef.current = runSliced(q, { onEvent, onDone });
@@ -198,7 +159,6 @@ export default function RunDemo() {
   const urgentLabel = () => `紧急任务 #${clickCountRef.current + 1}`;
   const insertUrgent = () => {
     clickCountRef.current += 1;
-    if (mode === 'naive') return; // naive：能点进来说明循环已结束，真实积压数在开跑流程里统计
     queueRef.current.add('urgent', () => busyWork(0), urgentLabel());
     push('click', `🖱️ 外头来了新任务「${urgentLabel()}」→ 已插到队列最前面`);
   };
@@ -213,7 +173,7 @@ export default function RunDemo() {
         <p className="demo-sub">
           面试原题：<b>「写一段代码，函数里有个循环不让它闲着；外头来了新任务，能优先执行」</b>。
           关键矛盾：JS 单线程，<b>纯同步循环绝不可能被中断</b>——正解是把循环切成片，
-          <b>片间留出让步点</b>。下面三种跑法都是真的在主线程上执行，右下角
+          <b>片间留出让步点</b>。下面两种跑法都是真的在主线程上执行，右下角
           <b>rAF 心跳</b>和<b>等待毫秒数</b>会诚实告诉你页面卡没卡。
         </p>
       </div>
@@ -222,7 +182,7 @@ export default function RunDemo() {
       <section className="sp-card">
         <div className="sp-card-head">
           <span className="sp-card-title">🎬 选一种跑法</span>
-          <span className="sp-card-src">shared.js · runSliced / runNaive / runMicroChain</span>
+          <span className="sp-card-src">shared.js · runSliced / runMicroChain</span>
         </div>
         <div className="sp-picks">
           {MODES.map((m) => (
@@ -236,7 +196,7 @@ export default function RunDemo() {
             </button>
           ))}
         </div>
-        <pre className="sp-code">{highlightJs(mode === 'naive' ? CODE_NAIVE : mode === 'micro' ? CODE_CORE_MICRO : CODE_CORE)}</pre>
+        <pre className="sp-code">{highlightJs(mode === 'micro' ? CODE_CORE_MICRO : CODE_CORE)}</pre>
         <p className="sp-hint">💡 {MODES.find((m) => m.id === mode).hint}</p>
       </section>
 
@@ -250,15 +210,15 @@ export default function RunDemo() {
               id="sp-urgent-btn"
               className="sp-btn sp-btn-urgent"
               onClick={insertUrgent}
-              disabled={running && mode !== 'naive'}
+              disabled={running}
             >
-              ⚡ {mode === 'naive' ? '在冻结期间点我试试' : running ? '插入紧急任务（下一让步点优先跑）' : '先预埋一个紧急任务'}
+              ⚡ {running ? '插入紧急任务（下一让步点优先跑）' : '先预埋一个紧急任务'}
             </button>
             <button className="sp-btn sp-btn-play" onClick={start} disabled={running}>▶ 开跑</button>
             <button
               className="sp-btn sp-btn-stop"
               onClick={() => cancelRef.current?.cancel()}
-              disabled={!running || mode === 'naive'}
+              disabled={!running}
               title={mode === 'micro' ? '微任务链里 cancel() 只能在 await 点被读到，实际退出靠看门狗' : '在下一个让步点体面停止循环'}
             >
               ⏹ 停止
@@ -316,11 +276,6 @@ export default function RunDemo() {
         {/* ③ 对拍结论 */}
         {!running && events.length > 0 && (
           <div className={'sp-verdict sp-verdict-' + mode}>
-            {mode === 'naive' && (
-              <>🧊 <b>结论</b>：错得最直白——循环确实没闲着，但紧急任务要等整整 {NAIVE_MS}ms
-                {accumulated > 0 ? `（你这期间点了 ${accumulated} 次，全部积压到循环结束后才派发）` : '（点 ⚡ 按钮试试，它根本不理你）'}。
-                期间 rAF 冻住。这版代码面试写出来直接挂。</>
-            )}
             {mode === 'micro' && (
               <>🎭 <b>结论</b>：await 微任务续片 = 「假异步」。切片之间从没让出事件循环，
                 跑完前点进来的新任务进不了队列（只有早就预埋进自家队列的才被优先）。

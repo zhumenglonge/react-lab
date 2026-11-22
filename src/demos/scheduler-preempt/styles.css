@@ -188,7 +188,6 @@
 .sp-badge-slice  { color: var(--accent);      background: var(--accent-bg);      border-color: var(--accent-border); }
 .sp-badge-urgent { color: var(--warning);     background: var(--warning-bg);     border-color: var(--warning-border); }
 .sp-badge-click  { color: var(--accent-2);    background: var(--accent-2-bg);    border-color: var(--accent-2-border); }
-.sp-badge-gap    { color: var(--danger);      background: var(--danger-bg);      border-color: var(--danger-border); }
 .sp-badge-done   { color: var(--success);     background: var(--success-bg);     border-color: var(--success-border); }
 .sp-badge-info   { color: var(--text-secondary); background: var(--surface-2);   border-color: var(--border-strong); }
 
@@ -266,7 +265,6 @@
   border: 1px solid transparent;
 }
 .sp-verdict b { color: var(--text-strong); }
-.sp-verdict-naive  { color: var(--danger);  background: var(--danger-bg);  border-color: var(--danger-border); }
 .sp-verdict-micro  { color: var(--warning); background: var(--warning-bg); border-color: var(--warning-border); }
 .sp-verdict-sliced { color: var(--success); background: var(--success-bg); border-color: var(--success-border); }
 

@@ -9,7 +9,6 @@
 
 export const WORK_MS = 50;     // 每片真实忙 50ms
 export const URGENT_MS = 60;   // 插队任务真实忙 60ms
-export const NAIVE_MS = 800;   // 裸跑对照组：一整段 800ms 同步长任务
 export const MICRO_MAX = 20;   // B 组看门狗：微任务链不解让，最多跑 20 片强制停，防页面永久卡死
 
 /* ---------- 烧时间：让主线程真忙 ms 毫秒（不让它闲着） ---------- */
@@ -101,19 +100,6 @@ export function runSliced(q, { onEvent, onDone, sliceMs = WORK_MS, yieldWay = 't
       stopped = true; // 只置标志；退场日志与 onDone 由 step 在下一个让步点统一处理
     },
   };
-}
-
-/* ---------- 对照组 A：裸同步死循环（跑一次就懂：期间一切任务全排队） ---------- */
-export function runNaive({ onEvent, onDone, totalMs = NAIVE_MS }) {
-  const start = performance.now();
-  onEvent({ kind: 'info', text: `▶ 开始 ${totalMs}ms 纯同步循环（没有任何让步点）` });
-  busyWork(totalMs);
-  onEvent({
-    kind: 'gap',
-    text: `⏱️ 主线程被占住 ${Math.round(performance.now() - start)}ms：期间点击/定时器/rAF 全部排队顺延`,
-  });
-  onEvent({ kind: 'done', text: '✅ 循环结束，事件循环这才处理攒下的任务' });
-  onDone();
 }
 
 /* ---------- 对照组 B：微任务链续片（看似异步，其实一步没让；带看门狗防卡死） ---------- */
