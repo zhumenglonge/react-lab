@@ -1,6 +1,14 @@
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
 import { topics, groupTopicsByCategory, searchTopicsByTitle } from './demos/registry.js'
+import {
+  recordVisit,
+  getVisits,
+  clearVisits,
+  getRecentTopics,
+  sortTopicsByRecency,
+  formatRelativeTime,
+} from './demos/visitStats.js'
 
 /* =========================================================
  * 应用根组件：只负责"目录页 <-> 主题页"的切换
@@ -33,6 +41,13 @@ function App() {
 
   const active = topics.find((t) => t.id === activeId)
 
+  // 进入主题页就算一次访问：点进去、刷新直接落在主题页都算；主题内切 tab 不算
+  useEffect(() => {
+    if (activeId && topics.some((t) => t.id === activeId)) {
+      recordVisit(activeId)
+    }
+  }, [activeId])
+
   return (
     <div className="app">
       {active ? (
@@ -63,11 +78,27 @@ function highlightTitle(title, keyword) {
 function HomePage({ onPick }) {
   const [keyword, setKeyword] = useState('')
   const inputRef = useRef(null)
+  // 访问记录快照：只在「清空记录」时原地更新；看完主题回到首页会重新挂载、重新读取
+  const [visits, setVisits] = useState(() => getVisits())
 
   const searching = keyword.trim() !== ''
   // 只按标题过滤，subtitle / tags 不参与匹配
-  const matched = useMemo(() => searchTopicsByTitle(keyword), [keyword])
+  const matchedRaw = useMemo(() => searchTopicsByTitle(keyword), [keyword])
+  // 搜索结果吃热度加成：看过的按最近时间排前面，回车打开的就是最常看的匹配项
+  const matched = useMemo(
+    () => (searching ? sortTopicsByRecency(matchedRaw) : matchedRaw),
+    [searching, matchedRaw],
+  )
   const groups = useMemo(() => groupTopicsByCategory(matched), [matched])
+  // 首页顶部的「最近看过」：最多 3 个，按访问时间倒序（直接每次算，
+  // visits 变化或从主题页回来重新挂载时都会拿到最新记录）
+  const recentTopics = getRecentTopics(topics, 3)
+
+  const clearStats = () => {
+    if (!window.confirm('清空全部「最近看过」记录？')) return
+    clearVisits()
+    setVisits({})
+  }
 
   // 按 / 快速聚焦搜索框（已在输入框里打字时不抢焦点）
   useEffect(() => {
@@ -140,6 +171,34 @@ function HomePage({ onPick }) {
             </>
           )}
         </div>
+
+        {!searching && recentTopics.length > 0 && (
+          <section className="category recent-section" aria-label="最近看过的主题">
+            <div className="recent-head">
+              <h2 className="category-title">🕘 最近看过</h2>
+              <button className="recent-clear" onClick={clearStats}>
+                清空记录
+              </button>
+            </div>
+            <div className="topic-grid recent-grid">
+              {recentTopics.map((t) => (
+                <button
+                  key={t.id}
+                  className="topic-card"
+                  onClick={() => onPick(t.id)}
+                >
+                  <div className="topic-card-head">
+                    <span className="topic-icon">{t.icon}</span>
+                    <h3 className="topic-title">{t.title}</h3>
+                  </div>
+                  <div className="recent-meta">
+                    🕐 {formatRelativeTime(visits[t.id].lastAt)}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
 
         {topics.length === 0 && (
           <div className="empty-tip">
