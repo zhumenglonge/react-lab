@@ -33,8 +33,8 @@ const MODES = [
 ]
 
 /* 下面就是 shared.js 的真身全文：busyWork + createQueue + maybePromise + runSliced。
- * B/C 跑的是同一份调度器，差异只在调用参数（yieldWay / maxSlices）——见 ③ 开头注释 */
-const CODE_CORE = `// ① busyWork 真身：烧时间专用——从 start 起空转 ms 毫秒，期间 CPU 全被它占着
+ * B/C 跑的是同一份调度器，差异只在调用参数——两版末尾各附上自己的实际调用展开 */
+const CODE_CORE_BASE = `// ① busyWork 真身：烧时间专用——从 start 起空转 ms 毫秒，期间 CPU 全被它占着
 function busyWork(ms) {
   const start = Date.now();
   while (Date.now() - start < ms) {}   // 循环体是空的：纯耗时间，不让它闲着 ✔
@@ -109,6 +109,22 @@ export function runSliced(q, { onEvent, onDone, sliceMs = WORK_MS, yieldWay = 't
     },
   };
 }`
+
+// C 组的展示版：真身全文 + 末尾附上它的实际调用（start() 的 else 分支）
+const CODE_CORE = CODE_CORE_BASE + `
+// ④ C 组的实际调用（RunDemo 的 start() 里 else 分支走的默认参数）：
+runSliced(q, { onEvent, onDone });   // 默认 yieldWay: 'timeout'（setTimeout 让步）+ maxSlices: Infinity，无限跑`;
+
+// B 组的展示版：同一份真身全文 + 末尾附上它的实际调用——
+// runMicroChain 本体只是一行转发，等价展开就是下面这几个参数
+const CODE_CORE_MICRO = CODE_CORE_BASE + `
+// ④ B 组的实际调用（RunDemo 的 start() 里 mode === 'micro' 走的分支）：
+runSliced(q, {
+  onEvent, onDone,
+  sliceMs: 50,        // WORK_MS，和 C 一样每片忙 50ms
+  yieldWay: 'micro',  // ★ 唯一的行为差异：让步点走 await Promise.resolve()
+  maxSlices: 20,      // ★ 看门狗：微任务链停不下来，跑满 20 片强制停
+});`
 
 function badgeOf(kind) {
   if (kind === 'slice') return { label: '🔁 循环片', cls: 'slice' };
@@ -260,7 +276,7 @@ export default function RunDemo() {
             </button>
           ))}
         </div>
-        <CodeBlock code={CODE_CORE} />
+        <CodeBlock code={mode === 'micro' ? CODE_CORE_MICRO : CODE_CORE} />
         <p className="sp-hint">💡 {MODES.find((m) => m.id === mode).hint}</p>
       </section>
 
